@@ -29,6 +29,9 @@
 |DB|<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">|
 |Server|<img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">|
 
+## ✍️ Wireframe
+
+
 ## 🐳 ERD
 
 ## 🏹 Trouble Shooting
