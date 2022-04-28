@@ -145,6 +145,7 @@ public class KakaoService {
                     .build();
 
             repository.save(kakaoUser);
+            return kakaoUser;
 
         }
         return findKakao;
