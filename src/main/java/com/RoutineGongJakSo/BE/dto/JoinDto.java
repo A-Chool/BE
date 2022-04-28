@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 public class JoinDto {
+    //ToDo : 닉네임 숫자 제한 추가
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     @Email(message = "올바른 이메일 형식이 아닙니다.")
