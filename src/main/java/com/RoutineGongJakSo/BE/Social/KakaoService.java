@@ -63,8 +63,8 @@ public class KakaoService {
         //HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "697926f4f0e3abb13ba40a6525d912aa");
-        body.add("redirect_uri", "https://localhost:8080/oauth/kakao/callback");
+        body.add("client_id", "047ec864abf0c1ac004a38d6d7bdfca2");
+        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
         body.add("code", code);
 
         //HTTP 요청 보내기
@@ -120,14 +120,14 @@ public class KakaoService {
     // 3번
     private User signupKakaoUser(KakaoUserInfoDto kakaoUserInfoDto) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfoDto.getId();
+        Long kakaoId = kakaoUserInfoDto.getKakaoId();
         User findKakao = repository.findByKakaoId(kakaoId)
                 .orElse(null);
 
         if (findKakao == null) {
             //회원가입
             //username = kakaoNickname
-            String nickName = kakaoUserInfoDto.getNickName();
+            String nickName = kakaoUserInfoDto.getUserName();
 
             //password : random UUID
             String password = UUID.randomUUID().toString();
