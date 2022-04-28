@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Entity
-public class User extends Timestamped{
+public class User extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long userId;
@@ -36,5 +36,7 @@ public class User extends Timestamped{
     @Column(unique = true)
     private Long kakaoId;
 
+    @Column(unique = true)
+    private Long naverId;
 
 }
