@@ -21,7 +21,7 @@ public class JwtTokenUtils {
         String token = null;
         try {
             token = JWT.create()
-                    .withIssuer("Mr.GenGar")
+                    .withIssuer("Mr.A-Chool")
                     .withClaim(CLAIM_USER_NAME, userDetails.getUsername())
                     .withClaim(CLAIM_USER_EMAIL, userDetails.getUserEmail())
                     .withClaim(CLAIM_USER_LEVEL, userDetails.getUserLevel())
