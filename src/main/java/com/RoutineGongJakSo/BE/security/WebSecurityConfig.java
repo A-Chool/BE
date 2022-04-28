@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .httpBasic().disable()
+                .formLogin().disable() //소셜로그인 할 떄 일단 바꾸라고 해서 바꿈
                 .cors().and() // .configurationSource(corsConfigurationSource())
                 .headers();
 
