@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 페이지</title>
+
+    <script>
+        // function kakaoLogin(){
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/oauth2/authorization/kakao",
+        //         success: function (response){}
+        //     })
+        // }
+        // function naverLogin(){
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/oauth2/authorization/naver",
+        //         success: function (response){}
+        //     })
+        // }
+    </script>
+</head>
+<body>
+<h1>에러 금지님의 로그인 페이지</h1>
+<button onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=dc550b84dc3e942fcee5c41968191cd2&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code'">kakao</button>
+<button onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=dc550b84dc3e942fcee5c41968191cd2&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code'">naver</button>
+<a></a>
+</body>
+</html>

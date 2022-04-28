@@ -33,7 +33,8 @@ public class User extends Timestamped{
     @Column
     private int userLevel;
 
-    @Column
-    private String kakaoId;
+    @Column(unique = true)
+    private Long kakaoId;
+
 
 }
