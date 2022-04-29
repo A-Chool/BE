@@ -1,11 +1,9 @@
 package com.RoutineGongJakSo.BE.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @NoArgsConstructor
@@ -37,6 +35,5 @@ public class User extends Timestamped {
     private Long kakaoId;
 
     @Column(unique = true)
-    private Long naverId;
-
+    private String naverId;
 }

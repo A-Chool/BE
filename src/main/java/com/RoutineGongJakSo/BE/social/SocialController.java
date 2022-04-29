@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -23,14 +24,12 @@ public class SocialController {
     @GetMapping("/kakao/callback")
     public KakaoUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response
     ) throws JsonProcessingException {
-       return kakaoService.kakaoLogin(code, response);
+        return kakaoService.kakaoLogin(code, response);
     }
 
     //네이버 로그인
     @GetMapping("/naver/callback")
-    public void naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response) throws JsonProcessingException{
-        naverService.naverLogin(code, state, response);
-
+    public void naverLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException{
+        naverService.naverLogin(code, response);
     }
-
 }
