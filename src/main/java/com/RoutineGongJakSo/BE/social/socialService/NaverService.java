@@ -76,7 +76,7 @@ public class NaverService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", naverClientId);
         body.add("client_secret", naverSecret);
-        body.add("redirect_uri", "http://localhost:8080/api/user/naver/callback");
+        body.add("redirect_uri", "http://localhost:3000/api/user/naver/callback");
         body.add("code", code);
         body.add("state", state);
 

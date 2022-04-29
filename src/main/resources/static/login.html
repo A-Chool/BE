@@ -6,8 +6,14 @@
 </head>
 <body>
 <h1>에러 금지님의 로그인 페이지</h1>
-<button onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=48b5d8b478c6053722ca178c9372cce4&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code'">kakao</button>
-<button onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Fo8R6V0kNJno2WnHRpvg&state=STATE_STRING&redirect_uri=http://localhost:8080/api/user/naver/callback'">naver</button>
+
+<!--백 연결용-->
+<!--<button onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=48b5d8b478c6053722ca178c9372cce4&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code'">kakao</button>-->
+<!--<button onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Fo8R6V0kNJno2WnHRpvg&state=STATE_STRING&redirect_uri=http://localhost:8080/api/user/naver/callback'">naver</button>-->
+
+<!--프론트 연결용-->
+<button onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=48b5d8b478c6053722ca178c9372cce4&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code'">kakao</button>
+<button onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Fo8R6V0kNJno2WnHRpvg&state=STATE_STRING&redirect_uri=http://localhost:3000/api/user/naver/callback'">naver</button>
 <a></a>
 </body>
 </html>
