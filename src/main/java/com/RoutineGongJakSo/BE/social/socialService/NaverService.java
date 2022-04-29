@@ -67,7 +67,7 @@ public class NaverService {
     //1번
     public String getAccessToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type","application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         final String state = new BigInteger(130, new SecureRandom()).toString();
         System.out.println("getCode : " + code);
 
@@ -100,7 +100,7 @@ public class NaverService {
     }
 
     //2번
-    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException{
+    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
 // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -126,7 +126,7 @@ public class NaverService {
         String email = jsonNode.get("response")
                 .get("email").asText();
 
-        log.info("네이버 사용자 정보 id: {},{},{}",id,nickname, email);
+        log.info("네이버 사용자 정보 id: {},{},{}", id, nickname, email);
 
         return new NaverUserInfoDto(id, nickname, email);
     }

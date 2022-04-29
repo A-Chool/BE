@@ -18,7 +18,7 @@ public class UserValidator {
 //        if(match.find()){
 //            throw new NullPointerException("비밀번호는 중복된 글자가 3개 미만이어야 합니다.");
 //        }
-        if(found.isPresent()){
+        if (found.isPresent()) {
             throw new NullPointerException("아이디가 중복됩니다.");
         }
 //        if(!joinDto.getUserPwCheck().equals(joinDto.getUserPw())){
