@@ -19,11 +19,11 @@ public class UserDetailsImpl implements UserDetails {
         return null;
     }
 
-    public String getUserEmail(){
+    public String getUserEmail() {
         return user.getUserEmail();
     }
 
-    public int getUserLevel(){
+    public int getUserLevel() {
         return user.getUserLevel();
     }
 
