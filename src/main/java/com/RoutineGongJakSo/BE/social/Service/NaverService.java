@@ -1,10 +1,10 @@
-package com.RoutineGongJakSo.BE.social.socialService;
+package com.RoutineGongJakSo.BE.social.Service;
 
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
-import com.RoutineGongJakSo.BE.social.socialDto.NaverUserInfoDto;
+import com.RoutineGongJakSo.BE.social.Dto.NaverUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,7 +67,7 @@ public class NaverService {
     //1번
     public String getAccessToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type","application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         final String state = new BigInteger(130, new SecureRandom()).toString();
         System.out.println("getCode : " + code);
 
@@ -76,7 +76,7 @@ public class NaverService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", naverClientId);
         body.add("client_secret", naverSecret);
-        body.add("redirect_uri", "http://localhost:3000/api/user/naver/callback");
+        body.add("redirect_uri", "http://34.228.32.139:8080/api/user/naver/callback");
         body.add("code", code);
         body.add("state", state);
 
@@ -100,7 +100,7 @@ public class NaverService {
     }
 
     //2번
-    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException{
+    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
 // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -126,7 +126,7 @@ public class NaverService {
         String email = jsonNode.get("response")
                 .get("email").asText();
 
-        log.info("네이버 사용자 정보 id: {},{},{}",id,nickname, email);
+        log.info("네이버 사용자 정보 id: {},{},{}", id, nickname, email);
 
         return new NaverUserInfoDto(id, nickname, email);
     }

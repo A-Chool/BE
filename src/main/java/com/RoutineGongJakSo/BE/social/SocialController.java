@@ -1,8 +1,8 @@
 package com.RoutineGongJakSo.BE.social;
 
-import com.RoutineGongJakSo.BE.social.socialDto.KakaoUserInfoDto;
-import com.RoutineGongJakSo.BE.social.socialService.KakaoService;
-import com.RoutineGongJakSo.BE.social.socialService.NaverService;
+import com.RoutineGongJakSo.BE.social.Dto.KakaoUserInfoDto;
+import com.RoutineGongJakSo.BE.social.Service.KakaoService;
+import com.RoutineGongJakSo.BE.social.Service.NaverService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ public class SocialController {
 
     //네이버 로그인
     @GetMapping("/naver/callback")
-    public void naverLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException{
+    public void naverLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         naverService.naverLogin(code, response);
     }
 }
