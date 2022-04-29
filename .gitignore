@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 application.properties
-login.html
 static/
+login.html
+resources/
