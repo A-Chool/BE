@@ -39,4 +39,6 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String naverId;
 
+
+
 }

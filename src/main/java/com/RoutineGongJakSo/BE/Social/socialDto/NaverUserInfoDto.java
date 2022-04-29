@@ -9,4 +9,6 @@ public class NaverUserInfoDto {
     private String naverId;
     private String userName;
     private String email;
+
+
 }

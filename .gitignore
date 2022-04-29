@@ -37,5 +37,6 @@ out/
 .vscode/
 application.properties
 login.html
-application_kakao.properties
-application_naver.properties
+
+
+

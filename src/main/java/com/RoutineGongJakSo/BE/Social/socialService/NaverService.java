@@ -180,5 +180,6 @@ public class NaverService {
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
         System.out.println("JWT토큰 : " + token);
         response.addHeader("Authorization", "BEARER" + " " + token);
+
     }
 }

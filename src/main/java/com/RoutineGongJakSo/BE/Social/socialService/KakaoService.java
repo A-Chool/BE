@@ -33,6 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KakaoService {
 
+
     @Value("${kakao.client_id}")
     String kakaoClientId;
 

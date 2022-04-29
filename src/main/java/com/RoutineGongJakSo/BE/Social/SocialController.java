@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class SocialController {
     @GetMapping("/naver/callback")
     public void naverLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException{
         naverService.naverLogin(code, response);
+
 
     }
 
