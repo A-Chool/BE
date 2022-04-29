@@ -18,7 +18,7 @@ public class UserController {
 
     @PostMapping("/api/user/signup")
     public ErrorResult join(@Valid @RequestBody JoinDto joinDto, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return new ErrorResult(false, message);
         }
