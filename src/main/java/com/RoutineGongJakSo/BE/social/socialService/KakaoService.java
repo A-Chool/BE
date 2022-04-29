@@ -63,7 +63,7 @@ public class KakaoService {
     //1번
     public String getAccessToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type","application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         System.out.println("getCode : " + code);
 
         //HTTP Body 생성
@@ -93,7 +93,7 @@ public class KakaoService {
     }
 
     //2번
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException{
+    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
 // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -118,7 +118,7 @@ public class KakaoService {
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
-        log.info("카카오 사용자 정보 id: {},{},{}",id,nickname, email);
+        log.info("카카오 사용자 정보 id: {},{},{}", id, nickname, email);
 
         return new KakaoUserInfoDto(id, nickname, email);
     }

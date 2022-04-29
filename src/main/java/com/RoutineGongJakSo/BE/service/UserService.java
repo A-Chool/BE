@@ -41,6 +41,6 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new ErrorResult(true,"회원가입 완료!");
+        return new ErrorResult(true, "회원가입 완료!");
     }
 }

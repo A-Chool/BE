@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 @RequiredArgsConstructor
 public class FormLoginAuthProvider implements AuthenticationProvider {
 
-    @Resource(name="userDetailsServiceImpl")
+    @Resource(name = "userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
 
