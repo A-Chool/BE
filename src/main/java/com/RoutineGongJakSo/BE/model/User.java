@@ -17,6 +17,9 @@ public class User extends Timestamped {
     @Id
     private Long userId;
 
+    @ManyToOne
+    @JoinColumn(name = "weekTeamUserId")
+    private WeekTeamUser weekTeamUser;
 
     @Column(nullable = false, unique = true)
     private String userEmail;
