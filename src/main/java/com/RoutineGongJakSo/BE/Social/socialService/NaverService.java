@@ -25,6 +25,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @Slf4j
@@ -35,9 +37,9 @@ public class NaverService {
     private final UserRepository repository;
 
     // 네이버 로그인
-    public void naverLogin(String code, String state, HttpServletResponse response) throws JsonProcessingException {
+    public void naverLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가코드" 로 "액세스 토큰" 요청
-        String accessToken = getAccessToken(code, state);
+        String accessToken = getAccessToken(code);
 
         // 2. 토큰으로 카카오 API 호출
         NaverUserInfoDto naverUserInfoDto = getNaverUserInfo(accessToken);
@@ -55,9 +57,10 @@ public class NaverService {
 
     //header 에 Content-type 지정
     //1번
-    public String getAccessToken(String code, String state) throws JsonProcessingException {
+    public String getAccessToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type","application/x-www-form-urlencoded;charset=utf-8");
+        final String state = new BigInteger(130, new SecureRandom()).toString();
         System.out.println("getCode : " + code);
 
         //HTTP Body 생성
@@ -94,6 +97,7 @@ public class NaverService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//        final String state = new BigInteger(130, new SecureRandom()).toString();
 
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> naverUserInfoRequest = new HttpEntity<>(headers);
@@ -108,10 +112,10 @@ public class NaverService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
+        String id = jsonNode.get("response").get("id").asText();
+        String nickname = jsonNode.get("response")
                 .get("nickname").asText();
-        String email = jsonNode.get("naver_account")
+        String email = jsonNode.get("response")
                 .get("email").asText();
 
         log.info("네이버 사용자 정보 id: {},{},{}",id,nickname, email);
@@ -122,7 +126,7 @@ public class NaverService {
     // 3번
     private User signupNaverUser(NaverUserInfoDto naverUserInfoDto) {
         // DB 에 중복된 Naver Id 가 있는지 확인
-        Long naverId = naverUserInfoDto.getNaverId();
+        String naverId = naverUserInfoDto.getNaverId();
         User findNaver = repository.findByNaverId(naverId)
                 .orElse(null);
 

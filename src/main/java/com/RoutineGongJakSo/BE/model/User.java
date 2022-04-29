@@ -37,6 +37,6 @@ public class User extends Timestamped {
     private Long kakaoId;
 
     @Column(unique = true)
-    private Long naverId;
+    private String naverId;
 
 }
