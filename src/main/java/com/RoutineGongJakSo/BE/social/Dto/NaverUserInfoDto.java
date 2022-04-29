@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.social.socialDto;
+package com.RoutineGongJakSo.BE.social.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

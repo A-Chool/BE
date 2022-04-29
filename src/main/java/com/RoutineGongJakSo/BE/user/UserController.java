@@ -1,8 +1,6 @@
-package com.RoutineGongJakSo.BE.controller;
+package com.RoutineGongJakSo.BE.user;
 
-import com.RoutineGongJakSo.BE.dto.JoinDto;
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;
-import com.RoutineGongJakSo.BE.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +16,7 @@ public class UserController {
 
     @PostMapping("/api/user/signup")
     public ErrorResult join(@Valid @RequestBody JoinDto joinDto, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             String message = errors.getFieldError().getDefaultMessage();
             return new ErrorResult(false, message);
         }
