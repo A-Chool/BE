@@ -1,6 +1,5 @@
-package com.RoutineGongJakSo.BE.service;
+package com.RoutineGongJakSo.BE.user;
 
-import com.RoutineGongJakSo.BE.dto.JoinDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;

@@ -1,8 +1,6 @@
-package com.RoutineGongJakSo.BE.controller;
+package com.RoutineGongJakSo.BE.user;
 
-import com.RoutineGongJakSo.BE.dto.JoinDto;
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;
-import com.RoutineGongJakSo.BE.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
