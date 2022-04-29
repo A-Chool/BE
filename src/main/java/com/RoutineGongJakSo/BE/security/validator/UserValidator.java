@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.security.validator;
 
-import com.RoutineGongJakSo.BE.dto.JoinDto;
+import com.RoutineGongJakSo.BE.user.JoinDto;
 import com.RoutineGongJakSo.BE.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

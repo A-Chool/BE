@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.dto;
+package com.RoutineGongJakSo.BE.user;
 
 import lombok.Getter;
 
@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 public class JoinDto {
-
 
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
