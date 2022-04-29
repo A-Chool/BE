@@ -17,6 +17,7 @@ public class User extends Timestamped {
     @Id
     private Long userId;
 
+
     @Column(nullable = false, unique = true)
     private String userEmail;
 
