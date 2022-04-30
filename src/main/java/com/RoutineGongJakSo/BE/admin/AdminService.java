@@ -50,7 +50,7 @@ public class AdminService {
     public List<AdminDto.ResponseDto> getAllUser() {
         List<User> users = userRepository.findAll();
 
-        List<AdminDto.ResponseDto> ResponseDto = new ArrayList<>();
+        List<AdminDto.ResponseDto> responseDtos = new ArrayList<>();
 
         for (User user : users) {
             AdminDto.ResponseDto findDto = AdminDto.ResponseDto.builder()
@@ -62,10 +62,10 @@ public class AdminService {
                     .kakaoId(user.getKakaoId())
                     .naverId(user.getNaverId())
                     .build();
-            ResponseDto.add(findDto);
+            responseDtos.add(findDto);
         }
 
-        return ResponseDto;
+        return responseDtos;
     }
 
     //권한 변경
