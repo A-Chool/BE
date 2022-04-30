@@ -44,6 +44,9 @@ dependencies {
 
 	//validation 모듈 추가
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// websocket 추가
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
