@@ -1,7 +1,9 @@
 package com.RoutineGongJakSo.BE.admin;
 
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +22,19 @@ public class AdminController {
 
     //전체 유저 조회
     @GetMapping("/userList")
-    public List<AdminDto.ResponseDto> getAllUser() {
-        return adminService.getAllUser();
+    public List<AdminDto.ResponseDto> getAllUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.getAllUser(userDetails);
     }
 
     //권한 변경
     @PutMapping("/{userId}")
-    public String updateLevel(@PathVariable Long userId, @RequestBody AdminDto.UpdateDto update) {
-        return adminService.updateLevel(userId, update);
+    public String updateLevel(@PathVariable Long userId, @RequestBody AdminDto.UpdateDto update, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.updateLevel(userId, update, userDetails);
     }
 
     //유저 삭제
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable Long userId) {
-        return adminService.deleteUser(userId);
+    public String deleteUser(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.deleteUser(userId, userDetails);
     }
 }
