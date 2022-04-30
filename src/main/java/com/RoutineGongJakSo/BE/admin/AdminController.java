@@ -19,15 +19,15 @@ public class AdminController {
         return adminService.login(adminDto);
     }
 
-    //전체 유저 조
+    //전체 유저 조회
     @GetMapping("/userList")
-    public List<User> getAllUser(){
+    public List<AdminDto.ResponseDto> getAllUser(){
         return adminService.getAllUser();
     }
 
     //권한 변경
     @PutMapping("/{userId}")
-    public String updateLevel(@PathVariable Long userId, @RequestBody AdminDto.Update update){
+    public String updateLevel(@PathVariable Long userId, @RequestBody AdminDto.UpdateDto update){
         return adminService.updateLevel(userId, update);
     }
 

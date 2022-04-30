@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +47,30 @@ public class AdminService {
     }
 
     //전체 유저 조회
-    public List<User> getAllUser() {
-        List<User> user = userRepository.findAll();
-        return user;
+    public List<AdminDto.ResponseDto> getAllUser() {
+        List<User> users = userRepository.findAll();
+
+        List<AdminDto.ResponseDto> ResponseDto = new ArrayList<>();
+
+        for (User user : users) {
+            AdminDto.ResponseDto findDto = AdminDto.ResponseDto.builder()
+                    .userId(user.getUserId())
+                    .userEmail(user.getUserEmail())
+                    .userName(user.getUserName())
+                    .phoneNumber(user.getPhoneNumber())
+                    .userLevel(user.getUserLevel())
+                    .kakaoId(user.getKakaoId())
+                    .naverId(user.getNaverId())
+                    .build();
+            ResponseDto.add(findDto);
+        }
+
+        return ResponseDto;
     }
 
     //권한 변경
     @Transactional
-    public String updateLevel(Long userId, AdminDto.Update update) {
+    public String updateLevel(Long userId, AdminDto.UpdateDto update) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 유저입니다.")
         );
