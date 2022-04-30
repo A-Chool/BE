@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -42,5 +43,11 @@ public class AdminService {
         System.out.println("맵 안에 토큰값 확인: " + result.get("token"));
 
         return result;
+    }
+
+    //전체 유저 조회
+    public List<User> getAllUser() {
+        List<User> user = userRepository.findAll();
+        return user;
     }
 }
