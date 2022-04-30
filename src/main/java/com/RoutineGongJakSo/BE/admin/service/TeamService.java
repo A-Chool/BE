@@ -64,14 +64,10 @@ public class TeamService {
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
-        //팀 아이디로 팀원을 찾고
-        //유저 아이디로 유저를 찾고
-        //멤버로 저장한다
-
-        //ToDo : refactor
         WeekTeam weekTeam = weekTeamRepository.findById(teamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
+
         User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );

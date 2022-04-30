@@ -45,6 +45,5 @@ public class Validator {
         if (teamCheck.isPresent()){
             throw new NullPointerException("이미 만들어진 팀이 존재합니다.");
         }
-
     }
 }
