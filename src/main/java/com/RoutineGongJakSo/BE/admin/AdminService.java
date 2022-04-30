@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.admin;
 
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final PasswordEncoder passwordEncoder;
+    private final Validator validator;
 
     //관리자 로그인
     @Transactional
@@ -31,7 +33,7 @@ public class AdminService {
         }
 
         //접근권한 확인
-        Validator.adminCheck(user);
+        validator.adminCheck(user);
 
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
@@ -44,17 +46,16 @@ public class AdminService {
     }
 
     //전체 유저 조회
-    public List<AdminDto.ResponseDto> getAllUser() {
+    public List<AdminDto.ResponseDto> getAllUser(UserDetailsImpl userDetails) {
 
-//        User find = userRepository.findByUserEmail(userDetails.getUserEmail())
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-//
-//        if (userDetails == null) {
-//            throw new NullPointerException("관리자만 접근 할 수 있습니다.");
-//        }
-//
-//        //접근권한 확인
-//        Validator.adminCheck(find);
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+
+        //접근권한 확인
+        validator.adminCheck(admin);
 
         List<User> users = userRepository.findAll();
 
@@ -78,7 +79,17 @@ public class AdminService {
 
     //권한 변경
     @Transactional
-    public String updateLevel(Long userId, AdminDto.UpdateDto update) {
+    public String updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
+
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+
+        //관리자 접근 권한 확인
+        validator.adminCheck(admin);
+
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 유저입니다.")
         );
@@ -89,7 +100,17 @@ public class AdminService {
 
     //유저 삭제
     @Transactional
-    public String deleteUser(Long userId) {
+    public String deleteUser(Long userId, UserDetailsImpl userDetails) {
+
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+
+        //관리자 접근 권한 확인
+        validator.adminCheck(admin);
+
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 유저입니다.")
         );
