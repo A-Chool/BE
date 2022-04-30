@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class AdminService {
 
     //관리자 로그인
     @Transactional
-    public Map<String, Object> login(AdminDto adminDto) {
+    public Map<String, Object> login(AdminDto.RequestDto adminDto) {
         User user = userRepository.findByUserEmail(adminDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
 
@@ -37,7 +38,7 @@ public class AdminService {
 
         result.put("token", jwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
         result.put("userId", user.getUserEmail());
-        result.put("username", user.getUserName());
+        result.put("username가", user.getUserName());
         result.put("userLevel", user.getUserLevel());
 
         System.out.println("맵 안에 토큰값 확인: " + result.get("token"));
@@ -46,8 +47,45 @@ public class AdminService {
     }
 
     //전체 유저 조회
-    public List<User> getAllUser() {
-        List<User> user = userRepository.findAll();
-        return user;
+    public List<AdminDto.ResponseDto> getAllUser() {
+        List<User> users = userRepository.findAll();
+
+        List<AdminDto.ResponseDto> responseDtos = new ArrayList<>();
+
+        for (User user : users) {
+            AdminDto.ResponseDto findDto = AdminDto.ResponseDto.builder()
+                    .userId(user.getUserId())
+                    .userEmail(user.getUserEmail())
+                    .userName(user.getUserName())
+                    .phoneNumber(user.getPhoneNumber())
+                    .userLevel(user.getUserLevel())
+                    .kakaoId(user.getKakaoId())
+                    .naverId(user.getNaverId())
+                    .build();
+            responseDtos.add(findDto);
+        }
+
+        return responseDtos;
+    }
+
+    //권한 변경
+    @Transactional
+    public String updateLevel(Long userId, AdminDto.UpdateDto update) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 유저입니다.")
+        );
+        user.setUserLevel(update.getUserLevel());
+
+        return "권한이 수정 되었습니다.";
+    }
+
+    //유저 삭제
+    @Transactional
+    public String deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 유저입니다.")
+        );
+        userRepository.delete(user);
+        return "해당 유저 정보가 삭제되었습니다.";
     }
 }
