@@ -3,9 +3,7 @@ package com.RoutineGongJakSo.BE.admin.service;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
-import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +17,18 @@ import java.util.Optional;
 public class TeamService {
 
     private final Validator validator;
-    private final UserRepository userRepository;
     private final WeekTeamRepository weekTeamRepository;
     private final MemberRepository memberRepository;
 
+    // 팀 추가
     @Transactional
     public String createTeam(UserDetailsImpl userDetails, TeamDto.createTeamDto teamDto) {
 
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
 
-        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-
         //관리자 접근 권한 확인
-        validator.adminCheck(admin);
+        validator.adminCheck(userDetails);
 
         //중복 팀 체크
         Optional<WeekTeam> teamCheck = weekTeamRepository.findByTeamNameAndWeek(teamDto.getTeamName(), teamDto.getWeek());
@@ -49,7 +44,7 @@ public class TeamService {
                 .week(teamDto.getWeek())
                 .groundRole(groundRole)
                 .workSpace(workSpace)
-                .roomId(teamDto.getWeek() + "주차 " + teamDto.getTeamName())
+                .roomId(teamDto.getWeek() + "주차 " + teamDto.getTeamName()) //1주차 1조
                 .build();
 
         weekTeamRepository.save(weekTeam);
@@ -57,18 +52,35 @@ public class TeamService {
         return "팀 생성 완료!";
     }
 
+    // 팀원 추가
     @Transactional
     public String addMembers(UserDetailsImpl userDetails, TeamDto.addMember teamDto) {
 
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
 
-        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-
         //관리자 접근 권한 확인
-        validator.adminCheck(admin);
+        validator.adminCheck(userDetails);
 
         return "팀원 추가 완료!";
+    }
+
+    //팀 삭제
+    @Transactional
+    public String deleteTeam(Long teamId, UserDetailsImpl userDetails) {
+
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        WeekTeam weekTeam = weekTeamRepository.findById(teamId).orElseThrow(
+                () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
+        );
+
+        weekTeamRepository.delete(weekTeam);
+
+        return "삭제 완료";
     }
 }

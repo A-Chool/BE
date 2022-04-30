@@ -5,10 +5,7 @@ import com.RoutineGongJakSo.BE.admin.service.TeamService;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +22,10 @@ public class TeamController {
     @PostMapping("/members")
     public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.addMember teamDto){
         return teamService.addMembers(userDetails, teamDto);
+    }
+
+    @DeleteMapping("{teamId}")
+    public String deleteTeam(@PathVariable Long teamId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return teamService.deleteTeam(teamId, userDetails);
     }
 }
