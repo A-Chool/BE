@@ -1,5 +1,6 @@
-package com.RoutineGongJakSo.BE.admin;
+package com.RoutineGongJakSo.BE.admin.service;
 
+import com.RoutineGongJakSo.BE.admin.dto.AdminDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
