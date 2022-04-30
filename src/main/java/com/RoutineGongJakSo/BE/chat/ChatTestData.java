@@ -14,12 +14,12 @@ public class ChatTestData implements ApplicationRunner {
     private UserRepository userRepository;
 
     @Autowired
-    private ChatService chatService;
+    private ChatRoomRepository chatRoomRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         String roomName = "1조";
-        ChatRoom chatRoom = chatService.createRoom(roomName);
-        System.out.println("roomName = " + chatRoom.getRoomId());
+        chatRoomRepository.createChatRoom(roomName);
+
     }
 }
