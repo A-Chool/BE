@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -18,25 +20,18 @@ public class WeekTeam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long WeekTeam;
 
-    @ManyToOne
-    @JoinColumn(name = "WEEK_USER_ID")
-    private WeekTeamUser weekTeamUser;
+    @Column(nullable = false)
+    private String teamName;
 
     @Column(nullable = false)
-    private String week;
+    private Long week;
 
-    @Column(nullable = false)
-    private String team;
-
-    //공지사항
-    @Column(nullable = false)
-    private String workSpace;
-
-    //그라운드룰
     @Column(nullable = false)
     private String groundRole;
 
-    //채팅방ID
+    @Column(nullable = false)
+    private String workSpace;
+
     @Column(nullable = false)
     private String roomId;
 }
