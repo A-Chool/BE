@@ -27,7 +27,6 @@ public class TeamService {
     // 팀 추가
     @Transactional
     public String createTeam(UserDetailsImpl userDetails, TeamDto.createTeamDto teamDto) {
-
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -58,7 +57,6 @@ public class TeamService {
     // 팀원 추가
     @Transactional
     public String addMembers(UserDetailsImpl userDetails, TeamDto.addMember teamDto) {
-
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -85,7 +83,6 @@ public class TeamService {
     //팀 삭제
     @Transactional
     public String deleteTeam(Long teamId, UserDetailsImpl userDetails) {
-
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -96,6 +93,23 @@ public class TeamService {
         );
 
         weekTeamRepository.delete(weekTeam);
+
+        return "삭제 완료";
+    }
+
+    //팀원 삭제
+    @Transactional
+    public String deleteMember(Long memberId, UserDetailsImpl userDetails) {
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new NullPointerException("해당 팀원은 존재하지 않습니다.")
+        );
+
+        memberRepository.delete(member);
 
         return "삭제 완료";
     }
