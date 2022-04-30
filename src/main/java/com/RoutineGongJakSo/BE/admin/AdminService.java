@@ -5,14 +5,13 @@ import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class AdminService {
 
     //관리자 로그인
     @Transactional
-    public Map<String, Object> login(AdminDto.RequestDto adminDto) {
+    public HttpHeaders login(AdminDto.RequestDto adminDto) {
         User user = userRepository.findByUserEmail(adminDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
 
@@ -34,20 +33,29 @@ public class AdminService {
         //접근권한 확인
         Validator.adminCheck(user);
 
-        Map<String, Object> result = new HashMap<>();
+        //Token -> Headers로 보내기
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        result.put("token", jwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
-        result.put("userId", user.getUserEmail());
-        result.put("username가", user.getUserName());
-        result.put("userLevel", user.getUserLevel());
+        System.out.println("Headers 토큰값 확인: " + headers.get("Authorization"));
 
-        System.out.println("맵 안에 토큰값 확인: " + result.get("token"));
-
-        return result;
+        return headers;
     }
 
     //전체 유저 조회
     public List<AdminDto.ResponseDto> getAllUser() {
+
+//        User find = userRepository.findByUserEmail(userDetails.getUserEmail())
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+//
+//        if (userDetails == null) {
+//            throw new NullPointerException("관리자만 접근 할 수 있습니다.");
+//        }
+//
+//        //접근권한 확인
+//        Validator.adminCheck(find);
+
         List<User> users = userRepository.findAll();
 
         List<AdminDto.ResponseDto> responseDtos = new ArrayList<>();
