@@ -13,6 +13,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class Validator {
 
+    private final UserRepository userRepository;
+
     //유저 아이디 중복확인
     public static void checkUser(Optional<User> found) {
         if (found.isPresent()) {
@@ -21,7 +23,11 @@ public class Validator {
     }
 
     //관리자 접근 권한 확인
-    public void adminCheck(User user) {
+    public void adminCheck(UserDetailsImpl userDetails) {
+
+        User user = userRepository.findByUserEmail(userDetails.getUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+
         if (user.getUserLevel() < 5) {
             throw new NullPointerException("접근 권한이 없습니다.");
         }
