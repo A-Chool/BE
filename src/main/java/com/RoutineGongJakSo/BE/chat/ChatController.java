@@ -3,10 +3,10 @@ package com.RoutineGongJakSo.BE.chat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
