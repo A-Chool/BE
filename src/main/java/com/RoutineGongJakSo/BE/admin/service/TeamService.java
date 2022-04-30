@@ -3,7 +3,10 @@ package com.RoutineGongJakSo.BE.admin.service;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
+import com.RoutineGongJakSo.BE.model.Member;
+import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
+import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ public class TeamService {
 
     private final Validator validator;
     private final WeekTeamRepository weekTeamRepository;
+    private final UserRepository userRepository;
     private final MemberRepository memberRepository;
 
     // 팀 추가
@@ -26,7 +30,6 @@ public class TeamService {
 
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
-
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
@@ -58,9 +61,27 @@ public class TeamService {
 
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
-
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
+
+        //팀 아이디로 팀원을 찾고
+        //유저 아이디로 유저를 찾고
+        //멤버로 저장한다
+
+        //ToDo : refactor
+        WeekTeam weekTeam = weekTeamRepository.findById(teamDto.getTeamId()).orElseThrow(
+                () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+        );
+
+        Member member = Member.builder()
+                .weekTeam(weekTeam)
+                .user(user)
+                .build();
+
+        memberRepository.save(member);
 
         return "팀원 추가 완료!";
     }
@@ -71,7 +92,6 @@ public class TeamService {
 
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
-
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 

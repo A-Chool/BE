@@ -15,9 +15,8 @@ public class TeamDto {
     //팀원 추가 요청
     @Getter
     public static class addMember {
-        private String teamName;
         private Long teamId;
-        private Long MemberId;
+        private Long memberId;
     }
 }
 
