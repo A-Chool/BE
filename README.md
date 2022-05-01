@@ -43,3 +43,6 @@
 2) ERD 설계시 어떻게 연관관계를 맺어야 보다 나은 설계를 할 수 있는지에 대한 고찰
 → 다른 동기분들과의 집단 지성 + 여러 개의 ERD를 그려보고, 서로 의견을 공유하며 수정
 → 실제 코드를 작성하면서, 추가적으로 발생하는 미흡한 부분을 보완 및 수정
+
+## 📌 Personal Trouble Shooting
+<a href="https://github.com/A-Chool/BE/wiki/%5BHyunWoong%5DTrouble-Shooting" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=&message=심현웅 &color=08CE5D&style=for-the-badge&>"/></a>
