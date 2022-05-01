@@ -35,7 +35,8 @@
 <summary>Wireframe</summary>
 <div markdown="1">       
 
-😎숨겨진 내용😎
+<img width="804" alt="스크린샷 2022-05-02 오전 2 16 55" src="https://user-images.githubusercontent.com/98807506/166156916-484f604e-6a8c-411f-b657-6b1a5ee8b43e.png">
+<img width="812" alt="스크린샷 2022-05-02 오전 2 21 36" src="https://user-images.githubusercontent.com/98807506/166157015-6cefbe94-3da0-49c0-9297-f92697a835e6.png">
 
 </div>
 </details>
