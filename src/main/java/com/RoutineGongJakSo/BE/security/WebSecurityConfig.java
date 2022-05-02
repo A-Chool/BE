@@ -149,7 +149,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("PUT,/**");
         skipPathList.add("DELETE,/**");
         // chat 허용
-        skipPathList.add("/chat/**");
+        skipPathList.add("GET, /chat/**");
 
         // Admin API 허용
         skipPathList.add("POST,/api/admin/login");
