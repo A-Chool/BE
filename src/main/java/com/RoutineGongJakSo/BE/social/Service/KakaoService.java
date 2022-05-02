@@ -26,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -129,6 +130,13 @@ public class KakaoService {
         Long kakaoId = kakaoUserInfoDto.getKakaoId();
         User findKakao = repository.findByKakaoId(kakaoId)
                 .orElse(null);
+
+        Optional<User> findCheck = repository.findByUserEmail(kakaoUserInfoDto.getEmail());
+
+        // 이미 가입된 사용자인지 확인
+        if (findCheck.isPresent()){
+            throw new NullPointerException("이미 가입된 아이디가 존재합니다.");
+        }
 
         if (findKakao == null) {
             //회원가입
