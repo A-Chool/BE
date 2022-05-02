@@ -1,5 +1,6 @@
-package com.RoutineGongJakSo.BE.admin;
+package com.RoutineGongJakSo.BE.admin.service;
 
+import com.RoutineGongJakSo.BE.admin.dto.AdminDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -32,8 +33,9 @@ public class AdminService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        //접근권한 확인
-        validator.adminCheck(user);
+        if (user.getUserLevel() < 5) {
+            throw new NullPointerException("접근 권한이 없습니다.");
+        }
 
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
@@ -51,11 +53,8 @@ public class AdminService {
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
-        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-
         //접근권한 확인
-        validator.adminCheck(admin);
+        validator.adminCheck(userDetails);
 
         List<User> users = userRepository.findAll();
 
@@ -84,11 +83,8 @@ public class AdminService {
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
-        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-
         //관리자 접근 권한 확인
-        validator.adminCheck(admin);
+        validator.adminCheck(userDetails);
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 유저입니다.")
@@ -105,11 +101,8 @@ public class AdminService {
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
-        User admin = userRepository.findByUserEmail(userDetails.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
-
         //관리자 접근 권한 확인
-        validator.adminCheck(admin);
+        validator.adminCheck(userDetails);
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 유저입니다.")

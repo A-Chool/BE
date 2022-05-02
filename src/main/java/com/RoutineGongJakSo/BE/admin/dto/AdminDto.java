@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.admin;
+package com.RoutineGongJakSo.BE.admin.dto;
 
 import lombok.Builder;
 import lombok.Getter;

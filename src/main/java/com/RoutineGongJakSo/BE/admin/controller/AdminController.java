@@ -1,5 +1,7 @@
-package com.RoutineGongJakSo.BE.admin;
+package com.RoutineGongJakSo.BE.admin.controller;
 
+import com.RoutineGongJakSo.BE.admin.dto.AdminDto;
+import com.RoutineGongJakSo.BE.admin.service.AdminService;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
