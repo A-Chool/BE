@@ -26,7 +26,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,7 +71,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId);
-        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/api/user/kakao/callback");
         body.add("code", code);
 
         //HTTP 요청 보내기

@@ -156,4 +156,25 @@ public class TeamService {
         }
         return weekMemberList;
     }
+
+    //주차 정보
+    public HashSet<String> getWeeks(UserDetailsImpl userDetails) {
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        List<WeekTeam> findWeek = weekTeamRepository.findAll();
+        List<String> weekList = new ArrayList<>();
+
+        for (WeekTeam find : findWeek) {
+            weekList.add(find.getWeek());
+        }
+
+        //중복 제거
+        HashSet<String> responseDto = new HashSet<>();
+        responseDto.addAll(weekList);
+
+        return responseDto;
+    }
 }
