@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -112,5 +112,37 @@ public class TeamService {
         memberRepository.delete(member);
 
         return "삭제 완료";
+    }
+
+    //해당 주차의 모든 팀을 조회
+    public Map<String, Object> getTeamList(UserDetailsImpl userDetails, TeamDto.getList getList) {
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        //해당 주차의 모든 팀을 조회
+        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(getList.getWeek());
+
+        //팀별 팀원 리스트
+        Map<String, Object> weekMemberList = new HashMap<>();
+
+        for (WeekTeam p : weekTeamList) {
+            List<Member> findMember = memberRepository.findByWeekTeam(p);
+            List<TeamDto.getUserList> userLists = new ArrayList<>();
+            for (Member getResponse : findMember) {
+                TeamDto.getUserList userList = TeamDto.getUserList.builder()
+                        .userId(getResponse.getUser().getUserId())
+                        .userName(getResponse.getUser().getUserName())
+                        .userEmail(getResponse.getUser().getUserEmail())
+                        .phoneNumber(getResponse.getUser().getPhoneNumber())
+                        .kakaoId(getResponse.getUser().getKakaoId())
+                        .createdAt(getResponse.getUser().getCreatedAt())
+                        .build();
+                userLists.add(userList);
+            }
+            weekMemberList.put(p.getTeamName(), userLists);
+        }
+        return weekMemberList;
     }
 }
