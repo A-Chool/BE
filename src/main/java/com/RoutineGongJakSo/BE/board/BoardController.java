@@ -14,7 +14,8 @@ public class BoardController {
 
     //게시판 리스트 조회
     @GetMapping("/api/user/board")
-    public List<BoardListDto> findAll(){
+    public List<BoardDto> findAll() {
+
         return boardService.findAll();
     }
 }

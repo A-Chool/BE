@@ -13,15 +13,15 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     //전체조회
-    public List<BoardListDto> findAll() {
+    public List<BoardDto> findAll() {
         List<Board> list = boardRepository.findAll();
-        List<BoardListDto> boardListDtos = new ArrayList<>();
+        List<BoardDto> boardDtos = new ArrayList<>();
         for (Board board : list) {
             System.out.println(board);
-             BoardListDto boardListDto = new BoardListDto(board);
-            boardListDtos.add(boardListDto);
+            BoardDto boardDto = new BoardDto(board);
+            boardDtos.add(boardDto);
         }
-        return boardListDtos;
+        return boardDtos;
     }
 
 }
