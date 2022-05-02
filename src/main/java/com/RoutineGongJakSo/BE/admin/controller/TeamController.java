@@ -26,9 +26,9 @@ public class TeamController {
     }
 
     //해당 주차의 모든 팀을 조회
-    @GetMapping("/")
-    public Map<String, Object> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.getList getList) {
-        return teamService.getTeamList(userDetails, getList);
+    @GetMapping("/{week}")
+    public Map<String, Object> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
+        return teamService.getTeamList(userDetails, week);
     }
 
     //팀원 추가
