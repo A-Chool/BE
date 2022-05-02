@@ -137,6 +137,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
 
+        // 회원 관리 API 허용
+        skipPathList.add("POST,/api/user/**");
+        skipPathList.add("POST,/item/details/{itemId}");
+        skipPathList.add("GET,/item/details/{itemId}");
+        skipPathList.add("POST,/item/details/basket");
+
+        //ToDo 일단 권한 다 풀어놓음, 추후 권한 수정 해야함
+        skipPathList.add("GET,/**");
+        skipPathList.add("POST,/**");
+        skipPathList.add("PUT,/**");
+        skipPathList.add("DELETE,/**");
+        // chat 허용
+        skipPathList.add("/chat/**");
+
         // Admin API 허용
         skipPathList.add("POST,/api/admin/login");
         skipPathList.add("GET,/api/admin/login");
