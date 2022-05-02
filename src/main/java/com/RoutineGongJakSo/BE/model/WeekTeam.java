@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -18,13 +16,13 @@ public class WeekTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long WeekTeam;
+    private Long WeekTeamId;
 
     @Column(nullable = false)
     private String teamName;
 
     @Column(nullable = false)
-    private Long week;
+    private String week;
 
     @Column(nullable = false)
     private String groundRole;
@@ -34,4 +32,5 @@ public class WeekTeam {
 
     @Column(nullable = false)
     private String roomId;
+
 }
