@@ -15,11 +15,7 @@ public class PostsController {
 
     private final PostsService postsService;
 
-    //게시판 리스트 조회
-    @GetMapping("/api/user/board")
-    public List<PostsResponseDto> findAll(){
-        return postsService.findAll();
-    }
+
 
     //게시글 조회
     @GetMapping("/api/user/{boardId}/posts")

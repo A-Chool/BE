@@ -1,4 +1,6 @@
 package com.RoutineGongJakSo.BE.board;
 
-public class BoardRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BoardRepository extends JpaRepository<Board, Long>{
 }

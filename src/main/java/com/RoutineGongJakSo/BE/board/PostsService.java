@@ -18,17 +18,7 @@ public class PostsService {
 
    private final PostsRepository postsRepository;
 
-   //전체조회
-   public List<PostsResponseDto> findAll() {
-      List<Posts> list = postsRepository.findAll();
-      List<PostsResponseDto> postsResponseDtos = new ArrayList<>();
-      for (Posts posts : list) {
-         System.out.println(posts);
-         PostsResponseDto postsResponseDto = new PostsResponseDto(posts);
-         postsResponseDtos.add(postsResponseDto);
-      }
-      return postsResponseDtos;
-   }
+
 
    //생성
    //@Transactional : 프록시객체 생성, 처리한 쿼리들 에러났을때 자동 rollback

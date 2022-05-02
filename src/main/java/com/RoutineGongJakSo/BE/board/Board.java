@@ -23,13 +23,16 @@ public class Board extends Timestamped {
     private String title;
 
     @OneToMany
-    private List<Posts> posts;
+    private List<Board> boardList;
 
-
+    public Board(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+}
 //    // 게시판 수정 메소드
 //    public void update(String id, String title, String author){
 //    this.id = id;
 //    this.title = title;
 //    this.author = author;
 //    }
-}
