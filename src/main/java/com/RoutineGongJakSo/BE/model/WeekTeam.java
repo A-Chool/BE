@@ -22,7 +22,7 @@ public class WeekTeam {
     private String teamName;
 
     @Column(nullable = false)
-    private Long week;
+    private String week;
 
     @Column(nullable = false)
     private String groundRole;

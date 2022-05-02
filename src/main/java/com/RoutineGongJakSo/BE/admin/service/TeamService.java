@@ -46,7 +46,7 @@ public class TeamService {
                 .week(teamDto.getWeek())
                 .groundRole(groundRole)
                 .workSpace(workSpace)
-                .roomId(teamDto.getWeek() + "주차 " + teamDto.getTeamName()) //1주차 1조
+                .roomId(teamDto.getWeek() + " " + teamDto.getTeamName()) //1주차 1조
                 .build();
 
         weekTeamRepository.save(weekTeam);
@@ -70,12 +70,16 @@ public class TeamService {
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
 
-        // 이미 소속된 팀이 있는지 확인
-       Optional<Member> findCheck = memberRepository.findByUserAndWeekTeam(user, weekTeam);
-
-       if (findCheck.isPresent()){
-         throw new NullPointerException("해당 유저는 소속된 팀이 존재합니다.");
-       }
+        // 이미 소속된 팀이 존재하는지 확인
+        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
+        for (WeekTeam find : weekTeamList) {
+            List<Member> findMember = memberRepository.findByWeekTeam(find);
+            for (Member member : findMember) {
+                if (member.getUser() == user) {
+                    throw new NullPointerException("해당 유저는 이미 소속된 팀이 존재합니다.");
+                }
+            }
+        }
 
         Member member = Member.builder()
                 .weekTeam(weekTeam)

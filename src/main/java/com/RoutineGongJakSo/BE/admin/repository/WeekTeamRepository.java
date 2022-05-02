@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WeekTeamRepository extends JpaRepository<WeekTeam, Long> {
-    Optional<WeekTeam> findByTeamNameAndWeek(String teamName, Long week);
+    Optional<WeekTeam> findByTeamNameAndWeek(String teamName, String week);
 
-    List<WeekTeam> findByWeek(Long week);
+    List<WeekTeam> findByWeek(String week);
 
 }

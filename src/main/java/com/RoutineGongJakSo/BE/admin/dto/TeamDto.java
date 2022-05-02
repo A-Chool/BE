@@ -12,7 +12,7 @@ public class TeamDto {
     @Getter
     public static class createTeamDto {
         private String teamName;
-        private Long week;
+        private String week;
     }
 
     //팀원 추가 요청
@@ -25,7 +25,7 @@ public class TeamDto {
     //주차별 팀 조회시
     @Getter
     public static class getList {
-        private Long week;
+        private String week;
     }
 
     //주차별 팀 response
