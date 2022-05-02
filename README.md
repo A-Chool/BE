@@ -16,7 +16,6 @@
 
 #### `Frontend`
  <a href="https://github.com/kyeongbong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=이경태 &color=61dafb&style=for-the-badge&>"/></a>
- <a href="https://github.com/insidelamp" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=임세영 &color=61dafb&style=for-the-badge&>"/></a>
 
 
 **[(Front-end github)](https://github.com/Routine-GongJakSo/FE)**
