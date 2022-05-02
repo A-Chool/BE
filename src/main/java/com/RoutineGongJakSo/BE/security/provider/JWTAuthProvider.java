@@ -31,7 +31,7 @@ public class JWTAuthProvider implements AuthenticationProvider {
         //  -> 해결을 위해서는 UserDetailsImpl 에 User 객체를 저장하지 않도록 수정
         //  ex) UserDetailsImpl 에 userId, username 만 저장
         //    -> JWT 에 userId, username 정보를 암호화/복호화하여 사용
-        User user = userRepository.findByUserId(userId)
+        User user = userRepository.findByUserEmail(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + userId));
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

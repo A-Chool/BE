@@ -31,7 +31,7 @@ public class JwtDecoder {
         }
 
         String username = decodedJWT
-                .getClaim(CLAIM_USER_NAME)
+                .getClaim(CLAIM_USER_EMAIL)
                 .asString();
 
         return username;

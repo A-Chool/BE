@@ -15,10 +15,6 @@ public class User extends Timestamped {
     @Id
     private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "weekTeamUserId")
-    private WeekTeamUser weekTeamUser;
-
     @Column(nullable = false, unique = true)
     private String userEmail;
 
@@ -39,4 +35,8 @@ public class User extends Timestamped {
 
     @Column(unique = true)
     private String naverId;
+
+    @ManyToOne
+    @JoinColumn(name = "WEEK_TEAM_ID")
+    private WeekTeam weekTeam;
 }

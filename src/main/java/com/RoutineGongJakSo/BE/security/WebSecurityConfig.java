@@ -151,6 +151,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // chat 허용
         skipPathList.add("/chat/**");
 
+        // Admin API 허용
+        skipPathList.add("POST,/api/admin/login");
+        skipPathList.add("GET,/api/admin/login");
+
+        // User API 허용
+        skipPathList.add("POST,/api/user/signup");
+
         skipPathList.add("GET,/**.js");
 
         skipPathList.add("GET,/favicon.ico");

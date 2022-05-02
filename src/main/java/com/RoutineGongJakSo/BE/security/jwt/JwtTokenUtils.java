@@ -14,8 +14,8 @@ public class JwtTokenUtils {
     private static final int JWT_TOKEN_VALID_MILLI_SEC = 60 * 30 * 1000;
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
-    private static final String CLAIM_USER_EMAIL = "USER_EMAIL";
-    private static final String CLAIM_USER_LEVEL = "USER_LEVEL";
+    public static final String CLAIM_USER_EMAIL = "USER_EMAIL";
+    public static final String CLAIM_USER_LEVEL = "USER_LEVEL";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {
