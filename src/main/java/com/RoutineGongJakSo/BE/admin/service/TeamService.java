@@ -126,14 +126,14 @@ public class TeamService {
     }
 
     //해당 주차의 모든 팀을 조회
-    public Map<String, Object> getTeamList(UserDetailsImpl userDetails, TeamDto.getList getList) {
+    public Map<String, Object> getTeamList(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
         //해당 주차의 모든 팀을 조회
-        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(getList.getWeek());
+        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
 
         //팀별 팀원 리스트
         Map<String, Object> weekMemberList = new HashMap<>();

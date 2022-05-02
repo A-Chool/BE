@@ -22,12 +22,6 @@ public class TeamDto {
         private Long memberId;
     }
 
-    //주차별 팀 조회시
-    @Getter
-    public static class getList {
-        private String week;
-    }
-
     //주차별 팀 response
     @Getter
     @Builder
