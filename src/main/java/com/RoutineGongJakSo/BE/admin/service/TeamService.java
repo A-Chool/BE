@@ -70,6 +70,13 @@ public class TeamService {
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
 
+        // 이미 소속된 팀이 있는지 확인
+       Optional<Member> findCheck = memberRepository.findByUserAndWeekTeam(user, weekTeam);
+
+       if (findCheck.isPresent()){
+         throw new NullPointerException("해당 유저는 소속된 팀이 존재합니다.");
+       }
+
         Member member = Member.builder()
                 .weekTeam(weekTeam)
                 .user(user)
