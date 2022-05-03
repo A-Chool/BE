@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.board;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,9 +12,16 @@ public class BoardDto {
     private String boardName;
     private int boardLevel;
 
-    public BoardDto(Board board) {
-        this.id = board.getId();
-        this.boardName = board.getboardName();
-        this.boardLevel = board.getBoardLevel();
+//    public BoardDto(Board board) {
+//        this.id = board.getId();
+//        this.boardName = board.getboardName();
+//        this.boardLevel = board.getBoardLevel();
+//    }
+    @Getter
+    @Builder
+    public static class boardDto{
+        private Long id;
+        private String boardName;
+        private int boardLevel;
     }
 }

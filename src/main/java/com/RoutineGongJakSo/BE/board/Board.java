@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
 
     @Column(nullable = false)
     private String boardName;
@@ -27,10 +27,6 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private int boardLevel;
 
-
-    public String getboardName() {
-        return boardName;
-    }
 }
 
 //
