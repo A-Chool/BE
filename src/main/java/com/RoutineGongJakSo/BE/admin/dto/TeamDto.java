@@ -45,9 +45,9 @@ public class TeamDto {
 
     @Getter
     @Builder
-    public static class getTeamId {
-        private String teamName;
-        private Long teamId;
+    public static class getNoMember{
+        private String userName;
+        private Long userId;
     }
 
 }
