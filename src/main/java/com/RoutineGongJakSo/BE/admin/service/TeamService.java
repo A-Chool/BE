@@ -199,7 +199,7 @@ public class TeamService {
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
 
         //모든 유저를 찾기
-        List<User> NoMemberList = userRepository.findAll();
+        List<User> noMemberList = userRepository.findAll();
         //값을 return 할 Dto 만들기
         List<TeamDto.getNoMember> noMembers = new ArrayList<>();
 
@@ -210,12 +210,12 @@ public class TeamService {
                     () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
             );
             //제거 대상 제거
-            NoMemberList.remove(getUser);
+                noMemberList.remove(getUser);
             }
         }
 
         //return 값 가공하기
-        for (User user : NoMemberList) {
+        for (User user : noMemberList) {
             TeamDto.getNoMember response = TeamDto.getNoMember.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
