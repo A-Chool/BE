@@ -58,19 +58,22 @@ public class TeamService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(UserDetailsImpl userDetails, TeamDto.addMember teamDto) {
+    public String addMembers(UserDetailsImpl userDetails, Long teamId) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
-        WeekTeam weekTeam = weekTeamRepository.findById(teamDto.getTeamId()).orElseThrow(
+        WeekTeam weekTeam = weekTeamRepository.findById(teamId).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
-
-        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+        User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
+
+//        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+//                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+//        );
 
         // 이미 소속된 팀이 존재하는지 확인
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
