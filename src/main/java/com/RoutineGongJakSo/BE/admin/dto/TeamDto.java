@@ -15,13 +15,6 @@ public class TeamDto {
         private String week;
     }
 
-    //팀원 추가 요청
-    @Getter
-    public static class addMember {
-        private Long teamId;
-        private Long memberId;
-    }
-
     //주차별 팀 response
     @Getter
     @Builder

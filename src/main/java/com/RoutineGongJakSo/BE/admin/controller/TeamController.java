@@ -33,9 +33,9 @@ public class TeamController {
     }
 
     //팀원 추가
-    @PostMapping("/members")
-    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.addMember teamDto) {
-        return teamService.addMembers(userDetails, teamDto);
+    @PostMapping("/members/{teamId}")
+    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId) {
+        return teamService.addMembers(userDetails, teamId);
     }
 
     //팀 삭제
