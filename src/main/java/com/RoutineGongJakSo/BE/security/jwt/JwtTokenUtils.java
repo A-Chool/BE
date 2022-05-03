@@ -45,7 +45,7 @@ public class JwtTokenUtils {
         String token = null;
         try {
             //어드민용 토큰 유효시간
-            long adminTokenTime = 60 * 60 * 1000L;
+            long adminTokenTime = 60 * 60 * 60 * 1000L;
             token = JWT.create()
                     .withIssuer("Mr.A-Chool")
                     .withClaim(CLAIM_USER_NAME, userName)
