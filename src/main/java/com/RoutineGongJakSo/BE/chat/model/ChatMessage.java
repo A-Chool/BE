@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.model;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
