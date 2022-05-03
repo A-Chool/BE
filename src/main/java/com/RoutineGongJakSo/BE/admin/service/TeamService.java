@@ -143,6 +143,7 @@ public class TeamService {
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
                 TeamDto.getUserList userList = TeamDto.getUserList.builder()
+                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
                         .userId(getResponse.getUser().getUserId())
                         .userName(getResponse.getUser().getUserName())
                         .userEmail(getResponse.getUser().getUserEmail())
@@ -153,6 +154,7 @@ public class TeamService {
                 userLists.add(userList);
             }
             weekMemberList.put(p.getTeamName(), userLists);
+
         }
         return weekMemberList;
     }

@@ -39,6 +39,7 @@ public class TeamDto {
         private String phoneNumber;
         private Long kakaoId;
         private String createdAt;
+        private Long teamId;
 
     }
 }
