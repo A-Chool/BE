@@ -14,8 +14,8 @@ public class JwtTokenUtils {
     private static final int JWT_TOKEN_VALID_MILLI_SEC = 60 * 30 * 1000;
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
-    private static final String CLAIM_USER_EMAIL = "USER_EMAIL";
-    private static final String CLAIM_USER_LEVEL = "USER_LEVEL";
+    public static final String CLAIM_USER_EMAIL = "USER_EMAIL";
+    public static final String CLAIM_USER_LEVEL = "USER_LEVEL";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {
@@ -45,7 +45,7 @@ public class JwtTokenUtils {
         String token = null;
         try {
             //어드민용 토큰 유효시간
-            long adminTokenTime = 60 * 60 * 1000L;
+            long adminTokenTime = 60 * 60 * 60 * 1000L;
             token = JWT.create()
                     .withIssuer("Mr.A-Chool")
                     .withClaim(CLAIM_USER_NAME, userName)

@@ -16,27 +16,21 @@ public class WeekTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long WeekTeam;
+    private Long WeekTeamId;
 
-    @ManyToOne
-    @JoinColumn(name = "WEEK_USER_ID")
-    private WeekTeamUser weekTeamUser;
+    @Column(nullable = false)
+    private String teamName;
 
     @Column(nullable = false)
     private String week;
 
     @Column(nullable = false)
-    private String team;
+    private String groundRole;
 
-    //공지사항
     @Column(nullable = false)
     private String workSpace;
 
-    //그라운드룰
-    @Column(nullable = false)
-    private String groundRole;
-
-    //채팅방ID
     @Column(nullable = false)
     private String roomId;
+
 }
