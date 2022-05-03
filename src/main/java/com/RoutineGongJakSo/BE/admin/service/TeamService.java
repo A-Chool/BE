@@ -137,30 +137,31 @@ public class TeamService {
 
         //팀별 팀원 리스트
         Map<String, Object> weekMemberList = new HashMap<>();
+        List<TeamDto.getTeamId> getTeamIds = new ArrayList<>();
 
         for (WeekTeam p : weekTeamList) {
             List<Member> findMember = memberRepository.findByWeekTeam(p);
+
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
-                TeamDto.getUserList userList = TeamDto.getUserList.builder()
-                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
-                        .userId(getResponse.getUser().getUserId())
-                        .userName(getResponse.getUser().getUserName())
-                        .userEmail(getResponse.getUser().getUserEmail())
-                        .phoneNumber(getResponse.getUser().getPhoneNumber())
-                        .kakaoId(getResponse.getUser().getKakaoId())
-                        .createdAt(getResponse.getUser().getCreatedAt())
-                        .build();
-                userLists.add(userList);
+                    TeamDto.getUserList userList = TeamDto.getUserList.builder()
+                            .teamId(getResponse.getWeekTeam().getWeekTeamId())
+                            .userId(getResponse.getUser().getUserId())
+                            .userName(getResponse.getUser().getUserName())
+                            .userEmail(getResponse.getUser().getUserEmail())
+                            .phoneNumber(getResponse.getUser().getPhoneNumber())
+                            .kakaoId(getResponse.getUser().getKakaoId())
+                            .createdAt(getResponse.getUser().getCreatedAt())
+                            .build();
+                    userLists.add(userList);
             }
             weekMemberList.put(p.getTeamName(), userLists);
-
         }
         return weekMemberList;
     }
 
     //주차 정보
-    public HashSet<String> getWeeks(UserDetailsImpl userDetails) {
+    public ArrayList<String> getWeeks(UserDetailsImpl userDetails) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -177,6 +178,13 @@ public class TeamService {
         HashSet<String> responseDto = new HashSet<>();
         responseDto.addAll(weekList);
 
-        return responseDto;
+        //리스트로 변환(정렬)
+        ArrayList<String> response = new ArrayList<>(responseDto);
+
+        //정렬
+        Collections.sort(response);
+
+
+        return response;
     }
 }
