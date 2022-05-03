@@ -51,7 +51,7 @@ public class CheckInService {
 
         CheckIn checkIn = CheckIn.builder()
                 .user(user)
-                .date(date)
+                .date(date.toString())
                 .checkIn(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
                 .build();
 

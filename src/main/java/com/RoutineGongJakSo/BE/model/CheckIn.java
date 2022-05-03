@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 @Getter
 @Builder
@@ -25,7 +24,7 @@ public class CheckIn {
     private User user;
 
     @Column
-    private LocalDate date;
+    private String date;
 
     @Column
     private String checkIn;
