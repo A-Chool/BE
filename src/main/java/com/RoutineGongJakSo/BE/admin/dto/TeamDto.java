@@ -40,7 +40,16 @@ public class TeamDto {
         private Long kakaoId;
         private String createdAt;
         private Long teamId;
+        private Long memberId;
 
     }
+
+    @Getter
+    @Builder
+    public static class getTeamId {
+        private String teamName;
+        private Long teamId;
+    }
+
 }
 

@@ -137,25 +137,26 @@ public class TeamService {
 
         //팀별 팀원 리스트
         Map<String, Object> weekMemberList = new HashMap<>();
-        List<TeamDto.getTeamId> getTeamIds = new ArrayList<>();
 
         for (WeekTeam p : weekTeamList) {
             List<Member> findMember = memberRepository.findByWeekTeam(p);
-
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
-                    TeamDto.getUserList userList = TeamDto.getUserList.builder()
-                            .teamId(getResponse.getWeekTeam().getWeekTeamId())
-                            .userId(getResponse.getUser().getUserId())
-                            .userName(getResponse.getUser().getUserName())
-                            .userEmail(getResponse.getUser().getUserEmail())
-                            .phoneNumber(getResponse.getUser().getPhoneNumber())
-                            .kakaoId(getResponse.getUser().getKakaoId())
-                            .createdAt(getResponse.getUser().getCreatedAt())
-                            .build();
+                TeamDto.getUserList userList = TeamDto.getUserList.builder()
+                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
+                        .userId(getResponse.getUser().getUserId())
+                        .userName(getResponse.getUser().getUserName())
+                        .userEmail(getResponse.getUser().getUserEmail())
+                        .phoneNumber(getResponse.getUser().getPhoneNumber())
+                        .kakaoId(getResponse.getUser().getKakaoId())
+                        .createdAt(getResponse.getUser().getCreatedAt())
+                        .memberId(getResponse.getMemberId())
+                        .build();
+
                     userLists.add(userList);
             }
-            weekMemberList.put(p.getTeamName(), userLists);
+
+            weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
         }
         return weekMemberList;
     }
@@ -183,7 +184,6 @@ public class TeamService {
 
         //정렬
         Collections.sort(response);
-
 
         return response;
     }
