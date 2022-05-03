@@ -25,6 +25,7 @@ public class AdminDto {
         private int userLevel;
         private Long kakaoId;
         private String naverId;
+        private String createdAt;
     }
 
     @Getter
