@@ -31,6 +31,8 @@ public class TeamService {
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
+        // ':' 사용 금지
+        validator.teamNameCheck(teamDto.getTeamName());
 
         //중복 팀 체크
         Optional<WeekTeam> teamCheck = weekTeamRepository.findByTeamNameAndWeek(teamDto.getTeamName(), teamDto.getWeek());
