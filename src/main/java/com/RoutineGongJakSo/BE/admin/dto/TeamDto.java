@@ -15,6 +15,12 @@ public class TeamDto {
         private String week;
     }
 
+    @Getter
+    public static class addTeamDto{
+        private Long teamId;
+        private Long userId;
+    }
+
     //주차별 팀 response
     @Getter
     @Builder
