@@ -20,7 +20,7 @@ public class BoardService {
             BoardDto.boardDto responseDto = BoardDto.boardDto.builder()
                     .boardName(board.getBoardName())
                     .boardLevel(board.getBoardLevel())
-                    .id(board.getId())
+                    .boardId(board.getBoardId())
                     .build();
             boardDtos.add(responseDto);
         }

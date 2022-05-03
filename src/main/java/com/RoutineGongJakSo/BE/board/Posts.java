@@ -2,8 +2,6 @@
 //
 //import com.RoutineGongJakSo.BE.model.User;
 //import lombok.*;
-//import org.springframework.data.annotation.CreatedDate;
-//import org.springframework.data.annotation.LastModifiedDate;
 //
 //import javax.persistence.*;
 //
@@ -17,20 +15,15 @@
 //@AllArgsConstructor
 //@Entity
 //
-//public class Posts{
+//public class Posts {
 //
 //    //글 id
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private long Id;
+//    private long postsId;
 //
-//    @Column
-//    @CreatedDate
-//    private String createdAt;
-//
-//    @Column
-//    @LastModifiedDate
-//    private String modifiedAt;
+//    @ManyToOne
+//    private Long user_id;
 //
 //    //제목
 //    @Column(nullable = false)
@@ -46,7 +39,7 @@
 //    private User user;
 //
 //    @ManyToOne
-//    @JoinColumn(name="boardId", nullable = false)
+//    @JoinColumn(name = "board.Id", nullable = false)
 //    private Posts posts;
 //
 //
@@ -59,7 +52,7 @@
 //        this.author = author;
 //    }
 //
-//    public void update(String title, String modifiedAt, String detail){
+//    public void update(String title, String modifiedAt, String detail) {
 //        this.title = title;
 //        this.modifiedAt = modifiedAt;
 //        this.detail = detail;

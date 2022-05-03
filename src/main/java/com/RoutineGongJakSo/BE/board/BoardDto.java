@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardDto {
 
-    private Long id;
+    private Long boardId;
     private String boardName;
     private int boardLevel;
 
@@ -20,7 +20,7 @@ public class BoardDto {
     @Getter
     @Builder
     public static class boardDto{
-        private Long id;
+        private Long boardId;
         private String boardName;
         private int boardLevel;
     }

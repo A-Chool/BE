@@ -17,13 +17,13 @@ import javax.persistence.*;
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long boardId;
 
     @Column(nullable = false)
     private String boardName;
 
     //권한 -> user, admin
-    @Enumerated
+//    @Enumerated
     @Column(nullable = false)
     private int boardLevel;
 
