@@ -1,9 +1,6 @@
 package com.RoutineGongJakSo.BE.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 @Entity
 public class User extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +35,8 @@ public class User extends Timestamped {
 
     @Column(unique = true)
     private String naverId;
+
+    @ManyToOne
+    @JoinColumn(name = "WEEK_TEAM_ID")
+    private WeekTeam weekTeam;
 }

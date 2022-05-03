@@ -1,10 +1,10 @@
-package com.RoutineGongJakSo.BE.social.socialService;
+package com.RoutineGongJakSo.BE.social.Service;
 
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
-import com.RoutineGongJakSo.BE.social.socialDto.NaverUserInfoDto;
+import com.RoutineGongJakSo.BE.social.Dto.NaverUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,10 +1,10 @@
-package com.RoutineGongJakSo.BE.social.socialService;
+package com.RoutineGongJakSo.BE.social.Service;
 
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
-import com.RoutineGongJakSo.BE.social.socialDto.KakaoUserInfoDto;
+import com.RoutineGongJakSo.BE.social.Dto.KakaoUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -70,7 +71,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId);
-        body.add("redirect_uri", "http://34.228.32.139:8080/api/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/api/user/kakao/callback");
         body.add("code", code);
 
         //HTTP 요청 보내기
@@ -129,6 +130,13 @@ public class KakaoService {
         Long kakaoId = kakaoUserInfoDto.getKakaoId();
         User findKakao = repository.findByKakaoId(kakaoId)
                 .orElse(null);
+
+        Optional<User> findCheck = repository.findByUserEmail(kakaoUserInfoDto.getEmail());
+
+        // 이미 가입된 사용자인지 확인
+        if (findCheck.isPresent()){
+            throw new NullPointerException("이미 가입된 아이디가 존재합니다.");
+        }
 
         if (findKakao == null) {
             //회원가입

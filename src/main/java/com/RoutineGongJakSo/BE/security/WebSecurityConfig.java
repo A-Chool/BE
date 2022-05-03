@@ -80,13 +80,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin().disable()
                 .authorizeRequests()
+                .antMatchers("/websocket/**").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()
+
                 // [로그아웃 기능]
                 .logout()
                 // 로그아웃 요청 처리 URL
                 .logoutUrl("/api/user/logout")
+                .logoutUrl("/api/admin/logout")
                 .permitAll();
     }
 
@@ -95,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
@@ -136,21 +140,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
 
-        // 회원 관리 API 허용
-        skipPathList.add("POST,/api/user/**");
-        skipPathList.add("POST,/item/details/{itemId}");
-        skipPathList.add("GET,/item/details/{itemId}");
-        skipPathList.add("POST,/item/details/basket");
+        // Admin API 허용
+        skipPathList.add("POST,/api/admin/login");
+        skipPathList.add("GET,/api/admin/login");
 
-        //ToDo 일단 권한 다 풀어놓음, 추후 권한 수정 해야함
-        skipPathList.add("GET,/**");
-        skipPathList.add("POST,/**");
-        skipPathList.add("PUT,/**");
-        skipPathList.add("DELETE,/**");
+        // User API 허용
+        skipPathList.add("POST,/api/user/signup");
 
         skipPathList.add("GET,/**.js");
+        skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/sub/**");
+        skipPathList.add("GET,/pub/**");
 
         skipPathList.add("GET,/favicon.ico");
+
+        skipPathList.add("GET,/login.html");
+        skipPathList.add("POST,/login.html");
+        skipPathList.add("GET,/api/user/kakao/**");
+        skipPathList.add("POST,/api/user/kakao/**");
+
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

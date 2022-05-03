@@ -44,6 +44,13 @@ dependencies {
 
 	//validation 모듈 추가
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// websocket 추가
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {

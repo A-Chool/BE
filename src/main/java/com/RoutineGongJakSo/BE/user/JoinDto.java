@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.dto;
+package com.RoutineGongJakSo.BE.user;
 
 import lombok.Getter;
 

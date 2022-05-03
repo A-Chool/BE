@@ -1,10 +1,9 @@
-package com.RoutineGongJakSo.BE.service;
+package com.RoutineGongJakSo.BE.user;
 
-import com.RoutineGongJakSo.BE.dto.JoinDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;
-import com.RoutineGongJakSo.BE.security.validator.UserValidator;
+import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class UserService {
         Optional<User> found = userRepository.findByUserEmail(joinDto.getEmail());
 
         // 아이디 중복 검사, 비밀번호 확인 검사
-        UserValidator.checkUser(found, joinDto);
+        Validator.checkUser(found);
 
         String userEmail = joinDto.getEmail();
         String userName = joinDto.getUserName();
