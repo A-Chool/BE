@@ -31,6 +31,8 @@ public class TeamService {
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
+        // ':' 사용 금지
+        validator.teamNameCheck(teamDto.getTeamName());
 
         //중복 팀 체크
         Optional<WeekTeam> teamCheck = weekTeamRepository.findByTeamNameAndWeek(teamDto.getTeamName(), teamDto.getWeek());
@@ -56,19 +58,22 @@ public class TeamService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(UserDetailsImpl userDetails, TeamDto.addMember teamDto) {
+    public String addMembers(UserDetailsImpl userDetails, TeamDto.addTeamDto addTeamDto) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
-        WeekTeam weekTeam = weekTeamRepository.findById(teamDto.getTeamId()).orElseThrow(
+        WeekTeam weekTeam = weekTeamRepository.findById(addTeamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
-
-        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+        User user = userRepository.findById(addTeamDto.getUserId()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
+
+//        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+//                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+//        );
 
         // 이미 소속된 팀이 존재하는지 확인
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
@@ -150,17 +155,19 @@ public class TeamService {
                         .phoneNumber(getResponse.getUser().getPhoneNumber())
                         .kakaoId(getResponse.getUser().getKakaoId())
                         .createdAt(getResponse.getUser().getCreatedAt())
+                        .memberId(getResponse.getMemberId())
                         .build();
-                userLists.add(userList);
-            }
-            weekMemberList.put(p.getTeamName(), userLists);
 
+                    userLists.add(userList);
+            }
+
+            weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
         }
         return weekMemberList;
     }
 
     //주차 정보
-    public HashSet<String> getWeeks(UserDetailsImpl userDetails) {
+    public ArrayList<String> getWeeks(UserDetailsImpl userDetails) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -177,6 +184,12 @@ public class TeamService {
         HashSet<String> responseDto = new HashSet<>();
         responseDto.addAll(weekList);
 
-        return responseDto;
+        //리스트로 변환(정렬)
+        ArrayList<String> response = new ArrayList<>(responseDto);
+
+        //정렬
+        Collections.sort(response);
+
+        return response;
     }
 }

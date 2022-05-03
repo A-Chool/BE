@@ -15,11 +15,10 @@ public class TeamDto {
         private String week;
     }
 
-    //팀원 추가 요청
     @Getter
-    public static class addMember {
+    public static class addTeamDto{
         private Long teamId;
-        private Long memberId;
+        private Long userId;
     }
 
     //주차별 팀 response
@@ -40,7 +39,16 @@ public class TeamDto {
         private Long kakaoId;
         private String createdAt;
         private Long teamId;
+        private Long memberId;
 
     }
+
+    @Getter
+    @Builder
+    public static class getTeamId {
+        private String teamName;
+        private Long teamId;
+    }
+
 }
 

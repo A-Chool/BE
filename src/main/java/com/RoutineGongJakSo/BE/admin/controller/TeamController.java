@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class TeamController {
 
     //팀원 추가
     @PostMapping("/members")
-    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.addMember teamDto) {
-        return teamService.addMembers(userDetails, teamDto);
+    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.addTeamDto addTeamDto) {
+        return teamService.addMembers(userDetails, addTeamDto);
     }
 
     //팀 삭제
@@ -51,7 +52,7 @@ public class TeamController {
 
     //주차 정보
     @GetMapping("/week")
-    public HashSet<String> getWeeks(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ArrayList<String> getWeeks(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return teamService.getWeeks(userDetails);
     }
 
