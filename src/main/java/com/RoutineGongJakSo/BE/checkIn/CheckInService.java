@@ -41,13 +41,13 @@ public class CheckInService {
                 () -> new NullPointerException("해당 사용자가 존재하지 않습니다.")
         );
 
-      List<CheckIn> checkInList = checkInRepository.findByUser(user);
+        List<CheckIn> checkInList = checkInRepository.findByUser(user);
 
-      for (CheckIn check : checkInList){
-          if (check.getCheckOut() == null){
-              throw new NullPointerException("체크아웃을 먼저 해주세요");
-          }
-      }
+        for (CheckIn check : checkInList) {
+            if (check.getCheckOut() == null) {
+                throw new NullPointerException("체크아웃을 먼저 해주세요");
+            }
+        }
         //현재 서울 날짜
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString();
         //현재 시간
@@ -68,7 +68,7 @@ public class CheckInService {
     }
 
     //사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
-    public void getCheckIn(UserDetailsImpl userDetails) throws ParseException {
+    public String getCheckIn(UserDetailsImpl userDetails) throws ParseException {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
 
@@ -80,28 +80,58 @@ public class CheckInService {
         //해당 유저의 해당 날짜의 전체 기록을 찾기
         List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
 
+        //기록 정보가 없을 때 return
+        if (checkInList == null) {
+            return "금일 기록된 정보가 없습니다.";
+        }
+
         //마지막 체크인 시간 확인
-        CheckIn lastCheckIn = checkInList.get(checkInList.size() -1);
+        CheckIn lastCheckIn = checkInList.get(checkInList.size() - 1);
 
         //마지막 기록의 체크아웃 값이 있는지 확인
-        if (lastCheckIn.getCheckOut() != null){
+        if (lastCheckIn.getCheckOut() != null) {
             throw new NullPointerException("아직 Start 를 누르지 않았습니다.");
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
-        Date timeFormatter = formatter.parse(lastCheckIn.getCheckIn());
+        //시간을 예쁘게 만들기
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+        SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
+        //체크인 시 기록된 시간, 날짜
+        Date timeFormatter = formatter.parse(lastCheckIn.getDate() + " " + lastCheckIn.getCheckIn());
+        log.info("마지막으로 체크인된 시간 : " + timeFormatter);
 
+        //현재 시간을 구하고
         ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        log.info("현재 년 : " + nowSeoul.getYear());
+        log.info("현재 월 " + nowSeoul.getMonthValue());
+        log.info("현재 일 " + nowSeoul.getDayOfMonth());
+        log.info("현재 시간 : " + nowSeoul);
+
+        //Date 포맷을 위해 년, 월, 일을 하나씩 적출해서 string 으로 변환하고
+        String nowYear = String.valueOf(nowSeoul.getYear());
+        String nowMonth = String.valueOf(nowSeoul.getMonthValue());
+        String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
+        log.info("현재 y : " + nowYear);
+        log.info("현재 m " + nowMonth);
+        log.info("현재 d " + nowDay);
+
+        //현재 시간을 스트링으로 변환하고
+        String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        log.info("가공된 시간 : " + nowTime);
+
+        //Date 형식으로 포맷
+        Date nowFormatter = formatter.parse(nowYear + "-" + nowMonth + "-" + nowDay + "-" + nowTime);
+        log.info("Date 형식으로 포맷된 현재시간 : " + nowFormatter);
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timeFormatter);
 
-        calendar.add(Calendar.SECOND, -800);
-        log.info("시간 계산 잘 되나?" + calendar);
-        log.info("현재 초단위 : " + nowSeoul.get(ChronoField.MILLI_OF_SECOND));
-        log.info("현재 시간 : " + nowSeoul);
+        calendar.add(Calendar.HOUR, -nowSeoul.getHour());
+        calendar.add(Calendar.MINUTE, -nowSeoul.getMinute());
+        calendar.add(Calendar.SECOND, -nowSeoul.getSecond());
 
-        log.info("포맷 확인 : " + timeFormatter);
+        log.info("최종 계산 시간 : " + calenderFormatter.format(calendar.getTime()));
 
 
         //solution 1. split 으로 : 단위로 쪼개기 -> 각 파트마다 초로 환산하기 -> 현재 시간이랑 빼기 -> 다시포시,분,초로 변환 -> string -> return;
@@ -114,8 +144,8 @@ public class CheckInService {
         //5. return;
 
 
-
         // 찍힌 시간에서 현재 시간 빼서 리턴
         // 밀리 초 단위로 계산해서 시간 형식으로 포맷해서 리턴(시간 양식 지키기)
+        return "정상 작동";
     }
 }

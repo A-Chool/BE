@@ -21,7 +21,7 @@ public class WeekTeam {
     private Long WeekTeamId;
 
     @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
-    private List<Member> memberList = new ArrayList<>();
+    private List<Member> memberList;
 
     @Column(nullable = false)
     private String teamName;

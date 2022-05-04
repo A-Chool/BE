@@ -25,7 +25,7 @@ public class CheckInController {
 
     //if 로그인된 사용자가 이미 start를 누른 상태라면, 값을 내려준다.
     @GetMapping("/checkIn")
-    public void getCheckIn(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
-        checkInService.getCheckIn(userDetails);
+    public String getCheckIn(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
+       return checkInService.getCheckIn(userDetails);
     }
 }

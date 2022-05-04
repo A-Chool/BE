@@ -189,6 +189,7 @@ public class TeamService {
         return response;
     }
 
+    //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<TeamDto.getNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
