@@ -19,7 +19,7 @@ public class CheckInController {
 
     //체크인 Start
     @PostMapping("/checkIn")
-    public String checkIn(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String checkIn(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException{
        return checkInService.checkIn(userDetails);
     }
 
