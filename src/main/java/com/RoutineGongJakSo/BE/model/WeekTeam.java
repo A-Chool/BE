@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,6 +19,9 @@ public class WeekTeam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long WeekTeamId;
+
+    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
+    private List<Member> memberList = new ArrayList<>();
 
     @Column(nullable = false)
     private String teamName;
