@@ -36,7 +36,4 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String naverId;
 
-    @ManyToOne
-    @JoinColumn(name = "WEEK_TEAM_ID")
-    private WeekTeam weekTeam;
 }
