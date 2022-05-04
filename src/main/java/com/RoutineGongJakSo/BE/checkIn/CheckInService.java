@@ -37,7 +37,6 @@ public class CheckInService {
         // 유저 정보를 찾음
         User user = validator.userInfo(userDetails);
 
-
         List<CheckIn> checkInList = checkInRepository.findByUser(user);
 
         for (CheckIn check : checkInList) {
@@ -66,12 +65,11 @@ public class CheckInService {
 
     //사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
     public String getCheckIn(UserDetailsImpl userDetails) throws ParseException {
-        // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        // 유저 정보를 찾음
-        User user = validator.userInfo(userDetails);
 
-        //[서울]현재 날짜, 시간
+        validator.loginCheck(userDetails);  // 로그인 여부 확인
+        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음
+
+        //[서울]현재 날짜
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString();
 
         //해당 유저의 해당 날짜의 전체 기록을 찾기
@@ -92,50 +90,32 @@ public class CheckInService {
             throw new NullPointerException("아직 Start 를 누르지 않았습니다.");
         }
 
-        String[] test = lastCheckIn.getCheckIn().split(":");
-        log.info("나눈다" + Arrays.deepToString(test));
+        String[] test = lastCheckIn.getCheckIn().split(":"); //시, 분, 초 나누기
 
-        int HH = Integer.parseInt(test[0]);
-        int mm = Integer.parseInt(test[1]);
-        int ss = Integer.parseInt(test[2]);
+        int HH = Integer.parseInt(test[0]); //시
+        int mm = Integer.parseInt(test[1]); //분
+        int ss = Integer.parseInt(test[2]); //초
 
-        log.info("HH " + HH);
-        log.info("mm " + mm);
-        log.info("ss " + ss);
-
-        //시간을 예쁘게 만들기
+        //시간을 형식에 맞게 포맷
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
         SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
-        //체크인 시 기록된 시간, 날짜
-        Date timeFormatter = formatter.parse(lastCheckIn.getDate() + " " + lastCheckIn.getCheckIn());
-        log.info("마지막으로 체크인된 시간 : " + timeFormatter);
 
-        //현재 시간을 구하고
+        //현재 시간
         ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        log.info("현재 년 : " + nowSeoul.getYear());
-        log.info("현재 월 " + nowSeoul.getMonthValue());
-        log.info("현재 일 " + nowSeoul.getDayOfMonth());
-        log.info("현재 시간 : " + nowSeoul);
 
         //Date 포맷을 위해 년, 월, 일을 하나씩 적출해서 string 으로 변환하고
         String nowYear = String.valueOf(nowSeoul.getYear());
         String nowMonth = String.valueOf(nowSeoul.getMonthValue());
         String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
-        log.info("현재 y : " + nowYear);
-        log.info("현재 m " + nowMonth);
-        log.info("현재 d " + nowDay);
 
         //현재 시간을 스트링으로 변환하고
         String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        log.info("가공된 시간 : " + nowTime);
 
+        //시간과 년월일을 합친다
         String sumDateTime = nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
-        log.info("믿는다 : " + sumDateTime);
 
         //Date 형식으로 포맷
         Date nowFormatter = formatter.parse(sumDateTime);
-        log.info("Date 형식으로 포맷된 현재시간 : " + nowFormatter);
-
 
         //캘린더에 기준 시간(현재시간)을 넣어준다.
         Calendar calendar = Calendar.getInstance();
@@ -145,8 +125,6 @@ public class CheckInService {
         calendar.add(Calendar.HOUR, -HH);
         calendar.add(Calendar.MINUTE, -mm);
         calendar.add(Calendar.SECOND, -ss);
-
-        log.info("최종 계산 시간 : " + calenderFormatter.format(calendar.getTime()));
 
         return calenderFormatter.format(calendar.getTime());
     }

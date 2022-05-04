@@ -41,23 +41,31 @@ public class Validator {
     }
 
     //이미 만들어진 팀이 있는지 확인
-    public void teamCheck(Optional<WeekTeam> teamCheck){
-        if (teamCheck.isPresent()){
+    public void teamCheck(Optional<WeekTeam> teamCheck) {
+        if (teamCheck.isPresent()) {
             throw new NullPointerException("이미 만들어진 팀이 존재합니다.");
         }
     }
 
     // ':' 사용 금지
-    public void teamNameCheck(String teamName){
-        if (teamName.contains(":")){
+    public void teamNameCheck(String teamName) {
+        if (teamName.contains(":")) {
             throw new NullPointerException("':' 은 사용할 수 없습니다.");
         }
     }
 
     //유저 정보를 찾음
-    public User userInfo(UserDetailsImpl userDetails){
+    public User userInfo(UserDetailsImpl userDetails) {
         User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow(
                 () -> new NullPointerException("해당 사용자가 존재하지 않습니다.")
+        );
+        return user;
+    }
+
+    //유저아이디로 유저정보 찾기
+    public User findUserIdInfo(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 유저입니다.")
         );
         return user;
     }
