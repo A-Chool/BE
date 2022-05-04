@@ -87,6 +87,9 @@ public class TeamService {
                 .user(user)
                 .build();
 
+        user.addMember(member);
+        weekTeam.addMember(member);
+
         memberRepository.save(member);
 
         return "팀원 추가 완료!";
