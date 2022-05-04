@@ -140,7 +140,7 @@ public class TeamService {
         Map<String, Object> weekMemberList = new HashMap<>();
 
         for (WeekTeam p : weekTeamList) {
-            List<Member> findMember = memberRepository.findByWeekTeamOrderByWeekTeam(p);
+            List<Member> findMember = memberRepository.findByWeekTeam(p);
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
                 TeamDto.getUserList userList = TeamDto.getUserList.builder()
