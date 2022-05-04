@@ -30,9 +30,8 @@ public class ChatController {
         System.out.println("message.getSender() = " + message.getSender());
         System.out.println("message.getMessage() = " + message.getMessage());
 
-        chatMessageService.save(message);
-
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
+        chatMessageService.save(message);
     }
 }

@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatMessageService {
 
-    private ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     public void save(ChatMessage chatMessage){
-        System.out.println("ChatMessageService Save!");
         chatMessageRepository.save(chatMessage);
     }
 }
