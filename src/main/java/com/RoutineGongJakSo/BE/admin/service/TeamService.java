@@ -159,7 +159,10 @@ public class TeamService {
 
             weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
         }
-        return weekMemberList;
+        //문자열 사전 순으로 키 정렬
+        Map<String, Object> sortedMap = new TreeMap<>(weekMemberList);
+
+        return sortedMap;
     }
 
     //주차 정보
