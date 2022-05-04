@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.security.validator;
 
-import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
@@ -53,6 +52,14 @@ public class Validator {
         if (teamName.contains(":")){
             throw new NullPointerException("':' 은 사용할 수 없습니다.");
         }
+    }
+
+    //유저 정보를 찾음
+    public User userInfo(UserDetailsImpl userDetails){
+        User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow(
+                () -> new NullPointerException("해당 사용자가 존재하지 않습니다.")
+        );
+        return user;
     }
 
 }

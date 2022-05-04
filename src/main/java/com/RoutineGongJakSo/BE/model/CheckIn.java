@@ -13,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CheckIn {
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long checkInId;
@@ -30,5 +29,4 @@ public class CheckIn {
 
     @Column
     private String checkOut;
-
 }
