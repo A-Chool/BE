@@ -140,7 +140,7 @@ public class TeamService {
         Map<String, Object> weekMemberList = new HashMap<>();
 
         for (WeekTeam p : weekTeamList) {
-            List<Member> findMember = memberRepository.findByWeekTeam(p);
+            List<Member> findMember = memberRepository.findByWeekTeamOrderByWeekTeam(p);
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
                 TeamDto.getUserList userList = TeamDto.getUserList.builder()
@@ -159,7 +159,10 @@ public class TeamService {
 
             weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
         }
-        return weekMemberList;
+        //문자열 사전 순으로 키 정렬
+        Map<String, Object> sortedMap = new TreeMap<>(weekMemberList);
+
+        return sortedMap;
     }
 
     //주차 정보
