@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +59,7 @@ public class CheckInService {
         CheckIn checkIn = CheckIn.builder()
                 .user(user)
                 .date(date)
-                .checkIn(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")))
+                .checkIn(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")))
                 .build();
 
         checkInRepository.save(checkIn);
@@ -87,6 +87,12 @@ public class CheckInService {
 
         //마지막 체크인 시간 확인
         CheckIn lastCheckIn = checkInList.get(checkInList.size() - 1);
+        String[] test = lastCheckIn.getCheckIn().split(":");
+        log.info("나눈다" + Arrays.deepToString(test));
+
+        for (int i = 0; i < test.length; i++){
+            int test1 =  Integer.parseInt(test[i]);
+        }
 
         //마지막 기록의 체크아웃 값이 있는지 확인
         if (lastCheckIn.getCheckOut() != null) {
@@ -118,16 +124,18 @@ public class CheckInService {
         //현재 시간을 스트링으로 변환하고
         String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         log.info("가공된 시간 : " + nowTime);
+        String sumDateTime = nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
+        log.info("믿는다 : " + sumDateTime);
 
         //Date 형식으로 포맷
-        Date nowFormatter = formatter.parse(nowYear + "-" + nowMonth + "-" + nowDay + "-" + nowTime);
+        Date nowFormatter = formatter.parse(sumDateTime);
         log.info("Date 형식으로 포맷된 현재시간 : " + nowFormatter);
 
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timeFormatter);
+        calendar.setTime(nowFormatter);
 
-        calendar.add(Calendar.HOUR, -nowSeoul.getHour());
+//        calendar.add(Calendar.HOUR, -timeFormatter);
         calendar.add(Calendar.MINUTE, -nowSeoul.getMinute());
         calendar.add(Calendar.SECOND, -nowSeoul.getSecond());
 
