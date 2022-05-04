@@ -36,4 +36,7 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String naverId;
 
+    @OneToOne(mappedBy = "user", cascade =CascadeType.REMOVE)
+    private Member member;
+
 }
