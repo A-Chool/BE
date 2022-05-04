@@ -13,9 +13,11 @@ import lombok.Setter;
 public class ChatMessageDto {
     private String sender;
     private String message;
+    private String createdAt;
 
     public ChatMessageDto(ChatMessage chatMessage) {
         this.sender = chatMessage.getSender();
         this.message = chatMessage.getMessage();
+        this.createdAt = chatMessage.getCreatedAt();
     }
 }
