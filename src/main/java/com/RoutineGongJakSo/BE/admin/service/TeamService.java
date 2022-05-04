@@ -31,6 +31,8 @@ public class TeamService {
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
+        // ':' 사용 금지
+        validator.teamNameCheck(teamDto.getTeamName());
 
         //중복 팀 체크
         Optional<WeekTeam> teamCheck = weekTeamRepository.findByTeamNameAndWeek(teamDto.getTeamName(), teamDto.getWeek());
@@ -56,17 +58,16 @@ public class TeamService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(UserDetailsImpl userDetails, TeamDto.addMember teamDto) {
+    public String addMembers(UserDetailsImpl userDetails, TeamDto.addTeamDto addTeamDto) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
 
-        WeekTeam weekTeam = weekTeamRepository.findById(teamDto.getTeamId()).orElseThrow(
+        WeekTeam weekTeam = weekTeamRepository.findById(addTeamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
-
-        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
+        User user = userRepository.findById(addTeamDto.getUserId()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
 
@@ -143,22 +144,29 @@ public class TeamService {
             List<TeamDto.getUserList> userLists = new ArrayList<>();
             for (Member getResponse : findMember) {
                 TeamDto.getUserList userList = TeamDto.getUserList.builder()
+                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
                         .userId(getResponse.getUser().getUserId())
                         .userName(getResponse.getUser().getUserName())
                         .userEmail(getResponse.getUser().getUserEmail())
                         .phoneNumber(getResponse.getUser().getPhoneNumber())
                         .kakaoId(getResponse.getUser().getKakaoId())
                         .createdAt(getResponse.getUser().getCreatedAt())
+                        .memberId(getResponse.getMemberId())
                         .build();
+
                 userLists.add(userList);
             }
-            weekMemberList.put(p.getTeamName(), userLists);
+
+            weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
         }
-        return weekMemberList;
+        //문자열 사전 순으로 키 정렬
+        Map<String, Object> sortedMap = new TreeMap<>(weekMemberList);
+
+        return sortedMap;
     }
 
     //주차 정보
-    public HashSet<String> getWeeks(UserDetailsImpl userDetails) {
+    public ArrayList<String> getWeeks(UserDetailsImpl userDetails) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -175,6 +183,50 @@ public class TeamService {
         HashSet<String> responseDto = new HashSet<>();
         responseDto.addAll(weekList);
 
-        return responseDto;
+        //리스트로 변환(정렬)
+        ArrayList<String> response = new ArrayList<>(responseDto);
+
+        //정렬
+        Collections.sort(response);
+
+        return response;
+    }
+
+    public List<TeamDto.getNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        //해당 주차에 대한 팀 찾기
+        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
+
+        //모든 유저를 찾기
+        List<User> noMemberList = userRepository.findAll();
+        //값을 return 할 Dto 만들기
+        List<TeamDto.getNoMember> noMembers = new ArrayList<>();
+
+        for (WeekTeam weekTeam : weekTeamList) {
+            List<Member> member = memberRepository.findByWeekTeam(weekTeam);
+            for (Member find : member){
+            User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
+                    () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+            );
+            //제거 대상 제거
+                noMemberList.remove(getUser);
+            }
+        }
+
+        //return 값 가공하기
+        for (User user : noMemberList) {
+            TeamDto.getNoMember response = TeamDto.getNoMember.builder()
+                    .userId(user.getUserId())
+                    .userName(user.getUserName())
+                    .build();
+
+            noMembers.add(response);
+        }
+
+        return noMembers;
     }
 }

@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.security.validator;
 
+import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
@@ -46,4 +47,12 @@ public class Validator {
             throw new NullPointerException("이미 만들어진 팀이 존재합니다.");
         }
     }
+
+    // ':' 사용 금지
+    public void teamNameCheck(String teamName){
+        if (teamName.contains(":")){
+            throw new NullPointerException("':' 은 사용할 수 없습니다.");
+        }
+    }
+
 }

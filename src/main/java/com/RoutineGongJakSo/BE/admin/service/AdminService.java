@@ -69,6 +69,7 @@ public class AdminService {
                     .userLevel(user.getUserLevel())
                     .kakaoId(user.getKakaoId())
                     .naverId(user.getNaverId())
+                    .createdAt(user.getCreatedAt())
                     .build();
             responseDtos.add(findDto);
         }
