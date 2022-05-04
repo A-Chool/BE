@@ -1,13 +1,11 @@
 package com.RoutineGongJakSo.BE.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @NoArgsConstructor
@@ -29,4 +27,8 @@ public class CheckIn {
 
     @Column
     private String checkOut;
+
+    @ManyToOne
+    @JoinColumn(name = "ANALYSIS_ID")
+    Analysis analysis;
 }
