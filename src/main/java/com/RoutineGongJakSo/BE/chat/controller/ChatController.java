@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.chat.controller;
 
 
+import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
 import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisPublisher;
 import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
@@ -8,6 +9,11 @@ import com.RoutineGongJakSo.BE.chat.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -25,13 +31,16 @@ public class ChatController {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatRoomRepository.enterChatRoom(message.getRoomId());
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+        } else {
+            chatMessageService.save(message);
         }
-        System.out.println("message = " + message);
-        System.out.println("message.getSender() = " + message.getSender());
-        System.out.println("message.getMessage() = " + message.getMessage());
-
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
-        chatMessageService.save(message);
+    }
+
+    @GetMapping("/chat/message/{roomId}")
+    @ResponseBody
+    public List<ChatMessageDto> getMessages(@PathVariable String roomId) {
+        return chatMessageService.getMessages(roomId);
     }
 }

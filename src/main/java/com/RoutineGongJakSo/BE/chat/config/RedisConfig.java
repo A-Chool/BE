@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.chat.config;
 
-import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -33,7 +32,6 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
-        System.out.println("redisTemplate = " + redisTemplate);
         return redisTemplate;
     }
 }
