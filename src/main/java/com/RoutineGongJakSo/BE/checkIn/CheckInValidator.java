@@ -5,7 +5,6 @@ import com.RoutineGongJakSo.BE.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.model.Analysis;
 import com.RoutineGongJakSo.BE.model.CheckIn;
 import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +31,40 @@ public class CheckInValidator {
     ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-    private final Validator validator;
     private final CheckInRepository checkInRepository;
     private final AnalysisRepository analysisRepository;
+
+    // 캘린더 생성
+    public Calendar todayCalender(String date) throws ParseException {
+        Calendar today = Calendar.getInstance(); //캘린더를 만들어 줌
+        today.setTime(sdf.parse(date)); //파라미터 기준으로 캘린더 셋팅
+        return today;
+    }
+
+    //날짜 yyyy-MM-dd 형식에 맞게 포맷
+    public String DateFormat(Calendar calendar){
+        return sdf.format(calendar.getTime());
+    }
+
+    //전 날 오전 5시 기준 데이터 포맷
+    public Date dateTimeFormat(String setDateTime) throws ParseException{
+        String sumToday = setDateTime + "05:00:00"; //어제 날짜 + 오전5시 -> 조건을 걸기 위해 만들어줌
+        return formatter.parse(sumToday);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //=====================================================================
 
     //전날 기준 캘린더
     public Calendar yesterDayCalender(String date) throws ParseException {
@@ -45,16 +75,9 @@ public class CheckInValidator {
         return yesterDay;
     }
 
-    //날짜 yyyy-MM-dd 형식에 맞게 포맷
-    public String DateFormat(Calendar calendar){
-        return sdf.format(calendar.getTime());
-    }
 
-    //전 날 오전 5시 기준 데이터 포맷
-    public Date dateTimeFormat(String setDateTime) throws ParseException{
-        String sumTomorrow = setDateTime + "05:00:00"; //어제 날짜 + 오전5시 -> 조건을 걸기 위해 만들어줌
-        return formatter.parse(sumTomorrow);
-    }
+
+
 
     //String 현재시간
     public String nowTime(){
@@ -68,7 +91,7 @@ public class CheckInValidator {
             Date sumFormatter = formatter.parse(sumDateTime); //체크인 시간
             Calendar sumFormat = Calendar.getInstance(); //체크인 시간
             sumFormat.setTime(sumFormatter); //체크인 시간
-            if (setFormat.compareTo(sumFormat) > 0){ // 인자보다 미래일 경우
+            if (setFormat.compareTo(sumFormat) < 0){ // 인자보다 미래일 경우
                 checkInList.add(checkIn); //해당 유저의 해당 날짜 전체 기록에 추가
             }
         }
@@ -110,25 +133,26 @@ public class CheckInValidator {
 
         //Analysis daySum이 마지막으로 업데이트 된 시간 -> 체크인리스트의 마지막번째 체크아웃 시간
         //전날 Analysis의 값과 시간이 오전 5시 이전이라면, 그 값이 마지막에 기록된 친구가 될 수 있도록 셋팅
-        String sumAnalysisDateTime = analysis.get().getDate() + lastCheckIn.getCheckOut();
+        String sumAnalysisDateTime = lastCheckIn.getDate() + lastCheckIn.getCheckIn();
 
-        if (yesterDayAnalysis.isPresent()){
-            sumAnalysisDateTime = yesterDayAnalysis.get().getDate() + lastCheckIn.getCheckOut();
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////
 
         Date sumFormatter = formatter.parse(sumAnalysisDateTime); //Analysis 마지막 저장 시간
         Calendar sumFormat = Calendar.getInstance(); //체크인 시간
         sumFormat.setTime(sumFormatter); //체크인 시간
-        if (setFormat.compareTo(sumFormat) > 0){
+        if (setFormat.compareTo(sumFormat) < 0){
             analysis = yesterDayAnalysis;
         }
 
-        //마지막 기록의 체크아웃 값이 있는지 확인
-        if (strLastCheckOut != null) {
-            throw new NullPointerException("아직 Start 를 누르지 않았습니다.");
-        }
+            sumAnalysisDateTime = analysis.get().getDate() + lastCheckIn.getCheckIn();
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+
+//        //마지막 기록의 체크아웃 값이 있는지 확인
+//        if (strLastCheckOut != null) {
+//            throw new NullPointerException("아직 Start 를 누르지 않았습니다.");
+//        }
 
         String[] timeStamp = lastCheckIn.getCheckIn().split(":"); //시, 분, 초 나누기
 

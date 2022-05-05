@@ -41,39 +41,43 @@ public class CheckInService {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
+        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
+        String strToday = checkInValidator.DateFormat(setDay); //오늘 날짜 str yyyy-MM-dd 형식
+        Date setFormatter = checkInValidator.dateTimeFormat(strToday); //yyyy-MM-dd 05:00:00(당일 오전 5시)
+        setDay.setTime(setFormatter); //yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+
+        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
+
+        //compareTo() > 0 : 인자보다 미래
+        //compareTo() < 0 : 인자보다 과거
+        //compareTo() == 0 : 인자와 같은 시간
+        if (today.compareTo(setDay) < 0){
+            today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
+        }
+
+        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+
         //체크인 테이블에서 해당 유저 + 오늘 날짜의 해당하는 친구들을 리스트에 담음
-        List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
-
-        Calendar yesterDay = checkInValidator.yesterDayCalender(date); //전 날 기준 캘린더
-        String strYesterDay = checkInValidator.DateFormat(yesterDay); //어제 날짜 str yyyy-MM-dd 형식
-        Date setFormatter = checkInValidator.dateTimeFormat(strYesterDay); //yyyy-MM-dd 05:00:00(전일 오전 5시)
-
-        //해당 유저의 전날 날짜의 전체 기록 찾기
-        List<CheckIn> yesterDayCheckList = checkInRepository.findByUserAndDate(user, strYesterDay);
-
-        Calendar setFormat = Calendar.getInstance(); // 초기화 시간 05시 기준의 캘린더를 만들어 줌
-        setFormat.setTime(setFormatter); // 전일 오전 5시 기준으로 캘린더 셋팅
-
-        //현재시간보다 과거일 때,
-        List<CheckIn> finalCheckInList = checkInValidator.setTimeCheck(yesterDayCheckList, checkInList, setFormat);
+        List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, setToday);
 
         //체크아웃을 하지 않은 상태에서 체크인을 시도할 경우 NPE
-        for (CheckIn check : finalCheckInList) {
+        for (CheckIn check : checkInList) {
             if (check.getCheckOut() == null) {
                 throw new NullPointerException("체크아웃을 먼저 해주세요");
             }
         }
 
+
         String nowTime = checkInValidator.nowTime(); //현재 서울 시간
         CheckIn checkIn = CheckIn.builder()
                 .user(user)
-                .date(date)
+                .date(setToday)
                 .checkIn(nowTime)
                 .build();
 
         checkInRepository.save(checkIn);
 
-        return "Start!";
+        return "00:00:00";
     }
 
     //[GET]사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
@@ -81,66 +85,47 @@ public class CheckInService {
 
         User user = validator.userInfo(userDetails); // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        Calendar yesterDay = checkInValidator.yesterDayCalender(date); //전 날 기준 캘린더
-        String strYesterDay = checkInValidator.DateFormat(yesterDay); //어제 날짜 str yyyy-MM-dd 형식
-        Date setFormatter = checkInValidator.dateTimeFormat(strYesterDay); //yyyy-MM-dd 05:00:00(전일 오전 5시)
+        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더(오전 5시로 셋팅됨)
+        String strToday = checkInValidator.DateFormat(setDay); //오늘 날짜 str yyyy-MM-dd 형식
+        Date setFormatter = checkInValidator.dateTimeFormat(strToday); //yyyy-MM-dd 05:00:00(당일 오전 5시)
+        setDay.setTime(setFormatter); //yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        //해당 유저의 해당 날짜의 전체 기록 찾기
-        List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
-        //해당 유저의 전날 날짜의 전체 기록 찾기
-        List<CheckIn> yesterDayCheckList = checkInRepository.findByUserAndDate(user, strYesterDay);
+        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
 
-        Calendar setFormat = Calendar.getInstance(); // 초기화 시간 05시
-        setFormat.setTime(setFormatter); // 전일 오전 5시 기준으로 캘린더 셋팅
-
-        //새벽 다섯시 전까지의 모든 친구들을 담은 리스트
-        List<CheckIn> finalCheckInList = checkInValidator.setTimeCheck(yesterDayCheckList, checkInList, setFormat);
-
-        //기록 정보가 없을 때 return
-        if (finalCheckInList.size() < 1) {
-            return "00:00:00";
+        //compareTo() > 0 : 인자보다 미래
+        //compareTo() < 0 : 인자보다 과거
+        //compareTo() == 0 : 인자와 같은 시간
+        if (today.compareTo(setDay) < 0){
+            today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
         }
 
-        //마지막 체크인 시간 확인
-        CheckIn lastCheckIn = finalCheckInList.get(finalCheckInList.size()-1);
-        String strLastCheckOut = lastCheckIn.getCheckOut();
-        Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, date);
+        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
 
-        //마지막 기록의 체크아웃 값이 있는지 확인
-        if (strLastCheckOut != null) {
-            if (analysis.isPresent()){ // 만약 analysis 테이블에 그 날의 기록된 daySum이 있다면, 그 값 내려주기
-                return analysis.get().getDaySum();
-            }
-            throw new NullPointerException("아직 Start 를 누르지 않았습니다.");
+        Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, setToday);
+
+        if (analysis.isPresent()){
+            return analysis.get().getDaySum();
         }
+        List<CheckIn> findCheckIn = checkInRepository.findByUserAndDate(user, setToday);
+        CheckIn firstCheckIn = findCheckIn.get(0); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
 
-        //analysis 테이블의 해당 날짜의 기록이 있는 경우
-        if (analysis.isPresent()) {
-            strLastCheckOut = analysis.get().getDaySum();
-            return strLastCheckOut;
-        }
+//        Calendar checkInCalendar = checkInValidator.todayCalender(firstCheckIn.getDate()); //checkIn 시간 기준용
+//        String setCheckIn = firstCheckIn.getDate() + " " + firstCheckIn.getCheckIn(); //yyyy-MM-dd HH:mm:ss
+//        checkInCalendar.setTime(formatter.parse(setCheckIn)); //checkIn 시간 기준으로 캘린더 셋팅
 
-        String[] timeStamp = lastCheckIn.getCheckIn().split(":"); //시, 분, 초 나누기
+    // ToDo 사용자가 00시 이후에 처음 체크인을 했을 때,
+
+        String[] timeStamp = firstCheckIn.getCheckIn().split(":"); //시, 분, 초 나누기
 
         int HH = Integer.parseInt(timeStamp[0]); //시
         int mm = Integer.parseInt(timeStamp[1]); //분
         int ss = Integer.parseInt(timeStamp[2]); //초
 
-        String sumDateTime = checkInValidator.sumDateTime(); //
+        today.add(Calendar.HOUR, -HH);
+        today.add(Calendar.MINUTE, -mm);
+        today.add(Calendar.SECOND, -ss);
 
-        //Date 형식으로 포맷
-        Date nowFormatter = formatter.parse(sumDateTime);
-
-        //캘린더에 기준 시간(현재시간)을 넣어준다.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nowFormatter);
-
-        //기록된 체크인 시간을 시, 분, 초 단위로 쪼개서 빼준다.
-        calendar.add(Calendar.HOUR, -HH);
-        calendar.add(Calendar.MINUTE, -mm);
-        calendar.add(Calendar.SECOND, -ss);
-
-        return calenderFormatter.format(calendar.getTime()); //이걸 day_Sum에 save
+        return calenderFormatter.format(today.getTime());
     }
 
     //ToDo 총 공부 시간 계산하기
@@ -258,8 +243,8 @@ public class CheckInService {
         String daysum = checkInValidator.daySum(user); // 총 공부 시간을 찾아줌
 
         if (setFormat.compareTo(toDay) < 0){ // 인자보다 과거일 경우
-            Optional<Analysis>  find = analysisRepository.findByUserAndDate(user, date);
-            List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
+            Optional<Analysis>  find = analysisRepository.findByUserAndDate(user, strYesterDay);
+            List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, strYesterDay);
             CheckIn check = checkInList.get(checkInList.size()-1);
             if (check.getCheckOut() != null){
                 throw new NullPointerException("Start 를 먼저 눌러주세요.");

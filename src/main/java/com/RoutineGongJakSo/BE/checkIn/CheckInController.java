@@ -31,4 +31,5 @@ public class CheckInController {
     public String checkOut(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException{
         return checkInService.checkOut(userDetails);
     }
+
 }
