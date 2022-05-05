@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.service;
 
+import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
@@ -9,6 +10,7 @@ import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -130,7 +132,7 @@ public class TeamService {
     }
 
     //해당 주차의 모든 팀을 조회
-    public Map<String, Object> getTeamList(UserDetailsImpl userDetails, String week) {
+    public List<TeamDto.weekTeamDto> getTeamList(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -138,34 +140,27 @@ public class TeamService {
 
         //해당 주차의 모든 팀을 조회
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
+        List<TeamDto.weekTeamDto> weekTeamDtoList = new ArrayList<>();
 
-        //팀별 팀원 리스트
-        Map<String, Object> weekMemberList = new HashMap<>();
+        for(WeekTeam weekTeam : weekTeamList){
+            List<MemberDto> memberDtoList = new ArrayList<>();
 
-        for (WeekTeam p : weekTeamList) {
-            List<Member> findMember = memberRepository.findByWeekTeam(p);
-            List<TeamDto.getUserList> userLists = new ArrayList<>();
-            for (Member getResponse : findMember) {
-                TeamDto.getUserList userList = TeamDto.getUserList.builder()
-                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
-                        .userId(getResponse.getUser().getUserId())
-                        .userName(getResponse.getUser().getUserName())
-                        .userEmail(getResponse.getUser().getUserEmail())
-                        .phoneNumber(getResponse.getUser().getPhoneNumber())
-                        .kakaoId(getResponse.getUser().getKakaoId())
-                        .createdAt(getResponse.getUser().getCreatedAt())
-                        .memberId(getResponse.getMemberId())
-                        .build();
+            for(Member member : weekTeam.getMemberList()){
 
-                userLists.add(userList);
+                MemberDto memberDto = new MemberDto();
+                memberDto.setMemberId(member.getMemberId());
+                memberDto.setUser(new UserDto(member.getUser()));
+                memberDtoList.add(memberDto);
             }
 
-            weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
+            TeamDto.weekTeamDto weekTeamDto =  TeamDto.weekTeamDto.builder()
+                    .teamId(weekTeam.getWeekTeamId())
+                    .teamName(weekTeam.getTeamName())
+                    .memberList(memberDtoList)
+                    .build();
+            weekTeamDtoList.add(weekTeamDto);
         }
-        //문자열 사전 순으로 키 정렬
-        Map<String, Object> sortedMap = new TreeMap<>(weekMemberList);
-
-        return sortedMap;
+        return weekTeamDtoList;
     }
 
     //주차 정보
