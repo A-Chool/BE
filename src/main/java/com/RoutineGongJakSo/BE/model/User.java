@@ -3,6 +3,8 @@ package com.RoutineGongJakSo.BE.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,7 +38,10 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String naverId;
 
-    @ManyToOne
-    @JoinColumn(name = "WEEK_TEAM_ID")
-    private WeekTeam weekTeam;
+    @OneToMany(mappedBy = "user", cascade =CascadeType.REMOVE)
+    private List<Member> memberList = new ArrayList<>();
+
+    public void addMember(Member member) {
+        this.memberList.add(member);
+    }
 }

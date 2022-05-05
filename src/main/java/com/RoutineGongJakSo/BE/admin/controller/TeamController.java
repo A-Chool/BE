@@ -2,14 +2,12 @@ package com.RoutineGongJakSo.BE.admin.controller;
 
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.service.TeamService;
-import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +26,7 @@ public class TeamController {
 
     //해당 주차의 모든 팀을 조회
     @GetMapping("/{week}")
-    public Map<String, Object> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
+    public List<TeamDto.weekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
         return teamService.getTeamList(userDetails, week);
     }
 
@@ -56,5 +54,8 @@ public class TeamController {
         return teamService.getWeeks(userDetails);
     }
 
-
+    @GetMapping("/noMember/{week}")
+    public List<TeamDto.getNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week){
+       return teamService.getNoMember(userDetails, week);
+    }
 }

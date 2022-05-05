@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.chat.model;
+package com.RoutineGongJakSo.BE.chat.dto.model;
 
 import lombok.Getter;
 import lombok.Setter;

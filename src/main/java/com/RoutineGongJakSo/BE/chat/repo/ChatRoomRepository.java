@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
-import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;

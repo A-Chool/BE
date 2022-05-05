@@ -1,10 +1,9 @@
 package com.RoutineGongJakSo.BE.chat.controller;
 
-import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -22,7 +22,7 @@ public class Member {
     @JoinColumn(name = "WEEK_TEAM_ID")
     private WeekTeam weekTeam;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 

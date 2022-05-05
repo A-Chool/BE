@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.service;
 
+import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
@@ -9,6 +10,7 @@ import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -71,10 +73,6 @@ public class TeamService {
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
 
-//        User user = userRepository.findById(teamDto.getMemberId()).orElseThrow(
-//                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
-//        );
-
         // 이미 소속된 팀이 존재하는지 확인
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
         for (WeekTeam find : weekTeamList) {
@@ -90,6 +88,9 @@ public class TeamService {
                 .weekTeam(weekTeam)
                 .user(user)
                 .build();
+
+        user.addMember(member);
+        weekTeam.addMember(member);
 
         memberRepository.save(member);
 
@@ -131,7 +132,7 @@ public class TeamService {
     }
 
     //해당 주차의 모든 팀을 조회
-    public Map<String, Object> getTeamList(UserDetailsImpl userDetails, String week) {
+    public List<TeamDto.weekTeamDto> getTeamList(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -139,31 +140,28 @@ public class TeamService {
 
         //해당 주차의 모든 팀을 조회
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
+        List<TeamDto.weekTeamDto> weekTeamDtoList = new ArrayList<>();
 
-        //팀별 팀원 리스트
-        Map<String, Object> weekMemberList = new HashMap<>();
+        for(WeekTeam weekTeam : weekTeamList){
+            List<MemberDto> memberDtoList = new ArrayList<>();
 
-        for (WeekTeam p : weekTeamList) {
-            List<Member> findMember = memberRepository.findByWeekTeam(p);
-            List<TeamDto.getUserList> userLists = new ArrayList<>();
-            for (Member getResponse : findMember) {
-                TeamDto.getUserList userList = TeamDto.getUserList.builder()
-                        .teamId(getResponse.getWeekTeam().getWeekTeamId())
-                        .userId(getResponse.getUser().getUserId())
-                        .userName(getResponse.getUser().getUserName())
-                        .userEmail(getResponse.getUser().getUserEmail())
-                        .phoneNumber(getResponse.getUser().getPhoneNumber())
-                        .kakaoId(getResponse.getUser().getKakaoId())
-                        .createdAt(getResponse.getUser().getCreatedAt())
-                        .memberId(getResponse.getMemberId())
-                        .build();
+            for(Member member : weekTeam.getMemberList()){
 
-                    userLists.add(userList);
+                MemberDto memberDto = new MemberDto();
+                memberDto.setMemberId(member.getMemberId());
+                memberDto.setUser(new UserDto(member.getUser()));
+                memberDtoList.add(memberDto);
             }
 
-            weekMemberList.put(p.getTeamName() + ":" + p.getWeekTeamId(), userLists);
+            TeamDto.weekTeamDto weekTeamDto =  TeamDto.weekTeamDto.builder()
+                    .teamId(weekTeam.getWeekTeamId())
+                    .teamName(weekTeam.getTeamName())
+                    .week(weekTeam.getWeek())
+                    .memberList(memberDtoList)
+                    .build();
+            weekTeamDtoList.add(weekTeamDto);
         }
-        return weekMemberList;
+        return weekTeamDtoList;
     }
 
     //주차 정보
@@ -191,5 +189,43 @@ public class TeamService {
         Collections.sort(response);
 
         return response;
+    }
+
+    public List<TeamDto.getNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
+        // 로그인 여부 확인
+        validator.loginCheck(userDetails);
+        //관리자 접근 권한 확인
+        validator.adminCheck(userDetails);
+
+        //해당 주차에 대한 팀 찾기
+        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
+
+        //모든 유저를 찾기
+        List<User> noMemberList = userRepository.findAll();
+        //값을 return 할 Dto 만들기
+        List<TeamDto.getNoMember> noMembers = new ArrayList<>();
+
+        for (WeekTeam weekTeam : weekTeamList) {
+            List<Member> member = memberRepository.findByWeekTeam(weekTeam);
+            for (Member find : member){
+            User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
+                    () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+            );
+            //제거 대상 제거
+                noMemberList.remove(getUser);
+            }
+        }
+
+        //return 값 가공하기
+        for (User user : noMemberList) {
+            TeamDto.getNoMember response = TeamDto.getNoMember.builder()
+                    .userId(user.getUserId())
+                    .userName(user.getUserName())
+                    .build();
+
+            noMembers.add(response);
+        }
+
+        return noMembers;
     }
 }
