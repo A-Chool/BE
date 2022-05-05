@@ -3,6 +3,7 @@ package com.RoutineGongJakSo.BE.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,7 +40,7 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Member member;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<CheckIn> checkIn;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CheckIn> checkIn;
 
 }

@@ -19,6 +19,10 @@ public class CheckIn {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "ANALYSIS_ID")
+    Analysis analysis;
+
     @Column
     private String date;
 
@@ -28,7 +32,4 @@ public class CheckIn {
     @Column
     private String checkOut;
 
-    @ManyToOne
-    @JoinColumn(name = "ANALYSIS_ID")
-    Analysis analysis;
 }

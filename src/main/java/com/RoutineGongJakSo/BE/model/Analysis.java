@@ -29,5 +29,4 @@ public class Analysis {
     @OneToMany(mappedBy = "analysis", cascade = CascadeType.ALL)
     List<CheckIn> checkIns;
 
-    //db에 저장을 하고, 그 날 또 스톱워치를 사용한다면, 해당 날짜를 찾아 업뎃
 }

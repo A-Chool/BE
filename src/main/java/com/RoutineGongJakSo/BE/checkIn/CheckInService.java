@@ -19,10 +19,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -133,7 +130,7 @@ public class CheckInService {
             Date sumFormatter = formatter.parse(sumDateTime); //체크인 시간
             Calendar sumFormat = Calendar.getInstance(); //체크인 시간
             sumFormat.setTime(sumFormatter);
-            if (setFormat.compareTo(sumFormat) < 0){ // 인자보다 과거일 경우
+            if (setFormat.compareTo(sumFormat) > 0){ // 인자보다 미래일 경우
                 checkInList.add(checkIn); //해당 유저의 해당 날짜 전체 기록에 추가
             }
         }
@@ -144,7 +141,12 @@ public class CheckInService {
         }
 
         //마지막 체크인 시간 확인
-        CheckIn lastCheckIn = checkInList.get(checkInList.size() - 1);
+        CheckIn lastCheckIn = checkInList.get(checkInList.size()-1);
+
+//
+//        //analysis 테이블의 해당 날짜의 기록이 있는 경우
+//        if () {
+//        }
 
         //마지막 기록의 체크아웃 값이 있는지 확인
         if (lastCheckIn.getCheckOut() != null) {
@@ -188,6 +190,7 @@ public class CheckInService {
         return calenderFormatter.format(calendar.getTime());
     }
 
+    //체크아웃
     @Transactional
     public String checkOut(UserDetailsImpl userDetails, CheckInDto.requestDto requestDto) throws ParseException{
 
@@ -235,8 +238,7 @@ public class CheckInService {
         String daysum = requestDto.getTotalTime();
 
         if (setFormat.compareTo(toDay) < 0){ // 인자보다 과거일 경우
-            date = strYesterDay;
-            Optional<Analysis> find = analysisRepository.findByUserAndDate(user, date);
+            List<Analysis> find = analysisRepository.findByUserAndDate(user, date);
             List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
             CheckIn check = checkInList.get(checkInList.size()-1);
 
@@ -244,16 +246,21 @@ public class CheckInService {
                 throw new NullPointerException("Start 를 먼저 눌러주세요.");
             }
 
-            if (!find.isPresent()) {
+            //하나의 날짜에 하나의 값만 저장
+
+            if (find.size() < 1) {
+                check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));//ToDo 이 위치에서 있어야 함
                 Analysis analysis = Analysis.builder()
                         .daySum(daysum)
                         .date(date)
                         .user(user)
+                        .checkIns(checkInList)
                         .build();
                 analysisRepository.save(analysis);
+                check.setAnalysis(analysis);
+            }else { //!null이라면, 수정
+                find.get(0).setDaySum(requestDto.getTotalTime());
                 check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-            }else {
-                find.get().setDaySum(requestDto.getTotalTime());
             }
             return "수고하셨습니다.";
         }
