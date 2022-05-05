@@ -58,6 +58,7 @@ public class TeamDto {
     public static class weekTeamDto {
         private Long teamId;
         private String teamName;
+        private String week;
         private List<MemberDto> memberList;
     }
 }

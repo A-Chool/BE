@@ -156,6 +156,7 @@ public class TeamService {
             TeamDto.weekTeamDto weekTeamDto =  TeamDto.weekTeamDto.builder()
                     .teamId(weekTeam.getWeekTeamId())
                     .teamName(weekTeam.getTeamName())
+                    .week(weekTeam.getWeek())
                     .memberList(memberDtoList)
                     .build();
             weekTeamDtoList.add(weekTeamDto);
