@@ -1,14 +1,10 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
-import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
-import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
-import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
-import com.RoutineGongJakSo.BE.security.validator.Validator;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +13,30 @@ public class TeamBoardService {
 
 
     private final TeamBoardRepository teamBoardRepository;
-    /*private final WeekTeamRepository weekTeamRepository;
-    private final MemberRepository memberRepository;*/
 
-    //워크 스페이스스
-    public String savePost(TeamBoardDto teamBoardDto) {
-        return (String) teamBoardRepository.save(teamBoardDto);
+   /* 워크 스페이스스
+    게시글 생성*/
+
+    @Transactional
+    public String save(final TeamBoardRequestDto params) {
+        TeamBoard entity = TeamBoardRepository.save(params.toEntity());
+        return entity.getWorkSpace();
     }
+
+    @Transactional
+    public String update(final String workSpace, final TeamBoardRequestDto params) {
+
+        String entity = TeamBoardRepository.findByWorkSpace(workSpace);
+        entity.update(params.getWeek(), params.getTeamId(), params.getWorkSpace());
+        return workSpace;
     }
+}
+
+
+//    public String savePost(TeamBoardDto teamBoardDto) {
+//        return (String) teamBoardRepository.save(teamBoardDto);
+//    }
+//}
 
 
 //    //주차 팀정보
