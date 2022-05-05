@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.dto;
 
+import com.RoutineGongJakSo.BE.model.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,5 +53,12 @@ public class TeamDto {
         private Long userId;
     }
 
+    @Getter
+    @Builder
+    public static class weekTeamDto {
+        private Long teamId;
+        private String teamName;
+        private List<MemberDto> memberList;
+    }
 }
 
