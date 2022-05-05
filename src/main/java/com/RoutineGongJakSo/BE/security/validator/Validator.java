@@ -7,6 +7,10 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -69,8 +73,4 @@ public class Validator {
         );
         return user;
     }
-    public void checkTracking(){
-
-    }
-
 }
