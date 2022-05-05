@@ -20,7 +20,7 @@ public class TeamBoardController {
 
     //워크스페이스 수정
     @PatchMapping("/workSpace")
-    public String save(@PathVariable final String workSpace, @RequestBody final TeamBoardRequestDto params) {
+    public String update(@PathVariable final String workSpace, @RequestBody final TeamBoardRequestDto params) {
         return teamBoardService.update(workSpace, params);
     }
 }

@@ -1,28 +1,27 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import lombok.AllArgsConstructor;
+import com.RoutineGongJakSo.BE.board.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 //팀 대시보드
 public class TeamBoardService {
 
-
     private final TeamBoardRepository teamBoardRepository;
 
-   /* 워크 스페이스스
-    게시글 생성*/
-
+    //생성
     @Transactional
     public String save(final TeamBoardRequestDto params) {
-        TeamBoard entity = TeamBoardRepository.save(params.toEntity());
-        return entity.getWorkSpace();
+
+        Board entity = TeamBoardRepository.save(params.toEntity());
+        String workSpace = ((TeamBoard) entity).getWorkSpace();
+        return workSpace;
     }
 
+    //수정
     @Transactional
     public String update(final String workSpace, final TeamBoardRequestDto params) {
 
@@ -30,8 +29,8 @@ public class TeamBoardService {
         entity.update(params.getWeek(), params.getTeamId(), params.getWorkSpace());
         return workSpace;
     }
-}
 
+}
 
 //    public String savePost(TeamBoardDto teamBoardDto) {
 //        return (String) teamBoardRepository.save(teamBoardDto);
@@ -39,12 +38,6 @@ public class TeamBoardService {
 //}
 
 }
-
-
-//    public String savePost(TeamBoardDto teamBoardDto) {
-//        return (String) teamBoardRepository.save(teamBoardDto);
-//    }
-//}
 
 
 //    //주차 팀정보
