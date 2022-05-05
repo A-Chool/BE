@@ -38,6 +38,14 @@ public class TeamBoardService {
 //    }
 //}
 
+}
+
+
+//    public String savePost(TeamBoardDto teamBoardDto) {
+//        return (String) teamBoardRepository.save(teamBoardDto);
+//    }
+//}
+
 
 //    //주차 팀정보
 //    public List<TeamDto.weekTeamDto> getWeekTeamList
