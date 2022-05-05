@@ -31,16 +31,16 @@ public class CheckInService {
     private final CheckInValidator checkInValidator;
     private final Validator validator;
 
+    ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+    SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
+    String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
+
     //[POST]체크인
     @Transactional
     public String checkIn(UserDetailsImpl userDetails) throws ParseException{
-        // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        // 유저 정보를 찾음
-        User user = validator.userInfo(userDetails);
 
-        //현재 서울 날짜
-        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString();
+        User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         //체크인 테이블에서 해당 유저 + 오늘 날짜의 해당하는 친구들을 리스트에 담음
         List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
@@ -80,15 +80,7 @@ public class CheckInService {
     //[GET]사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
     public String getCheckIn(UserDetailsImpl userDetails) throws ParseException {
 
-        validator.loginCheck(userDetails);  // 로그인 여부 확인
-        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음
-
-        //시간을 형식에 맞게 포맷
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-        SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
-
-        //[서울]현재 날짜
-        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString();
+        User user = validator.userInfo(userDetails); // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         Calendar yesterDay = checkInValidator.yesterDayCalender(date); //전 날 기준 캘린더
         String strYesterDay = checkInValidator.DateFormat(yesterDay); //어제 날짜 str yyyy-MM-dd 형식
@@ -117,8 +109,6 @@ public class CheckInService {
 
         //마지막 기록의 체크아웃 값이 있는지 확인
         if (strLastCheckOut != null) {
-            //ToDo 해당 부분 추가로 수정하기!!
-            //return Analysis analysis = 해당 유저의 해당 날짜의 마지막 sumTime;
             if (analysis.size() > 0){ // 만약 analysis 테이블에 그 날의 기록된 daySum이 있다면, 그 값 내려주기
                 return analysis.get(0).getDaySum();
             }
@@ -158,39 +148,17 @@ public class CheckInService {
     @Transactional
     public String checkOut(UserDetailsImpl userDetails, CheckInDto.requestDto requestDto) throws ParseException{
 
-        validator.loginCheck(userDetails);  // 로그인 여부 확인
-        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음
+        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        //현재 서울 날짜
-        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString();
-
-        //전일 날짜를 구함
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar yesterDay = Calendar.getInstance();
-        yesterDay.setTime(sdf.parse(date));
-        yesterDay.add(Calendar.DATE, -1);//전날
-        String strYesterDay = sdf.format(yesterDay.getTime());
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-        String sumTomorrow = strYesterDay + "05:00:00"; //전일 오전5시 기준
-        Date setFormatter = formatter.parse(sumTomorrow);
+        //전일 날짜 구하기
+        Calendar yesterDay = checkInValidator.yesterDayCalender(date); //전 날 기준 캘린더
+        String strYesterDay = checkInValidator.DateFormat(yesterDay); //어제 날짜 str yyyy-MM-dd 형식
+        Date setFormatter = checkInValidator.dateTimeFormat(strYesterDay); //yyyy-MM-dd 05:00:00(전일 오전 5시)
 
         Calendar setFormat = Calendar.getInstance(); // 초기화 시간 05시
         setFormat.setTime(setFormatter);
 
-        //현재 시간
-        ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-
-        //Date 포맷을 위해 년, 월, 일을 하나씩 적출해서 string 으로 변환하고
-        String nowYear = String.valueOf(nowSeoul.getYear());
-        String nowMonth = String.valueOf(nowSeoul.getMonthValue());
-        String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
-
-        //현재 시간을 스트링으로 변환하고
-        String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
-        //시간과 년월일을 합친다
-        String sumDateTime = nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
+        String sumDateTime = checkInValidator.sumDateTime();//String yyyy-MM-dd HH:mm:ss 현재시간
 
         //Date 형식으로 포맷
         Date nowFormatter = formatter.parse(sumDateTime);
@@ -205,13 +173,11 @@ public class CheckInService {
             List<Analysis> find = analysisRepository.findByUserAndDate(user, date);
             List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, date);
             CheckIn check = checkInList.get(checkInList.size()-1);
-
             if (check.getCheckOut() != null){
                 throw new NullPointerException("Start 를 먼저 눌러주세요.");
             }
-
             if (find.size() < 1) {
-                check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));//ToDo 이 위치에서 있어야 함
+                check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));//이 친구는 이 위치에 있어야 합니다.
                 Analysis analysis = Analysis.builder()
                         .daySum(daysum)
                         .date(date)

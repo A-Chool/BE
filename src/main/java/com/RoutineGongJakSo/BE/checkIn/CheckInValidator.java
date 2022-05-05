@@ -59,7 +59,7 @@ public class CheckInValidator {
         return checkInList;
     }
 
-    //String yyyy-MM-dd HH:mm:ss 형식으로 return;
+    //String yyyy-MM-dd HH:mm:ss 형식으로 return; 현재 시간
     public String sumDateTime(){
         String nowYear = String.valueOf(nowSeoul.getYear());
         String nowMonth = String.valueOf(nowSeoul.getMonthValue());
