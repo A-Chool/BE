@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.dto;
 
-import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

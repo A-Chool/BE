@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.chat.pubsub;
 
 import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
-import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;

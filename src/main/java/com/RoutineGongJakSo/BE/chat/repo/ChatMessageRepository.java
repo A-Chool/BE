@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
-import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;

@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.chat.service;
 
 import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
-import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.repo.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.RoutineGongJakSo.BE.chat.controller;
 
 
 import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
-import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisPublisher;
 import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.chat.service.ChatMessageService;
