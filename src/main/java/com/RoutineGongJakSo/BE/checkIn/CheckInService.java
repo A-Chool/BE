@@ -35,6 +35,8 @@ public class CheckInService {
     SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
     String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
+    //ToDo : 현재시간 이상하게 나오니까, checkInValidator.sumDateTime() 사용해서 초기화하기
+
     //[POST]체크인
     @Transactional
     public String checkIn(UserDetailsImpl userDetails) throws ParseException{
@@ -47,6 +49,9 @@ public class CheckInService {
         setDay.setTime(setFormatter); //yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
         Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
+        String sumDateTime = checkInValidator.sumDateTime(); //String yyyy-MM-dd HH:mm:ss 현재시간
+        Date nowFormatter = formatter.parse(sumDateTime); //Date 형식으로 포맷
+        today.setTime(nowFormatter);
 
         //compareTo() > 0 : 인자보다 미래
         //compareTo() < 0 : 인자보다 과거
@@ -66,7 +71,6 @@ public class CheckInService {
                 throw new NullPointerException("체크아웃을 먼저 해주세요");
             }
         }
-
 
         String nowTime = checkInValidator.nowTime(); //현재 서울 시간
         CheckIn checkIn = CheckIn.builder()
@@ -91,6 +95,9 @@ public class CheckInService {
         setDay.setTime(setFormatter); //yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
         Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
+        String sumDateTime = checkInValidator.sumDateTime(); //String yyyy-MM-dd HH:mm:ss 현재시간
+        Date nowFormatter = formatter.parse(sumDateTime); //Date 형식으로 포맷
+        today.setTime(nowFormatter);
 
         //compareTo() > 0 : 인자보다 미래
         //compareTo() < 0 : 인자보다 과거
@@ -109,11 +116,13 @@ public class CheckInService {
         List<CheckIn> findCheckIn = checkInRepository.findByUserAndDate(user, setToday);
         CheckIn firstCheckIn = findCheckIn.get(0); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
 
-//        Calendar checkInCalendar = checkInValidator.todayCalender(firstCheckIn.getDate()); //checkIn 시간 기준용
-//        String setCheckIn = firstCheckIn.getDate() + " " + firstCheckIn.getCheckIn(); //yyyy-MM-dd HH:mm:ss
-//        checkInCalendar.setTime(formatter.parse(setCheckIn)); //checkIn 시간 기준으로 캘린더 셋팅
+        if (firstCheckIn == null){ //기록이 없는 경우
+            return "00:00:00";
+        }
 
-    // ToDo 사용자가 00시 이후에 처음 체크인을 했을 때,
+        Calendar checkInCalendar = Calendar.getInstance(); //checkIn 시간 기준용
+        String setCheckIn = firstCheckIn.getDate() + " " + firstCheckIn.getCheckIn(); //yyyy-MM-dd HH:mm:ss
+        checkInCalendar.setTime(formatter.parse(setCheckIn)); //checkIn 시간 기준으로 캘린더 셋팅
 
         String[] timeStamp = firstCheckIn.getCheckIn().split(":"); //시, 분, 초 나누기
 

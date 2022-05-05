@@ -52,7 +52,14 @@ public class CheckInValidator {
         return formatter.parse(sumToday);
     }
 
-
+    //String yyyy-MM-dd HH:mm:ss 형식으로 return; 현재 시간
+    public String sumDateTime(){
+        String nowYear = String.valueOf(nowSeoul.getYear());
+        String nowMonth = String.valueOf(nowSeoul.getMonthValue());
+        String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
+        String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
+    }
 
 
 
@@ -98,14 +105,7 @@ public class CheckInValidator {
         return checkInList;
     }
 
-    //String yyyy-MM-dd HH:mm:ss 형식으로 return; 현재 시간
-    public String sumDateTime(){
-        String nowYear = String.valueOf(nowSeoul.getYear());
-        String nowMonth = String.valueOf(nowSeoul.getMonthValue());
-        String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
-        String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        return nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
-    }
+
 
     //총 공부 시간 계산하기
     public String daySum(User user) throws ParseException {
