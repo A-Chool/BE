@@ -1,7 +1,5 @@
 package com.RoutineGongJakSo.BE.checkIn;
 
-import com.RoutineGongJakSo.BE.checkIn.dto.CheckInDto;
-import com.RoutineGongJakSo.BE.model.CheckIn;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,8 +26,9 @@ public class CheckInController {
        return checkInService.getCheckIn(userDetails);
     }
 
+    //체크아웃
     @PostMapping("/checkOut")
-    public String checkOut(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CheckInDto.requestDto requestDto) throws ParseException{
-        return checkInService.checkOut(userDetails, requestDto);
+    public String checkOut(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException{
+        return checkInService.checkOut(userDetails);
     }
 }

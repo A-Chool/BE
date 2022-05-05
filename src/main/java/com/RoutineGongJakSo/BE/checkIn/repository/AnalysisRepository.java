@@ -4,8 +4,8 @@ import com.RoutineGongJakSo.BE.model.Analysis;
 import com.RoutineGongJakSo.BE.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface AnalysisRepository extends JpaRepository<Analysis, Long> {
-    List<Analysis> findByUserAndDate(User user, String date);
+   Optional<Analysis> findByUserAndDate(User user, String date);
 }
