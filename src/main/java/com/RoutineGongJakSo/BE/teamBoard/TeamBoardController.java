@@ -1,36 +1,39 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
-import com.RoutineGongJakSo.BE.admin.service.TeamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/user/teamBoard")
 @RequiredArgsConstructor
 public class TeamBoardController {
 
-    private final TeamService teamService;
     private final TeamBoardService teamBoardService;
 
-    //팀정보 보기
-    @GetMapping("/api/user/teamBoard")
-    public List<TeamDto.weekTeamDto> getTeamList(@PathVariable String week) {
-        return TeamBoardService.getWeekTeamList(userDetails, week);
+
+    //워크스페이스 생성
+    @PostMapping("/workSpace")
+    public String save(@RequestBody final TeamBoardRequestDto params) {
+        return teamBoardService.save(params);
     }
 
-//    //워크스페이스 수정
-//    @PutMapping("/api/user/teamBoard/workSpace") {
-//
-//    }
+
+    //워크스페이스 수정
+    @PatchMapping("/workSpace")
+    public String save(@PathVariable final String workSpace, @RequestBody final TeamBoardRequestDto params) {
+        return teamBoardService.update(workSpace, params);
+    }
+}
+
+
 //
 //    //그라운드룰 수정
 //    @PutMapping("/api/user/teamBoard/groundRule") {
 //
 //    }
+//    //팀정보 보기
+//    @GetMapping
+//    public List<TeamDto.weekTeamDto> getTeamList(@PathVariable String week) {
+//        return TeamBoardService.getWeekTeamList(userDetails, week);
+//    }
 
-
-}

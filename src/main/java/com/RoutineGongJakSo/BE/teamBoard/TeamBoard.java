@@ -1,7 +1,5 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import com.RoutineGongJakSo.BE.model.Timestamped;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,24 +7,32 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@Builder
-@Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class TeamBoard extends Timestamped {
+@Entity
+public class TeamBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamId;
 
-    @Column
     private String week;
 
-   @Column
     private String workSpace;
 
+    @Builder
+    public TeamBoard(String week, Long teamId, String workSpace) {
+        this.teamId = teamId;
+        this.week = week;
+        this.workSpace = workSpace;
+    }
 
-   /* @Column(nullable = false)
+    public void update(String week, Long teamId, String workSpace) {
+        this.teamId = teamId;
+        this.week = week;
+        this.workSpace = workSpace;
+    }
+}
+/* @Column(nullable = false)
     private String workSpace;
 
     @Column(nullable = false)
@@ -34,4 +40,4 @@ public class TeamBoard extends Timestamped {
 
 //    @OneToOne(mappedBy = WeekTeam)
 //    private String weakTeamBoard;
-}
+
