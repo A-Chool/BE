@@ -82,7 +82,6 @@ public class CheckInService {
                 .date(setToday)
                 .checkIn(nowTime)
                 .build();
-
         checkInRepository.save(checkIn);
 
         return response;
@@ -108,11 +107,12 @@ public class CheckInService {
         Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, setToday);
 
         List<CheckIn> findCheckIn = checkInRepository.findByUserAndDate(user, setToday);
-        CheckIn firstCheckIn = findCheckIn.get(findCheckIn.size() - 1); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
 
-        if (firstCheckIn == null) { //기록이 없는 경우
+        if (findCheckIn.size() == 0) { //기록이 없는 경우
             return "00:00:00";
         }
+
+        CheckIn firstCheckIn = findCheckIn.get(findCheckIn.size() - 1); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
 
         //체크인, 체크아웃 기록된 세트가 1회 이상 있는 경우
         if (findCheckIn.get(findCheckIn.size() - 1).getCheckOut() != null) {
