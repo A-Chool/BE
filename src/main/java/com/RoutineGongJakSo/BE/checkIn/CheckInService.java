@@ -1,14 +1,17 @@
 package com.RoutineGongJakSo.BE.checkIn;
 
+import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
+import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
+import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
 import com.RoutineGongJakSo.BE.checkIn.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.checkIn.repository.CheckInRepository;
-import com.RoutineGongJakSo.BE.model.Analysis;
-import com.RoutineGongJakSo.BE.model.CheckIn;
-import com.RoutineGongJakSo.BE.model.User;
+import com.RoutineGongJakSo.BE.model.*;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Check;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,7 @@ public class CheckInService {
     private final CheckInRepository checkInRepository;
     private final AnalysisRepository analysisRepository;
     private final CheckInValidator checkInValidator;
+    private final WeekTeamRepository weekTeamRepository;
     private final Validator validator;
 
     ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
@@ -166,10 +171,9 @@ public class CheckInService {
             throw new NullPointerException("Start 를 먼저 눌러주세요");
         }
 
-        //빌더를 만들어서 셋 하는게 가능한가?
         if (findAnalysis.isPresent()) {
-            lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"))); //ToDo 호빈님께 조언 듣기
-            lastCheckIn.setAnalysis(findCheckIns.get(0).getAnalysis()); //ToDo 호빈님께 조언 듣기
+            lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            lastCheckIn.setAnalysis(findCheckIns.get(0).getAnalysis());
             findAnalysis.get().setDaySum(daySum); // 총 공부 시간
             return "수고 하셨습니다.";
         }
@@ -184,4 +188,76 @@ public class CheckInService {
         analysisRepository.save(analysis);
         return "수고 하셨습니다.";
     }
-}
+
+    //해당 주차의 모든 유저들의 기록
+    public List<CheckInListDto.TeamListDto> getAllCheckList(UserDetailsImpl userDetails, String week) throws ParseException {
+
+        validator.loginCheck(userDetails); // 로그인 여부 확인
+
+        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
+        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+
+        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
+        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+
+        if (today.compareTo(setDay) < 0) {
+            today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
+        }
+
+        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+
+        List<WeekTeam> weekTeams = weekTeamRepository.findByWeek(week); // 해당 주차 팀 찾기
+        List<CheckInListDto.TeamListDto> teamListDtos = new ArrayList<>();
+
+        for (WeekTeam weekTeam : weekTeams) {
+            List<CheckInListDto.UserDto> userDtos = new ArrayList<>();
+
+            for (Member member : weekTeam.getMemberList()) {
+                List<CheckIn> findCheckIns = checkInRepository.findByUserAndDate(member.getUser(), setToday);
+
+                boolean online = true; //온라인 여부
+                boolean lateCheck = false; //지각 여부
+                int HH = 0; // 첫번째 체크인 시간
+                if (findCheckIns.size() != 0){
+                    String timeCheck = findCheckIns.get(0).getCheckIn();
+                    String[] arrayTime = timeCheck.split(":");
+                    HH = Integer.parseInt(arrayTime[0]);
+                    if (HH < 5){ //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조건
+                        HH += 24;
+                    }
+                }
+
+                //온라인 여부 확인
+                if (findCheckIns.size() == 0 || findCheckIns.get(findCheckIns.size()-1).getCheckOut() != null){
+                    online = false;
+                }
+
+                //지각 여부 확인
+                if (findCheckIns.size() == 0 || HH > 9){
+                    lateCheck = true;
+                }
+
+                CheckInListDto.UserDto userDto = CheckInListDto.UserDto.builder()
+                        .memberId(member.getMemberId())
+                        .userName(member.getUser().getUserName())
+                        .userEmail(member.getUser().getUserEmail())
+                        .phoneNumber(member.getUser().getPhoneNumber())
+                        .online(online)
+                        .lateCheck(lateCheck)
+                        .build();
+                userDtos.add(userDto);
+            }
+
+            CheckInListDto.TeamListDto teamListDto = CheckInListDto.TeamListDto.builder()
+                    .teamId(weekTeam.getWeekTeamId())
+                    .teamName(weekTeam.getTeamName())
+                    .week(weekTeam.getWeek())
+                    .memberList(userDtos)
+                    .build();
+
+            teamListDtos.add(teamListDto);
+        }
+        return teamListDtos;
+
+    }
+    }

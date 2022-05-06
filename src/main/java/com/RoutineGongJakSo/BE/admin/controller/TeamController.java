@@ -20,19 +20,19 @@ public class TeamController {
 
     //팀 추가
     @PostMapping("/")
-    public String createTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.createTeamDto teamDto) {
+    public String createTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.CreateTeamDto teamDto) {
         return teamService.createTeam(userDetails, teamDto);
     }
 
     //해당 주차의 모든 팀을 조회
     @GetMapping("/{week}")
-    public List<TeamDto.weekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
+    public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
         return teamService.getTeamList(userDetails, week);
     }
 
     //팀원 추가
     @PostMapping("/members")
-    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.addTeamDto addTeamDto) {
+    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.AddTeamDto addTeamDto) {
         return teamService.addMembers(userDetails, addTeamDto);
     }
 
@@ -56,7 +56,7 @@ public class TeamController {
 
     //해당 주차에 멤버아이디가 없는 유저 리스트
     @GetMapping("/noMember/{week}")
-    public List<TeamDto.getNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week){
+    public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week){
        return teamService.getNoMember(userDetails, week);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +31,11 @@ public class CheckInController {
     @PostMapping("/checkOut")
     public String checkOut(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException{
         return checkInService.checkOut(userDetails);
+    }
+
+    @GetMapping("/checkInList/{week}")
+    public List<CheckInListDto.TeamListDto> getAllCheckList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) throws ParseException {
+       return checkInService.getAllCheckList(userDetails, week);
     }
 
 }
