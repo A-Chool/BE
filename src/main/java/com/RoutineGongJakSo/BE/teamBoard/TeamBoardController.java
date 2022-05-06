@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,28 +13,41 @@ public class TeamBoardController {
 
 
     //워크스페이스 생성
-    @PostMapping("/workSpace")
-    public String save(@RequestBody final TeamBoardRequestDto params) {
-        return teamBoardService.save(params);
+    @GetMapping("/workSpace/save")
+    public String save() {
+
+        return "save";
     }
 
+    @PostMapping("/workSpace/save")
+    public String save(TeamBoard teamBoard) {
+
+        teamBoardService.save(String.valueOf(teamBoard));
+
+        return "";
+    }
+
+    @GetMapping("/workSpace/view")
+    public String boardView(Model model, Long teamID) {
+
+        model.addAttribute("teamBoard", teamBoardService.teamBoard);
+        return "teamBoard";
+    }
 
     //워크스페이스 수정
-    @PatchMapping("/workSpace")
-    public String update(@PathVariable final String workSpace, @RequestBody final TeamBoardRequestDto params) {
-        return teamBoardService.update(workSpace, params);
+    @GetMapping("/workSpace/update")
+    public String update(@PathVariable("teamId") Long teamId, Model model) {
+
+        model.addAttribute("teamBoard", teamBoardService.update(teamId);
+        return "update";
+    }
+
+    @PostMapping("/workSpace")
+    public String update(@PathVariable("teamId") Long teamId, TeamBoard teamBoard) {
+
+        TeamBoard teamBoardTemp = teamBoardService.save(String.valueOf(teamBoard));
+        teamBoardTemp.setWorkSpace(teamBoard.getWorkSpace());
+
+        return "redirect:/workSpace/save";
     }
 }
-
-
-//
-//    //그라운드룰 수정
-//    @PutMapping("/api/user/teamBoard/groundRule") {
-//
-//    }
-//    //팀정보 보기
-//    @GetMapping
-//    public List<TeamDto.weekTeamDto> getTeamList(@PathVariable String week) {
-//        return TeamBoardService.getWeekTeamList(userDetails, week);
-//    }
-
