@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.checkIn;
 
 import com.RoutineGongJakSo.BE.model.Analysis;
+import com.RoutineGongJakSo.BE.model.CheckIn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -93,5 +95,31 @@ public class CheckInValidator {
             return daySum;
         }
         return calenderFormatter.format(today.getTime());
+    }
+
+    //온라인 여부 확인
+    public boolean onlineCheck(List<CheckIn> findCheckIns){
+        if (findCheckIns.size() == 0 || findCheckIns.get(findCheckIns.size()-1).getCheckOut() != null){
+            return false;
+        }
+        return true;
+    }
+
+    //지각 여부 확인
+    public boolean lateCheck(List<CheckIn> findCheckIns){
+        int HH = 0; // 첫번째 체크인 시간
+
+        if (findCheckIns.size() != 0){
+            String timeCheck = findCheckIns.get(0).getCheckIn();
+            String[] arrayTime = timeCheck.split(":");
+            HH = Integer.parseInt(arrayTime[0]);
+            if (HH < 5){ //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조력
+                HH += 24;
+            }
+        }
+        if (findCheckIns.size() == 0 || HH > 9){
+            return true;
+        }
+        return false;
     }
 }
