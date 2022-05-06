@@ -69,9 +69,10 @@ public class TeamService {
         WeekTeam weekTeam = weekTeamRepository.findById(addTeamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(addTeamDto.getUserId()).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
-        );
+
+        //유저아이디로 유저정보 찾기
+        User user = validator.findUserIdInfo(addTeamDto.getUserId());
+
 
         // 이미 소속된 팀이 존재하는지 확인
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
@@ -191,6 +192,7 @@ public class TeamService {
         return response;
     }
 
+    //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<TeamDto.getNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
@@ -207,11 +209,11 @@ public class TeamService {
 
         for (WeekTeam weekTeam : weekTeamList) {
             List<Member> member = memberRepository.findByWeekTeam(weekTeam);
-            for (Member find : member){
-            User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
-                    () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
-            );
-            //제거 대상 제거
+            for (Member find : member) {
+                User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
+                        () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+                );
+                //제거 대상 제거
                 noMemberList.remove(getUser);
             }
         }
