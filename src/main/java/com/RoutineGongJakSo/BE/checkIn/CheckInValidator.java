@@ -5,7 +5,6 @@ import com.RoutineGongJakSo.BE.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.model.Analysis;
 import com.RoutineGongJakSo.BE.model.CheckIn;
 import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -59,6 +58,16 @@ public class CheckInValidator {
         String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
         String nowTime = nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         return nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
+    }
+
+    //누적 공부시간 계산하기
+
+    public String totalDayTime(){
+
+
+
+
+        return "아직 테스트중입니다.";
     }
 
 

@@ -137,6 +137,60 @@ public class CheckInService {
         return calenderFormatter.format(today.getTime());
     }
 
+    //[POST]체크아웃
+    @Transactional
+    public String checkOut(UserDetailsImpl userDetails) throws ParseException{
+
+        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더(오전 5시로 셋팅됨)
+        String strToday = checkInValidator.DateFormat(setDay); //오늘 날짜 str yyyy-MM-dd 형식
+        Date setFormatter = checkInValidator.dateTimeFormat(strToday); //yyyy-MM-dd 05:00:00(당일 오전 5시)
+        setDay.setTime(setFormatter); //yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+
+        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
+        String sumDateTime = checkInValidator.sumDateTime(); //String yyyy-MM-dd HH:mm:ss 현재시간
+        Date nowFormatter = formatter.parse(sumDateTime); //Date 형식으로 포맷
+        today.setTime(nowFormatter);
+
+        //compareTo() > 0 : 인자보다 미래
+        //compareTo() < 0 : 인자보다 과거
+        //compareTo() == 0 : 인자와 같은 시간
+        if (today.compareTo(setDay) < 0){
+            today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
+        }
+
+        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+
+        List<CheckIn> findCheckIns = checkInRepository.findByUserAndDate(user, setToday);
+        CheckIn lastCheckIn = findCheckIns.get(findCheckIns.size()-1); //마지막번째 기록을 get
+
+        Optional<Analysis> findAnalysis = analysisRepository.findByUserAndDate(user, setToday);
+
+        String daySum = checkInValidator.totalDayTime();
+
+        if (lastCheckIn.getCheckOut() != null){
+            throw new NullPointerException("Start 를 먼저 눌러주세요");
+        }
+
+        if (findAnalysis.isPresent()){
+            lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            findAnalysis.get().setDaySum(daySum); // 총 공부 시간
+            return "수고 하셨습니다.";
+        }
+        lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        Analysis analysis = Analysis.builder()
+                .daySum(daySum)
+                .date(setToday)
+                .user(user)
+                .checkIns(findCheckIns)
+                .build();
+        lastCheckIn.setAnalysis(analysis);
+        analysisRepository.save(analysis);
+        return "수고 하셨습니다.";
+    }
+
+
     //ToDo 총 공부 시간 계산하기
 //    public void daySum(UserDetailsImpl userDetails) throws ParseException {
 //
@@ -226,54 +280,5 @@ public class CheckInService {
 //    }
 
 
-    //[POST]체크아웃
-    @Transactional
-    public String checkOut(UserDetailsImpl userDetails) throws ParseException{
 
-        User user = validator.userInfo(userDetails);   // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
-
-        //전일 날짜 구하기
-        Calendar yesterDay = checkInValidator.yesterDayCalender(date); //전 날 기준 캘린더
-        String strYesterDay = checkInValidator.DateFormat(yesterDay); //어제 날짜 str yyyy-MM-dd 형식
-        Date setFormatter = checkInValidator.dateTimeFormat(strYesterDay); //yyyy-MM-dd 05:00:00(전일 오전 5시)
-
-        Calendar setFormat = Calendar.getInstance(); // 초기화 시간 05시
-        setFormat.setTime(setFormatter);
-
-        String sumDateTime = checkInValidator.sumDateTime();//String yyyy-MM-dd HH:mm:ss 현재시간
-
-        //Date 형식으로 포맷
-        Date nowFormatter = formatter.parse(sumDateTime);
-
-        //캘린더에 기준 시간(현재시간)을 넣어준다.
-        Calendar toDay = Calendar.getInstance();
-        toDay.setTime(nowFormatter);
-
-        String daysum = checkInValidator.daySum(user); // 총 공부 시간을 찾아줌
-
-        if (setFormat.compareTo(toDay) < 0){ // 인자보다 과거일 경우
-            Optional<Analysis>  find = analysisRepository.findByUserAndDate(user, strYesterDay);
-            List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, strYesterDay);
-            CheckIn check = checkInList.get(checkInList.size()-1);
-            if (check.getCheckOut() != null){
-                throw new NullPointerException("Start 를 먼저 눌러주세요.");
-            }
-            if (!find.isPresent()) {
-                check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));//이 친구는 이 위치에 있어야 합니다.
-                Analysis analysis = Analysis.builder()
-                        .daySum(daysum)
-                        .date(date)
-                        .user(user)
-                        .checkIns(checkInList)
-                        .build();
-                analysisRepository.save(analysis);
-                check.setAnalysis(analysis);
-            }else { //!null이라면, 수정
-                find.get().setDaySum(daysum);
-                check.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-            }
-            return "수고하셨습니다.";
-        }
-        return "수고하셨습니다.";
-    }
 }
