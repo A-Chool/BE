@@ -43,7 +43,6 @@ public class TeamDto {
         private String createdAt;
         private Long teamId;
         private Long memberId;
-
     }
 
     @Getter
