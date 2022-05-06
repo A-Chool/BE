@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
-import com.RoutineGongJakSo.BE.chat.dto.model.ChatMessage;
+import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -12,21 +12,23 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class ChatMessageRepository {// Redis
-    private static final String CHAT_MESSAGE = "CHAT_MESSAGE";
+
     private final RedisTemplate<String, Object> redisTemplate;
-//    private HashOperations<String, String, ChatMessage> opsHashChatMessage;
-//    // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
-//    private Map<String, ChannelTopic> topics;
-//
-//    @PostConstruct
-//    private void init() {
-//        opsHashChatMessage = redisTemplate.opsForHash();
-//        topics = new HashMap<>();
-//    }
 
     public void save(ChatMessage chatMessage) {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessage.class));
-        redisTemplate.opsForList().rightPush(chatMessage.getRoomId(), chatMessage);
+
+        String roomId = chatMessage.getRoomId();
+
+        redisTemplate.opsForList().rightPush(roomId, chatMessage);
+
+        Long size = redisTemplate.opsForList().size(roomId);
+
+        //테스트 10개로 진행 완료
+        //Todo 추후에 100개로 바꿀예정
+        if (size > 10L) {
+            redisTemplate.opsForList().leftPop(roomId, size - 10L);
+        }
     }
 
     public List<ChatMessage> findAllMessage(String roomId) {
@@ -37,7 +39,7 @@ public class ChatMessageRepository {// Redis
             chatMessageList = (List) redisTemplate.opsForList().range(roomId, 0, -1);
 
             if (chatMessageList == null) {
-                chatMessageList = new LinkedList<ChatMessage>();
+                chatMessageList = new LinkedList<>();
             }
         }
 

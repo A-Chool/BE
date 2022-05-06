@@ -4,6 +4,8 @@ import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
+import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
+import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
@@ -25,7 +27,7 @@ public class TeamService {
     private final WeekTeamRepository weekTeamRepository;
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
-
+    private final ChatRoomRepository chatRoomRepository;
     // 팀 추가
     @Transactional
     public String createTeam(UserDetailsImpl userDetails, TeamDto.createTeamDto teamDto) {
@@ -45,12 +47,15 @@ public class TeamService {
         String groundRole = "";
         String workSpace = "";
 
+        String roomName = teamDto.getWeek()+" "+ teamDto.getTeamName();
+        ChatRoom chatRoom = chatRoomRepository.createChatRoom(roomName);
+
         WeekTeam weekTeam = WeekTeam.builder()
                 .teamName(teamDto.getTeamName())
                 .week(teamDto.getWeek())
                 .groundRole(groundRole)
                 .workSpace(workSpace)
-                .roomId(teamDto.getWeek() + " " + teamDto.getTeamName()) //1주차 1조
+                .roomId(chatRoom.getRoomId()) //1주차 1조
                 .build();
 
         weekTeamRepository.save(weekTeam);
