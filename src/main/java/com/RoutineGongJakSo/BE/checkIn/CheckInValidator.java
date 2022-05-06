@@ -5,6 +5,7 @@ import com.RoutineGongJakSo.BE.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.model.Analysis;
 import com.RoutineGongJakSo.BE.model.CheckIn;
 import com.RoutineGongJakSo.BE.model.User;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -60,15 +61,35 @@ public class CheckInValidator {
         return nowYear+ "-" + nowMonth+ "-" + nowDay+ " " + nowTime;
     }
 
-    //누적 공부시간 계산하기
-
-    public String totalDayTime(){
-
-
-
-
-        return "아직 테스트중입니다.";
-    }
+//    //당일 누적 공부시간 계산하기
+//    public String totalDayTime(Optional<Analysis> findAnalysis, UserDetailsImpl userDetails) throws ParseException {
+//
+//        String daySum = checkInService.getCheckIn(userDetails);
+//
+//        if (!findAnalysis.isPresent()){ //값이 없다면, 처음 기록이라는 뜻이니까, 위에 서비스단에서 만들어 놓은 로직 재활용 하면 됨
+//            return daySum;
+//        }
+//
+//        Calendar analysisDay = todayCalender(findAnalysis.get().getDate()); //analysis 기준 calendar 만들기
+//        String setTime = findAnalysis.get().getDate() + " " + findAnalysis.get().getDaySum();
+//        Date setFromatter = formatter.parse(setTime);
+//        analysisDay.setTime(setFromatter); // analysisa 의 daySum 기준시간으로 셋팅
+//
+//        String[] timeStamp = daySum.split(":");
+//
+//        int HH = Integer.parseInt(timeStamp[0]); //시
+//        int mm = Integer.parseInt(timeStamp[1]); //분
+//        int ss = Integer.parseInt(timeStamp[2]); //초
+//
+//        analysisDay.add(Calendar.HOUR, HH);
+//        analysisDay.add(Calendar.MINUTE, mm);
+//        analysisDay.add(Calendar.SECOND, ss);
+//
+//        log.info("총 공부 시간" + calenderFormatter.format(analysisDay.getTime()));
+//
+//        return calenderFormatter.format(analysisDay.getTime());
+//
+//    }
 
 
 

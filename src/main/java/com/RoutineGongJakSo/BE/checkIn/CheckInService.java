@@ -64,12 +64,19 @@ public class CheckInService {
 
         //체크인 테이블에서 해당 유저 + 오늘 날짜의 해당하는 친구들을 리스트에 담음
         List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, setToday);
+        Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, setToday);
 
         //체크아웃을 하지 않은 상태에서 체크인을 시도할 경우 NPE
         for (CheckIn check : checkInList) {
             if (check.getCheckOut() == null) {
                 throw new NullPointerException("체크아웃을 먼저 해주세요");
             }
+        }
+
+        String response = "00:00:00";
+
+        if (analysis.isPresent()){
+            response = analysis.get().getDaySum();
         }
 
         String nowTime = checkInValidator.nowTime(); //현재 서울 시간
@@ -81,7 +88,7 @@ public class CheckInService {
 
         checkInRepository.save(checkIn);
 
-        return "00:00:00";
+        return response;
     }
 
     //[GET]사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
@@ -110,14 +117,16 @@ public class CheckInService {
 
         Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, setToday);
 
-        if (analysis.isPresent()){
-            return analysis.get().getDaySum();
-        }
         List<CheckIn> findCheckIn = checkInRepository.findByUserAndDate(user, setToday);
-        CheckIn firstCheckIn = findCheckIn.get(0); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
+        CheckIn firstCheckIn = findCheckIn.get(findCheckIn.size()-1); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
 
         if (firstCheckIn == null){ //기록이 없는 경우
             return "00:00:00";
+        }
+
+        //체크인, 체크아웃 기록된 세트가 1회 이상 있는 경우
+        if (findCheckIn.get(findCheckIn.size()-1).getCheckOut() != null){
+            return analysis.get().getDaySum();
         }
 
         Calendar checkInCalendar = Calendar.getInstance(); //checkIn 시간 기준용
@@ -133,6 +142,31 @@ public class CheckInService {
         today.add(Calendar.HOUR, -HH);
         today.add(Calendar.MINUTE, -mm);
         today.add(Calendar.SECOND, -ss);
+
+        //=========================================================================================
+        //analysis !=null && 마지막 체크아웃 값이 !=null 일 때만 실행
+        if (analysis.isPresent()){
+            String daySum = calenderFormatter.format(today.getTime());
+            analysis.get().getDaySum();
+            Calendar analysisDay = checkInValidator.todayCalender(analysis.get().getDate()); //analysis 기준 calendar 만들기
+            String setTime = analysis.get().getDate() + " " + analysis.get().getDaySum();
+            Date setFromatter = formatter.parse(setTime);
+            analysisDay.setTime(setFromatter); // analysisa 의 daySum 기준시간으로 셋팅
+
+            String[] reTimeStamp = daySum.split(":");
+
+            int reHH = Integer.parseInt(reTimeStamp[0]); //시
+            int remm = Integer.parseInt(reTimeStamp[1]); //분
+            int ress = Integer.parseInt(reTimeStamp[2]); //초
+
+            analysisDay.add(Calendar.HOUR, reHH);
+            analysisDay.add(Calendar.MINUTE, remm);
+            analysisDay.add(Calendar.SECOND, ress);
+
+            daySum = calenderFormatter.format(analysisDay.getTime());
+            return daySum;
+        }
+//=========================================================================================
 
         return calenderFormatter.format(today.getTime());
     }
@@ -167,7 +201,30 @@ public class CheckInService {
 
         Optional<Analysis> findAnalysis = analysisRepository.findByUserAndDate(user, setToday);
 
-        String daySum = checkInValidator.totalDayTime();
+        //==============================================================위의 로직 수정 후 재 츄라이
+        String daySum = getCheckIn(userDetails);
+        if (findAnalysis.isPresent()){ //값이 없다면, 처음 기록이라는 뜻이니까, 위에 서비스단에서 만들어 놓은 로직 재활용 하면 됨
+            Calendar analysisDay = checkInValidator.todayCalender(findAnalysis.get().getDate()); //analysis 기준 calendar 만들기
+            String setTime = findAnalysis.get().getDate() + " " + findAnalysis.get().getDaySum();
+            Date setFromatter = formatter.parse(setTime);
+            analysisDay.setTime(setFromatter); // analysisa 의 daySum 기준시간으로 셋팅
+
+            String[] timeStamp = daySum.split(":");
+
+            int HH = Integer.parseInt(timeStamp[0]); //시
+            int mm = Integer.parseInt(timeStamp[1]); //분
+            int ss = Integer.parseInt(timeStamp[2]); //초
+
+            analysisDay.add(Calendar.HOUR, HH);
+            analysisDay.add(Calendar.MINUTE, mm);
+            analysisDay.add(Calendar.SECOND, ss);
+
+            log.info("총 공부 시간" + calenderFormatter.format(analysisDay.getTime()));
+            daySum = calenderFormatter.format(analysisDay.getTime());
+        }
+
+        //==============================================================
+//        String daySum = checkInValidator.totalDayTime(findAnalysis, userDetails); //당일 누적 공부시간
 
         if (lastCheckIn.getCheckOut() != null){
             throw new NullPointerException("Start 를 먼저 눌러주세요");
