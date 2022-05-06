@@ -80,9 +80,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin().disable()
                 .authorizeRequests()
+                .antMatchers("/websocket/**").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()
+
                 // [로그아웃 기능]
                 .logout()
                 // 로그아웃 요청 처리 URL
@@ -96,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
@@ -145,6 +148,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/api/user/signup");
 
         skipPathList.add("GET,/**.js");
+        skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/sub/**");
+        skipPathList.add("GET,/pub/**");
 
         skipPathList.add("GET,/favicon.ico");
 

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,4 +39,7 @@ public class WeekTeam {
     @Column(nullable = false)
     private String roomId;
 
+    public void addMember(Member member) {
+        this.memberList.add(member);
+    }
 }
