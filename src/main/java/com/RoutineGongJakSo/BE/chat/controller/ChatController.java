@@ -43,7 +43,6 @@ public class ChatController {
     @GetMapping("/chat/message/{roomId}")
     @ResponseBody
     public List<ChatMessage> getMessages(@PathVariable String roomId) {
-//        return chatMessageService.getMessages(roomId);
-        return null;
+        return chatMessageService.getMessages(roomId);
     }
 }
