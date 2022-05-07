@@ -17,9 +17,9 @@ public class ChatMessageService {
         chatMessageRepository.save(chatMessage);
     }
 
-    public List<ChatMessage> getMessages(String roomId) {
-        List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
-
-        return chatMessageList;
-    }
+//    public List<ChatMessage> getMessages(String roomId) {
+//        List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
+//
+//        return chatMessageList;
+//    }
 }
