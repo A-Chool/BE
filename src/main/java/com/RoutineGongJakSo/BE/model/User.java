@@ -42,7 +42,7 @@ public class User extends Timestamped {
     private List<CheckIn> checkIn;
 
     @OneToMany(mappedBy = "user", cascade =CascadeType.REMOVE)
-    private List<Member> memberList = new ArrayList<>();
+    private List<Member> memberList;
 
     public void addMember(Member member) {
         this.memberList.add(member);
