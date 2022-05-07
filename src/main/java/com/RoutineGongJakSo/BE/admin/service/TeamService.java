@@ -55,7 +55,8 @@ public class TeamService {
                 .week(teamDto.getWeek())
                 .groundRole(groundRole)
                 .workSpace(workSpace)
-                .roomId(chatRoom.getRoomId()) //1주차 1조
+                .roomId(chatRoom.getRoomId())
+                .roomName(roomName)
                 .build();
 
         weekTeamRepository.save(weekTeam);

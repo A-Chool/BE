@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
 import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
-import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -49,7 +48,7 @@ public class ChatMessageRepository {// Redis
     }
 
     public List<ChatMessage> findAllMessage(String roomId) {
-        return opsHashChatMessage.get(CHAT_MESSAGE,roomId);
+        return opsHashChatMessage.get(CHAT_MESSAGE, roomId);
     }
 
 }

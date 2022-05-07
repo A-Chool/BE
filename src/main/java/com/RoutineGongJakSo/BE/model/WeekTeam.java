@@ -39,6 +39,9 @@ public class WeekTeam {
     @Column(nullable = false)
     private String roomId;
 
+    @Column
+    private String roomName;
+
     public void addMember(Member member) {
         this.memberList.add(member);
     }
