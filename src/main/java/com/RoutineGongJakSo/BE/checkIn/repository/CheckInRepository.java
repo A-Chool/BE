@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CheckInRepository extends JpaRepository<CheckIn, Long> {
     List<CheckIn> findByUserAndDate(User user, String date);
+
+//exists
 }

@@ -113,7 +113,7 @@ public class CheckInValidator {
             String timeCheck = findCheckIns.get(0).getCheckIn();
             String[] arrayTime = timeCheck.split(":");
             HH = Integer.parseInt(arrayTime[0]);
-            if (HH < 5){ //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조력
+            if (HH < 5){ //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조건
                 HH += 24;
             }
         }
@@ -121,5 +121,24 @@ public class CheckInValidator {
             return true;
         }
         return false;
+    }
+
+    public String totalTime(List<Analysis> allUserList){
+
+        int total = 0; //총 누적 공부시간이 담김
+
+        for (Analysis find : allUserList) {
+            String[] arrayFind = find.getDaySum().split(":");
+            int allHH = Integer.parseInt(arrayFind[0]);
+            int allMM = allHH % 60;
+            int alltotal = allMM + Integer.parseInt(arrayFind[1]); //분으로 환산
+            total += alltotal;
+        }
+
+        String totalHH = String.valueOf(total / 60);
+        String totalMM = String.valueOf(total % 60);
+        String totalSumTime = totalHH + ":" + totalMM;
+
+        return totalSumTime;
     }
 }

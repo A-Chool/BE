@@ -89,7 +89,7 @@ public class CheckInService {
     }
 
     //[GET]사용자가 이미 start를 누른 상태라면, 값을 내려주는 곳(당일)
-    public String getCheckIn(UserDetailsImpl userDetails) throws ParseException {
+    public CheckInListDto.CheckInDto getCheckIn(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails); // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
@@ -109,16 +109,25 @@ public class CheckInService {
 
         List<CheckIn> findCheckIn = checkInRepository.findByUserAndDate(user, setToday);
 
+        List<CheckInListDto.TodayLogDto> todayLogDtoList = new ArrayList<>(); // 그 날의 로그 기록
+
         if (findCheckIn.size() == 0) { //기록이 없는 경우
-            return "00:00:00";
+            //==========================================================================
+            List<Analysis> allUserList = analysisRepository.findByUser(user);
+
+            String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
+
+            CheckInListDto.CheckInDto checkInDto = CheckInListDto.CheckInDto.builder()
+                    .daySumTime("00:00:00")
+                    .totalSumTime(total)
+                    .todayLog(todayLogDtoList)
+                    .build();
+
+            return checkInDto;
+            //==========================================================================
         }
 
         CheckIn firstCheckIn = findCheckIn.get(findCheckIn.size() - 1); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
-
-        //체크인, 체크아웃 기록된 세트가 1회 이상 있는 경우
-        if (findCheckIn.get(findCheckIn.size() - 1).getCheckOut() != null) {
-            return analysis.get().getDaySum();
-        }
 
         Calendar checkInCalendar = Calendar.getInstance(); //checkIn 시간 기준용
         String setCheckIn = firstCheckIn.getDate() + " " + firstCheckIn.getCheckIn(); //yyyy-MM-dd HH:mm:ss
@@ -134,13 +143,44 @@ public class CheckInService {
         today.add(Calendar.MINUTE, -mm);
         today.add(Calendar.SECOND, -ss);
 
-        //사용자가 1회 이상 체크인 체크아웃 기록이 있을 경우 시간 계산
-        return checkInValidator.analysisCheck(analysis, today);
+        String daySum = checkInValidator.analysisCheck(analysis, today); //누적 시간 계산
+//==========================================================================
+        List<Analysis> allUserList = analysisRepository.findByUser(user);
+
+        String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
+
+        for (CheckIn check : findCheckIn){
+            CheckInListDto.TodayLogDto todayLogDto = CheckInListDto.TodayLogDto.builder()
+                    .checkIn(check.getCheckIn())
+                    .checkOut(check.getCheckOut())
+                    .build();
+            todayLogDtoList.add(todayLogDto);
+        }
+
+        //체크인, 체크아웃 기록된 세트가 1회 이상 있는 경우
+        if (findCheckIn.get(findCheckIn.size() - 1).getCheckOut() != null) {
+            String todaySum = analysis.get().getDaySum();
+            CheckInListDto.CheckInDto checkInDto = CheckInListDto.CheckInDto.builder()
+                    .daySumTime(todaySum)
+                    .totalSumTime(total)
+                    .todayLog(todayLogDtoList)
+                    .build();
+            return checkInDto;
+        }
+
+        //현재 시간 + 누적 시간
+        CheckInListDto.CheckInDto checkInDto = CheckInListDto.CheckInDto.builder()
+                .daySumTime(daySum)
+                .totalSumTime(total)
+                .todayLog(todayLogDtoList)
+                .build();
+//==========================================================================
+        return checkInDto;
     }
 
     //[POST]체크아웃
     @Transactional
-    public String checkOut(UserDetailsImpl userDetails) throws ParseException {
+    public CheckInListDto.CheckInDto checkOut(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails);   // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
@@ -161,7 +201,7 @@ public class CheckInService {
 
         Optional<Analysis> findAnalysis = analysisRepository.findByUserAndDate(user, setToday);
 
-        String daySum = getCheckIn(userDetails); //총 공부시간
+        String daySum = getCheckIn(userDetails).getDaySumTime(); //총 공부시간
 
         if (lastCheckIn.getCheckOut() != null) {
             throw new NullPointerException("Start 를 먼저 눌러주세요");
@@ -171,7 +211,9 @@ public class CheckInService {
             lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             lastCheckIn.setAnalysis(findCheckIns.get(0).getAnalysis());
             findAnalysis.get().setDaySum(daySum); // 총 공부 시간
-            return "수고 하셨습니다.";
+//==========================================================================
+            return getCheckIn(userDetails);
+            //==========================================================================
         }
         lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         Analysis analysis = Analysis.builder()
@@ -182,7 +224,9 @@ public class CheckInService {
                 .build();
         lastCheckIn.setAnalysis(analysis);
         analysisRepository.save(analysis);
-        return "수고 하셨습니다.";
+        //==========================================================================
+        return getCheckIn(userDetails);
+        //==========================================================================
     }
 
     //해당 주차의 모든 유저들의 기록
