@@ -130,7 +130,7 @@ public class CheckInValidator {
         for (Analysis find : allUserList) {
             String[] arrayFind = find.getDaySum().split(":");
             int allHH = Integer.parseInt(arrayFind[0]);
-            int allMM = allHH % 60;
+            int allMM = allHH * 60;
             int alltotal = allMM + Integer.parseInt(arrayFind[1]); //분으로 환산
             total += alltotal;
         }

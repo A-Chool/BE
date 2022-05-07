@@ -112,7 +112,7 @@ public class CheckInService {
         List<CheckInListDto.TodayLogDto> todayLogDtoList = new ArrayList<>(); // 그 날의 로그 기록
 
         if (findCheckIn.size() == 0) { //기록이 없는 경우
-            //==========================================================================
+
             List<Analysis> allUserList = analysisRepository.findByUser(user);
 
             String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
@@ -124,7 +124,7 @@ public class CheckInService {
                     .build();
 
             return checkInDto;
-            //==========================================================================
+
         }
 
         CheckIn firstCheckIn = findCheckIn.get(findCheckIn.size() - 1); // 처음이 아니라면 analysis 에 값이 있을거고, 그렇다면 위의 조건문에서 return 당함
@@ -144,7 +144,7 @@ public class CheckInService {
         today.add(Calendar.SECOND, -ss);
 
         String daySum = checkInValidator.analysisCheck(analysis, today); //누적 시간 계산
-//==========================================================================
+
         List<Analysis> allUserList = analysisRepository.findByUser(user);
 
         String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
@@ -174,7 +174,7 @@ public class CheckInService {
                 .totalSumTime(total)
                 .todayLog(todayLogDtoList)
                 .build();
-//==========================================================================
+
         return checkInDto;
     }
 
@@ -211,9 +211,7 @@ public class CheckInService {
             lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             lastCheckIn.setAnalysis(findCheckIns.get(0).getAnalysis());
             findAnalysis.get().setDaySum(daySum); // 총 공부 시간
-//==========================================================================
             return getCheckIn(userDetails);
-            //==========================================================================
         }
         lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         Analysis analysis = Analysis.builder()
@@ -224,9 +222,8 @@ public class CheckInService {
                 .build();
         lastCheckIn.setAnalysis(analysis);
         analysisRepository.save(analysis);
-        //==========================================================================
+
         return getCheckIn(userDetails);
-        //==========================================================================
     }
 
     //해당 주차의 모든 유저들의 기록
