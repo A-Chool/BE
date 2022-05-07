@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -18,29 +15,29 @@ public class TeamBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamId;
 
-    private String week;
-
-    private String workSpace;
-
-    @Builder
-    public TeamBoard(String week, Long teamId, String workSpace) {
-        this.teamId = teamId;
-        this.week = week;
-        this.workSpace = workSpace;
-    }
-
-    public void update(String week, Long teamId, String workSpace) {
-        this.teamId = teamId;
-        this.week = week;
-        this.workSpace = workSpace;
-    }
-}
-/* @Column(nullable = false)
-    private String workSpace;
+    @Column(nullable = false)
+    private String userName;
 
     @Column(nullable = false)
-    private String groundRules;*/
+    private String phoneNumber;
 
-//    @OneToOne(mappedBy = WeekTeam)
-//    private String weakTeamBoard;
+    @Column(unique = true)
+    private Long kakaoId;
 
+    @Column(nullable = false, unique = true)
+    private String userEmail;
+
+    @Column(nullable = false)
+    private String groundRule;
+
+    @Column(nullable = false)
+    private String workSpaceTitle;
+
+    @Column(nullable = false)
+    private String workSpaceContent;
+
+    @Builder
+    public TeamBoard(String groundRule) {
+        this.groundRule = groundRule;
+    }
+}

@@ -1,29 +1,30 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
-//팀 대시보드
+
 public class TeamBoardService {
 
-    @Autowired
     private final TeamBoardRepository teamBoardRepository;
 
-    //생성
-    public TeamBoard save(String teamBoard) {
+    //그라운드룰
+    @Transactional
+    public Long save(TeamBoardtDto requestDto) {
 
-        teamBoardRepository.save(teamBoard);
+        return TeamBoardtDto.save(requestDto.toEntity()).getTeamId();
     }
 
-    //수정
+    @Transactional
+    public Long update(Long teamId, TeamBoardtDto requestDto) {
+        TeamBoard entity = TeamBoardRepository.findById(teamId);
 
+        entity.update(requestDto.getTeamId(), requestDto.getGroundrule());
 
-    public void update(String teamBoard) {
-
-        teamBoardRepository.update(teamBoard);
+        return TeamBoardRepository.save(entity).getTeamId();
     }
-
 }
