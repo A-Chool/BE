@@ -28,5 +28,20 @@ public class CheckInListDto {
         private boolean lateCheck; //지각 여부
     }
 
+    @Getter
+    @Builder
+    public static class CheckInDto{
+        private String daySumTime; // 하루 누적 공부시간
+        private String totalSumTime; // 총 누적 공부시간
+        private List<TodayLogDto> todayLog; // 로그인, 로그아웃 기록
+    }
+
+    @Getter
+    @Builder
+    public static class TodayLogDto{ //당일 로그인 로그아웃 기록
+        private String checkIn;
+        private String checkOut;
+    }
+
 
 }
