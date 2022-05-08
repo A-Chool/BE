@@ -159,7 +159,6 @@ public class KakaoService {
 
             repository.save(kakaoUser);
             return kakaoUser;
-
         }
         return findKakao;
     }

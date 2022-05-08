@@ -1,8 +1,10 @@
 package com.RoutineGongJakSo.BE.chat.controller;
 
-import com.RoutineGongJakSo.BE.chat.dto.model.ChatRoom;
+import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,15 +17,10 @@ public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
 
-//    @GetMapping("/room")
-//    public String rooms(Model model) {
-//        return "/chat/room";
-//    }
-
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+    public List<ChatRoom> room(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomRepository.findAllRoom(userDetails);
     }
 
     @PostMapping("/room")
@@ -31,12 +28,6 @@ public class ChatRoomController {
     public ChatRoom createRoom(@RequestParam String name) {
         return chatRoomRepository.createChatRoom(name);
     }
-
-//    @GetMapping("/room/enter/{roomId}")
-//    public String roomDetail(Model model, @PathVariable String roomId) {
-//        model.addAttribute("roomId", roomId);
-//        return "/chat/roomdetail";
-//    }
 
     @GetMapping("/room/{roomId}")
     @ResponseBody

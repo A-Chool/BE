@@ -83,13 +83,10 @@ public class AdminService {
 
         //로그인 여부 확인
         validator.loginCheck(userDetails);
-
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
-
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 유저입니다.")
-        );
+        //유저아이디로 유저정보 찾기
+        User user = validator.findUserIdInfo(userId);
         user.setUserLevel(update.getUserLevel());
 
         return "권한이 수정 되었습니다.";
@@ -101,13 +98,11 @@ public class AdminService {
 
         //로그인 여부 확인
         validator.loginCheck(userDetails);
-
         //관리자 접근 권한 확인
         validator.adminCheck(userDetails);
+        //유저아이디로 유저정보 찾기
+        User user = validator.findUserIdInfo(userId);
 
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 유저입니다.")
-        );
         userRepository.delete(user);
         return "해당 유저 정보가 삭제되었습니다.";
     }

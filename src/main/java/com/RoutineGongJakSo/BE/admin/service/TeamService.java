@@ -4,6 +4,8 @@ import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.dto.TeamDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
+import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
+import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
@@ -25,10 +27,10 @@ public class TeamService {
     private final WeekTeamRepository weekTeamRepository;
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
-
+    private final ChatRoomRepository chatRoomRepository;
     // 팀 추가
     @Transactional
-    public String createTeam(UserDetailsImpl userDetails, TeamDto.createTeamDto teamDto) {
+    public String createTeam(UserDetailsImpl userDetails, TeamDto.CreateTeamDto teamDto) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -45,12 +47,16 @@ public class TeamService {
         String groundRole = "";
         String workSpace = "";
 
+        String roomName = teamDto.getWeek()+" "+ teamDto.getTeamName();
+        ChatRoom chatRoom = chatRoomRepository.createChatRoom(roomName);
+
         WeekTeam weekTeam = WeekTeam.builder()
                 .teamName(teamDto.getTeamName())
                 .week(teamDto.getWeek())
                 .groundRole(groundRole)
                 .workSpace(workSpace)
-                .roomId(teamDto.getWeek() + " " + teamDto.getTeamName()) //1주차 1조
+                .roomId(chatRoom.getRoomId())
+                .roomName(roomName)
                 .build();
 
         weekTeamRepository.save(weekTeam);
@@ -60,7 +66,7 @@ public class TeamService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(UserDetailsImpl userDetails, TeamDto.addTeamDto addTeamDto) {
+    public String addMembers(UserDetailsImpl userDetails, TeamDto.AddTeamDto addTeamDto) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -69,9 +75,10 @@ public class TeamService {
         WeekTeam weekTeam = weekTeamRepository.findById(addTeamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(addTeamDto.getUserId()).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
-        );
+
+        //유저아이디로 유저정보 찾기
+        User user = validator.findUserIdInfo(addTeamDto.getUserId());
+
 
         // 이미 소속된 팀이 존재하는지 확인
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(weekTeam.getWeek());
@@ -132,7 +139,7 @@ public class TeamService {
     }
 
     //해당 주차의 모든 팀을 조회
-    public List<TeamDto.weekTeamDto> getTeamList(UserDetailsImpl userDetails, String week) {
+    public List<TeamDto.WeekTeamDto> getTeamList(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -140,12 +147,12 @@ public class TeamService {
 
         //해당 주차의 모든 팀을 조회
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
-        List<TeamDto.weekTeamDto> weekTeamDtoList = new ArrayList<>();
+        List<TeamDto.WeekTeamDto> weekTeamDtoList = new ArrayList<>();
 
         for(WeekTeam weekTeam : weekTeamList){
             List<MemberDto> memberDtoList = new ArrayList<>();
 
-            for(Member member : weekTeam.getMemberList()){
+            for(Member member : weekTeam.getMemberList()){ //ToDo getMemberList에 어떤 값이 들어있는지 확인은 어디서 할 수 있을까요?
 
                 MemberDto memberDto = new MemberDto();
                 memberDto.setMemberId(member.getMemberId());
@@ -153,7 +160,7 @@ public class TeamService {
                 memberDtoList.add(memberDto);
             }
 
-            TeamDto.weekTeamDto weekTeamDto =  TeamDto.weekTeamDto.builder()
+            TeamDto.WeekTeamDto weekTeamDto =  TeamDto.WeekTeamDto.builder()
                     .teamId(weekTeam.getWeekTeamId())
                     .teamName(weekTeam.getTeamName())
                     .week(weekTeam.getWeek())
@@ -191,7 +198,8 @@ public class TeamService {
         return response;
     }
 
-    public List<TeamDto.getNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
+    //해당 주차에 멤버아이디가 없는 유저 리스트
+    public List<TeamDto.GetNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
         validator.loginCheck(userDetails);
         //관리자 접근 권한 확인
@@ -202,23 +210,23 @@ public class TeamService {
 
         //모든 유저를 찾기
         List<User> noMemberList = userRepository.findAll();
-        //값을 return 할 Dto 만들기
-        List<TeamDto.getNoMember> noMembers = new ArrayList<>();
+        //값을 return 할 CheckInListDto 만들기
+        List<TeamDto.GetNoMember> noMembers = new ArrayList<>();
 
         for (WeekTeam weekTeam : weekTeamList) {
             List<Member> member = memberRepository.findByWeekTeam(weekTeam);
-            for (Member find : member){
-            User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
-                    () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
-            );
-            //제거 대상 제거
+            for (Member find : member) {
+                User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
+                        () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+                );
+                //제거 대상 제거
                 noMemberList.remove(getUser);
             }
         }
 
         //return 값 가공하기
         for (User user : noMemberList) {
-            TeamDto.getNoMember response = TeamDto.getNoMember.builder()
+            TeamDto.GetNoMember response = TeamDto.GetNoMember.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
                     .build();

@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.admin.dto;
 
-import com.RoutineGongJakSo.BE.model.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +12,13 @@ public class TeamDto {
     //팀 생성 요청
     @Getter
     @Setter
-    public static class createTeamDto {
+    public static class CreateTeamDto {
         private String teamName;
         private String week;
     }
 
     @Getter
-    public static class addTeamDto{
+    public static class AddTeamDto{
         private Long teamId;
         private Long userId;
     }
@@ -27,14 +26,14 @@ public class TeamDto {
     //주차별 팀 response
     @Getter
     @Builder
-    public static class responseDto {
+    public static class ResponseDto {
         private String teamName;
-        private List<getUserList> userList;
+        private List<GetUserList> userList;
     }
 
     @Getter
     @Builder
-    public static class getUserList {
+    public static class GetUserList {
         private Long userId;
         private String userName;
         private String userEmail;
@@ -43,19 +42,18 @@ public class TeamDto {
         private String createdAt;
         private Long teamId;
         private Long memberId;
-
     }
 
     @Getter
     @Builder
-    public static class getNoMember{
+    public static class GetNoMember{
         private String userName;
         private Long userId;
     }
 
     @Getter
     @Builder
-    public static class weekTeamDto {
+    public static class WeekTeamDto {
         private Long teamId;
         private String teamName;
         private String week;

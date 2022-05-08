@@ -1,7 +1,12 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
-import com.RoutineGongJakSo.BE.chat.dto.model.ChatRoom;
+import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
+import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisSubscriber;
+import com.RoutineGongJakSo.BE.model.Member;
+import com.RoutineGongJakSo.BE.model.User;
+import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,14 +31,27 @@ public class ChatRoomRepository {
     // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
     private Map<String, ChannelTopic> topics;
 
+    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
+
     @PostConstruct
     private void init() {
         opsHashChatRoom = redisTemplate.opsForHash();
         topics = new HashMap<>();
     }
 
-    public List<ChatRoom> findAllRoom() {
-        return opsHashChatRoom.values(CHAT_ROOMS);
+    public List<ChatRoom> findAllRoom(UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow( ()-> new IllegalArgumentException("유저가 없습니다."));
+        List<Member> memberList = memberRepository.findAllByUser(user);
+        System.out.println("memberList = " + memberList);
+        List<ChatRoom> chatRoomList = new ArrayList<>();
+        for(Member member : memberList){
+            ChatRoom chatRoom = new ChatRoom();
+            chatRoom.setRoomId(member.getWeekTeam().getRoomId());
+            chatRoom.setName(member.getWeekTeam().getRoomName());
+            chatRoomList.add(chatRoom);
+        }
+        return chatRoomList;
     }
 
     public ChatRoom findRoomById(String id) {

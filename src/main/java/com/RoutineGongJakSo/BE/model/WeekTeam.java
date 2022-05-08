@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class WeekTeam {
     private Long WeekTeamId;
 
     @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
-    private List<Member> memberList = new ArrayList<>();
+    private List<Member> memberList;
 
     @Column(nullable = false)
     private String teamName;
@@ -37,6 +38,9 @@ public class WeekTeam {
 
     @Column(nullable = false)
     private String roomId;
+
+    @Column
+    private String roomName;
 
     public void addMember(Member member) {
         this.memberList.add(member);

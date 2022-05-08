@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.admin.repository;
 
 import com.RoutineGongJakSo.BE.model.Member;
+import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     List<Member> findByWeekTeam(WeekTeam weekTeam);
 
+    List<Member> findAllByUser(User user);
 }
