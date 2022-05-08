@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin().disable()
                 .authorizeRequests()
-                .antMatchers("/websocket/**").permitAll()
+//                .antMatchers("/websocket/**").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()
@@ -149,8 +149,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/**.js");
         skipPathList.add("GET,/ws-stomp/**");
-        skipPathList.add("GET,/sub/**");
-        skipPathList.add("GET,/pub/**");
+//        skipPathList.add("GET,/sub/**");
+//        skipPathList.add("GET,/pub/**");
 
         skipPathList.add("GET,/favicon.ico");
 
