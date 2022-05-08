@@ -36,11 +36,13 @@ public class ChatController {
 
         // username 세팅
         String username = "";
+        String sender = "";
         if (!(String.valueOf(token).equals("Authorization") || String.valueOf(token).equals("null"))) {
             String tokenInfo = token.substring(7); // Bearer빼고
             username = jwtDecoder.decodeNickName(tokenInfo);
+            sender = jwtDecoder.decodeUsername(tokenInfo);
         }
-
+        message.setSender(sender);
         message.setNickname(username);
 
         // 시간 세팅
