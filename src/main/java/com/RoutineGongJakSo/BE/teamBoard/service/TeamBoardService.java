@@ -71,4 +71,14 @@ public class TeamBoardService {
         weekTeamRepository.save(weekTeam);
 
     }
+
+    public void updateWorkSpace(UserDetailsImpl userDetails, Long weekTeamId, String workSpace) {
+        validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(()->new IllegalArgumentException("팀없다."));
+
+        weekTeam.setWorkSpace(workSpace);
+
+        weekTeamRepository.save(weekTeam);
+    }
 }

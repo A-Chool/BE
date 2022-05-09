@@ -31,5 +31,12 @@ public class TeamBoardController {
         teamBoardService.updateGroundRule(userDetails, weekTeamId, groundRule);
     }
     // 워크스페이스 수정
+    @PutMapping("/api/user/teamBoard/workSpace/{weekTeamId}")
+    public void updateWorkSpace(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long weekTeamId,
+            String workSpace){
+        teamBoardService.updateWorkSpace(userDetails, weekTeamId, workSpace);
+    }
 
 }
