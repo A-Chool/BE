@@ -1,11 +1,12 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import com.RoutineGongJakSo.BE.model.WeekTeam;
+import com.RoutineGongJakSo.BE.model.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,6 +21,9 @@ public class TeamBoard {
     private String userName;
 
     @Column(nullable = false)
+    private String week;
+
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(unique = true)
@@ -28,9 +32,8 @@ public class TeamBoard {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
-    @OneToMany
-    @JoinColumn(name = "WeekTeam_WeekTeamId")
-    private WeekTeam weekTeam;
+    @OneToMany(mappedBy = "teamBoard", cascade = CascadeType.REMOVE)
+    private List<Member> memberList;
 
     @Column(nullable = false)
     private String groundRule;
@@ -41,5 +44,6 @@ public class TeamBoard {
     @Builder
     public TeamBoard(String groundRule) {
         this.groundRule = groundRule;
+        this.workSpace = getWorkSpace();
     }
 }
