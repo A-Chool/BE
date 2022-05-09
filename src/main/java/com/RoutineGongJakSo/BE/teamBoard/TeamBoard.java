@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
-import com.RoutineGongJakSo.BE.model.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
