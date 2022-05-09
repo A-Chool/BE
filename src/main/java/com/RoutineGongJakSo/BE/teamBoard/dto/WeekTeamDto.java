@@ -11,8 +11,8 @@ public class WeekTeamDto {
     public String week;
     public String weekTeamName;
 
-    public WeekTeamDto(WeekTeam weekTeam){
-        this.weekTeamId= weekTeam.getWeekTeamId();
+    public WeekTeamDto(WeekTeam weekTeam) {
+        this.weekTeamId = weekTeam.getWeekTeamId();
         this.week = weekTeam.getWeek();
         this.weekTeamName = weekTeam.getTeamName();
     }

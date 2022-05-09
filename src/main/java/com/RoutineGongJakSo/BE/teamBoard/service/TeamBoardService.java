@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,25 +27,25 @@ public class TeamBoardService {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        List<Member> userMemberList= user.getMemberList();
+        List<Member> userMemberList = user.getMemberList();
 
         List<WeekTeam> weekTeamList = new ArrayList<>();
         List<WeekTeamDto> weekTeamDtoList = new ArrayList<>();
 
-        for(Member member : userMemberList){
+        for (Member member : userMemberList) {
             WeekTeam weekTeam = member.getWeekTeam();
             weekTeamList.add(weekTeam);
             weekTeamDtoList.add(new WeekTeamDto(weekTeam));
         }
 
-        WeekTeam lastTeam = weekTeamList.get(weekTeamList.size()-1);
+        WeekTeam lastTeam = weekTeamList.get(weekTeamList.size() - 1);
 
         Long teamId = lastTeam.getWeekTeamId();
         String teamName = lastTeam.getTeamName();
 
         List<Member> teamMemberList = lastTeam.getMemberList();
         List<MemberDto> teamMemberDtoList = new ArrayList<>();
-        for(Member member : teamMemberList){
+        for (Member member : teamMemberList) {
             MemberDto memberDto = new MemberDto();
             memberDto.setMemberId(member.getMemberId());
             memberDto.setUser(new UserDto(member.getUser()));

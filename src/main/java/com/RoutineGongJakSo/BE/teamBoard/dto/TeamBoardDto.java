@@ -21,7 +21,7 @@ public class TeamBoardDto {
     public String groundRule;
     public String workSpace;
 
-    public TeamBoardDto(WeekTeam weekTeam){
+    public TeamBoardDto(WeekTeam weekTeam) {
         this.teamId = weekTeam.getWeekTeamId();
         this.teamName = weekTeam.getTeamName();
         this.groundRule = weekTeam.getGroundRole();
