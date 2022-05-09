@@ -18,8 +18,14 @@ public class TeamBoardController {
 
     // TeamBoard 클릭 시
     @GetMapping("/api/user/teamBoard")
-    public TeamBoardDto createTeam(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return teamBoardService.getTeamBoard(userDetails);
+    public TeamBoardDto getAllTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return teamBoardService.getAllTeamBoard(userDetails);
+    }
+
+    // TeamBoard 클릭 시
+    @GetMapping("/api/user/teamBoard/{weekTeamId}")
+    public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekTeamId) {
+        return teamBoardService.getTeamBoard(userDetails, weekTeamId);
     }
 
     // 그라운드 룰 수정

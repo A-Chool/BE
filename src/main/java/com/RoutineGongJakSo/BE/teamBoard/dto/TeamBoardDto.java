@@ -14,16 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamBoardDto {
-    public List<WeekTeamDto> weekTeamDtoList;
+    public List<WeekTeamDto> weekTeamList;
     public Long teamId;
     public String teamName;
-    public List<MemberDto> memberDtoList;
+    public String weekName;
+    public List<MemberDto> memberList;
     public String groundRule;
     public String workSpace;
 
     public TeamBoardDto(WeekTeam weekTeam) {
         this.teamId = weekTeam.getWeekTeamId();
         this.teamName = weekTeam.getTeamName();
+        this.weekName = weekTeam.getWeek();
         this.groundRule = weekTeam.getGroundRole();
         this.workSpace = weekTeam.getWorkSpace();
     }
