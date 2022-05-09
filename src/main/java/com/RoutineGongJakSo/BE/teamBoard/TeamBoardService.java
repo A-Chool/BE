@@ -20,11 +20,20 @@ public class TeamBoardService {
     }
 
     @Transactional
-    public Long update(Long teamId, TeamBoardtDto requestDto) {
+    public Long updateGroundrule(Long teamId, TeamBoardtDto.RequestDto requestDto) {
         TeamBoard entity = TeamBoardRepository.findById(teamId);
 
-        entity.update(requestDto.getTeamId(), requestDto.getGroundrule());
+        entity.updateGroundrule(requestDto.getTeamId(), requestDto.getGroundrule());
 
         return TeamBoardRepository.save(entity).getTeamId();
+    }
+
+    @Transactional
+    public Long updateWorkSpace(Long teamID, TeamBoardtDto.RequestDto requestDto) {
+        TeamBoard entity = TeamBoardRepository.findById(teamID);
+
+        entity.updateWorkSpace(requestDto.getTeamId(), requestDto.getWorkSpace());
+
+        return TeamBoardRepository.save(entity.getTeamId());
     }
 }
