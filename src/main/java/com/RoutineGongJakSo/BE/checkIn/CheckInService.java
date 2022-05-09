@@ -5,6 +5,8 @@ import com.RoutineGongJakSo.BE.checkIn.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.model.*;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.exception.UserException;
+import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +69,7 @@ public class CheckInService {
         //체크아웃을 하지 않은 상태에서 체크인을 시도할 경우 NPE
         for (CheckIn check : checkInList) {
             if (check.getCheckOut() == null) {
-                throw new NullPointerException("체크아웃을 먼저 해주세요");
+                throw new UserException(UserExceptionType.TRY_CHECKOUT);
             }
         }
 

@@ -11,6 +11,8 @@ import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.exception.UserException;
+import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -217,7 +219,7 @@ public class TeamService {
             List<Member> member = memberRepository.findByWeekTeam(weekTeam);
             for (Member find : member) {
                 User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
-                        () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+                        () -> new UserException(UserExceptionType.NOT_FOUND_MEMBER)
                 );
                 //제거 대상 제거
                 noMemberList.remove(getUser);
