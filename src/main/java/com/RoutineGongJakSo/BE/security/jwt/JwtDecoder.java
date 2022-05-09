@@ -36,6 +36,7 @@ public class JwtDecoder {
 
         return username;
     }
+
     public String decodeNickName(String token) {
         DecodedJWT decodedJWT = isValidToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
@@ -56,7 +57,7 @@ public class JwtDecoder {
         return username;
     }
 
-    private Optional<DecodedJWT> isValidToken(String token) {
+    public Optional<DecodedJWT> isValidToken(String token) {
         DecodedJWT jwt = null;
 
         try {
