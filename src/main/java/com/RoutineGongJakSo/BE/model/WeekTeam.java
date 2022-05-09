@@ -1,9 +1,7 @@
 package com.RoutineGongJakSo.BE.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 
@@ -11,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @NoArgsConstructor

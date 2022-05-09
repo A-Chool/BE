@@ -60,4 +60,15 @@ public class TeamBoardService {
 
         return teamBoardDto;
     }
+
+    public void updateGroundRule(UserDetailsImpl userDetails, Long weekTeamId, String groundRule) {
+        validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(()->new IllegalArgumentException("팀없다."));
+
+        weekTeam.setGroundRole(groundRule);
+
+        weekTeamRepository.save(weekTeam);
+
+    }
 }
