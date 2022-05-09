@@ -30,7 +30,7 @@ public class ChatMessageRepository {// Redis
         topics = new HashMap<>();
     }
 
-    public void save(ChatMessage chatMessage) {
+    public ChatMessage save(ChatMessage chatMessage) {
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         String roomId = chatMessage.getRoomId();
         List<ChatMessage> chatMessageList = opsHashChatMessage.get(CHAT_MESSAGE, roomId);
@@ -45,6 +45,8 @@ public class ChatMessageRepository {// Redis
 //        if (size > 10L) {
 //            redisTemplate.opsForList().leftPop(roomId, size - 10L);
 //        }
+
+        return chatMessage;
     }
 
     public List<ChatMessage> findAllMessage(String roomId) {
