@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.teamBoard;
 
+import com.RoutineGongJakSo.BE.model.WeekTeam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +28,15 @@ public class TeamBoard {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
+    @OneToMany
+    @JoinColumn(name = "WeekTeam_WeekTeamId")
+    private WeekTeam weekTeam;
+
     @Column(nullable = false)
     private String groundRule;
 
     @Column(nullable = false)
-    private String workSpaceTitle;
-
-    @Column(nullable = false)
-    private String workSpaceContent;
+    private String workSpace;
 
     @Builder
     public TeamBoard(String groundRule) {

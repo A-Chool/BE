@@ -10,13 +10,18 @@ public class TeamBoardController {
 
     private final TeamBoardService teamBoardService;
 
-    @PostMapping("/groundRule")
-    public Long save(@RequestBody TeamBoardtDto requestDto) {
+    @GetMapping("/groundRule{teamID}")
+    public Long save(@RequestBody TeamBoardtDto.requestDto requestDto) {
         return teamBoarService.save(requestDto);
     }
 
     @PutMapping("/goundRule/{teamId}")
-    public Long update(@PathVariable long teamId, @RequestBody TeamBoardDto requestDto) {
-        return teamBoardService.update(teamId, requestDto);
+    public Long updateGroundrule(@PathVariable long teamId, @RequestBody TeamBoardDto.requestDto requestDto) {
+        return teamBoardService.updateGroundrule(teamId, requestDto);
+    }
+
+    @PutMapping("/workSpace/{teamId}")
+    public Long updateWorkSpace(@PathVariable Long teamId, @RequestBody TeamBoardtDto.requestDto requestDto) {
+        return teamBoardService.updateWorkSpace(teamId, requestDto);
     }
 }
