@@ -4,7 +4,6 @@ package com.RoutineGongJakSo.BE.security.exception;
 import org.springframework.http.HttpStatus;
 
 public enum UserExceptionType implements BaseExceptionType {
-
     ALREADY_EXIST_USERNAME(600, HttpStatus.CONFLICT, "이미 존재하는 아이디입니다"),
     ALREADY_EXIST_NICKNAME(601, HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
     WRONG_PASSWORD(602, HttpStatus.BAD_REQUEST, "비밀번호가 잘못되었습니다."),
