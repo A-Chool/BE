@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.service;
 
+import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
 import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisPublisher;
 import com.RoutineGongJakSo.BE.chat.repo.ChatMessageRepository;
@@ -20,7 +21,7 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
 
-    public void save(ChatMessage message, String token) {
+    public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
         String username = "";
         String sender = "";
@@ -29,6 +30,9 @@ public class ChatMessageService {
             username = jwtDecoder.decodeNickName(tokenInfo);
             sender = jwtDecoder.decodeUsername(tokenInfo);
         }
+
+        ChatMessage message = new ChatMessage(messageDto);
+
         message.setSender(sender);
         message.setNickname(username);
 

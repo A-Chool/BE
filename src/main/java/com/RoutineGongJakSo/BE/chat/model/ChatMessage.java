@@ -1,11 +1,15 @@
 package com.RoutineGongJakSo.BE.chat.model;
 
 
+import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ChatMessage {
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
@@ -18,4 +22,14 @@ public class ChatMessage {
     private String nickname;// 메시지 보낸사람 name
     private String message; // 메시지
     private String createdAt;
+
+    public ChatMessage(){
+
+    }
+
+    public ChatMessage(ChatMessageDto dto){
+        this.type = dto.getType();
+        this.roomId = dto.getRoomId();
+        this.message = dto.getMessage();
+    }
 }
