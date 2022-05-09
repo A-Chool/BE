@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.teamBoard.service;
 
 import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
+import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
@@ -22,6 +23,7 @@ public class TeamBoardService {
 
     private final Validator validator;
     private final WeekTeamRepository weekTeamRepository;
+    private final MemberRepository memberRepository;
 
     public TeamBoardDto getTeamBoard(UserDetailsImpl userDetails) {
 
@@ -64,7 +66,11 @@ public class TeamBoardService {
     public void updateGroundRule(UserDetailsImpl userDetails, Long weekTeamId, String groundRule) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
+        User user = userDetails.getUser();
+
         WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(()->new IllegalArgumentException("팀없다."));
+
+        Long memberId = memberRepository.findByUserAndWeekTeam(user,weekTeam).orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
         weekTeam.setGroundRole(groundRule);
 
@@ -75,7 +81,13 @@ public class TeamBoardService {
     public void updateWorkSpace(UserDetailsImpl userDetails, Long weekTeamId, String workSpace) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(()->new IllegalArgumentException("팀없다."));
+        User user = userDetails.getUser();
+
+        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId)
+                .orElseThrow(()->new IllegalArgumentException("팀없다."));
+
+        Long memberId = memberRepository.findByUserAndWeekTeam(user,weekTeam)
+                .orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
         weekTeam.setWorkSpace(workSpace);
 
