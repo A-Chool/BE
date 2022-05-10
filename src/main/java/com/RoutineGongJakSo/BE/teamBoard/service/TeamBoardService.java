@@ -1,17 +1,16 @@
 package com.RoutineGongJakSo.BE.teamBoard.service;
 
-import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
+import com.RoutineGongJakSo.BE.admin.controller.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
+import com.RoutineGongJakSo.BE.admin.repository.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.admin.repository.security.validator.Validator;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
-import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
-import com.RoutineGongJakSo.BE.security.validator.Validator;
-import com.RoutineGongJakSo.BE.teamBoard.dto.GroundRuleDto;
-import com.RoutineGongJakSo.BE.teamBoard.dto.TeamBoardDto;
-import com.RoutineGongJakSo.BE.teamBoard.dto.WeekTeamDto;
-import com.RoutineGongJakSo.BE.teamBoard.dto.WorkSpaceDto;
+import com.RoutineGongJakSo.BE.teamBoard.dto.*;
+import com.RoutineGongJakSo.BE.toDo.ToDo;
+import com.RoutineGongJakSo.BE.toDo.ToDoRepository;
 import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,8 @@ public class TeamBoardService {
     private final Validator validator;
     private final WeekTeamRepository weekTeamRepository;
     private final MemberRepository memberRepository;
+    private final ToDoRepository toDoRepository;
+
 
     public TeamBoardDto getAllTeamBoard(UserDetailsImpl userDetails) {
 
@@ -44,6 +45,19 @@ public class TeamBoardService {
 
         WeekTeam lastTeam = weekTeamList.get(weekTeamList.size() - 1);
 
+        List<ToDo> toDoList = toDoRepository.findByWeekTeam(lastTeam);
+
+        List<ToDoDto> toDoDtoList = new ArrayList<>();
+
+        for(ToDo todo : toDoList){
+            ToDoDto toDoDto = ToDoDto.builder()
+                    .todoId(todo.getToDoId())
+                    .todoContent(todo.getTodoContent())
+                    .todoCheck(todo.isTodoCheck())
+                    .build();
+            toDoDtoList.add(toDoDto);
+        }
+
         List<Member> teamMemberList = lastTeam.getMemberList();
         List<MemberDto> teamMemberDtoList = new ArrayList<>();
         for (Member member : teamMemberList) {
@@ -56,6 +70,7 @@ public class TeamBoardService {
 
         teamBoardDto.setWeekTeamList(weekTeamDtoList);
         teamBoardDto.setMemberList(teamMemberDtoList);
+        teamBoardDto.setToDoList(toDoDtoList);
 
         System.out.println("teamBoardDto = " + teamBoardDto);
 
@@ -97,6 +112,22 @@ public class TeamBoardService {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
+        WeekTeam findWeekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(
+                () -> new NullPointerException("주차팀이 존재하지 않습니다.")
+        );
+
+        List<ToDo> toDoList = toDoRepository.findByWeekTeam(findWeekTeam);
+        List<ToDoDto> toDoDtoList = new ArrayList<>();
+
+        for(ToDo todo : toDoList){
+            ToDoDto toDoDto = ToDoDto.builder()
+                    .todoId(todo.getToDoId())
+                    .todoContent(todo.getTodoContent())
+                    .todoCheck(todo.isTodoCheck())
+                    .build();
+            toDoDtoList.add(toDoDto);
+        }
+
         List<Member> userMemberList = user.getMemberList();
 
         List<WeekTeam> weekTeamList = new ArrayList<>();
@@ -124,6 +155,7 @@ public class TeamBoardService {
 
         teamBoardDto.setWeekTeamList(weekTeamDtoList);
         teamBoardDto.setMemberList(teamMemberDtoList);
+        teamBoardDto.setToDoList(toDoDtoList);
 
         System.out.println("teamBoardDto = " + teamBoardDto);
 
