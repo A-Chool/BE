@@ -14,6 +14,7 @@ public class ChatRoom implements Serializable {
 
     private String roomId;
     private String name;
+//    private ChatMessage lastMessage; // Todo 최후의 방법
 
     public static ChatRoom create(String name) {
         ChatRoom chatRoom = new ChatRoom();

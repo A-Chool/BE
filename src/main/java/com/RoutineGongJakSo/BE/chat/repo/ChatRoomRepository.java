@@ -56,13 +56,13 @@ public class ChatRoomRepository {
             String roomId = member.getWeekTeam().getRoomId();
             chatRoomDto.setRoomId(roomId);
             chatRoomDto.setName(member.getWeekTeam().getRoomName());
+//            ChatMessage lastMessage = chatMessageRepository.findLastMessage(roomId);
+
             if (chatMessageRepository.findAllMessage(roomId) != null) {
                 ObjectMapper mapper = new ObjectMapper();
 
                 Map<String, List<ChatMessage>> z = chatMessageRepository.test(roomId);
 
-                System.out.println("z = " + z);
-                
                 List<ChatMessage> x = chatMessageRepository.findLastMessage(roomId);
                 System.out.println("x.getClass() = " + x.getClass());
                 ChatMessage lastMessage = x.get(x.size()-1);
