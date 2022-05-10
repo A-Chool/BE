@@ -27,6 +27,7 @@ public class TodoService {
                 .weekTeam(weekTeam)
                 .build();
 
+        weekTeam.addToDo(toDo);
         toDoRepository.save(toDo);
     }
 
