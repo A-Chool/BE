@@ -1,7 +1,9 @@
 package com.RoutineGongJakSo.BE.teamBoard.controller;
 
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.teamBoard.dto.GroundRuleDto;
 import com.RoutineGongJakSo.BE.teamBoard.dto.TeamBoardDto;
+import com.RoutineGongJakSo.BE.teamBoard.dto.WorkSpaceDto;
 import com.RoutineGongJakSo.BE.teamBoard.service.TeamBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +32,7 @@ public class TeamBoardController {
     public void updateGroundRule(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long weekTeamId,
-            @RequestBody String groundRule){
+            @RequestBody GroundRuleDto groundRule){
         teamBoardService.updateGroundRule(userDetails, weekTeamId, groundRule);
     }
     // 워크스페이스 수정
@@ -38,7 +40,7 @@ public class TeamBoardController {
     public void updateWorkSpace(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long weekTeamId,
-            @RequestBody String workSpace){
+            @RequestBody WorkSpaceDto workSpace){
         teamBoardService.updateWorkSpace(userDetails, weekTeamId, workSpace);
     }
 
