@@ -11,5 +11,5 @@ public class ChatRoomDto {
 
     public String roomId;
     public String name;
-    public ChatMessage lastMessage;
+    public Object lastMessage;
 }
