@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.chat.controller;
 
+import com.RoutineGongJakSo.BE.chat.dto.ChatRoomDto;
 import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -19,7 +20,7 @@ public class ChatRoomController {
 
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<ChatRoomDto> room(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomRepository.findAllRoom(userDetails);
     }
 

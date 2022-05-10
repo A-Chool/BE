@@ -1,13 +1,17 @@
 package com.RoutineGongJakSo.BE.chat.repo;
 
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
+import com.RoutineGongJakSo.BE.chat.dto.ChatRoomDto;
+import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.chat.pubsub.RedisSubscriber;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -33,6 +37,7 @@ public class ChatRoomRepository {
 
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @PostConstruct
     private void init() {
@@ -40,18 +45,47 @@ public class ChatRoomRepository {
         topics = new HashMap<>();
     }
 
-    public List<ChatRoom> findAllRoom(UserDetailsImpl userDetails) {
-        User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow( ()-> new IllegalArgumentException("유저가 없습니다."));
+    public List<ChatRoomDto> findAllRoom(UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
         List<Member> memberList = memberRepository.findAllByUser(user);
         System.out.println("memberList = " + memberList);
         List<ChatRoom> chatRoomList = new ArrayList<>();
-        for(Member member : memberList){
-            ChatRoom chatRoom = new ChatRoom();
-            chatRoom.setRoomId(member.getWeekTeam().getRoomId());
-            chatRoom.setName(member.getWeekTeam().getRoomName());
-            chatRoomList.add(chatRoom);
+        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
+        for (Member member : memberList) {
+            ChatRoomDto chatRoomDto = new ChatRoomDto();
+            String roomId = member.getWeekTeam().getRoomId();
+            chatRoomDto.setRoomId(roomId);
+            chatRoomDto.setName(member.getWeekTeam().getRoomName());
+//            ChatMessage lastMessage = chatMessageRepository.findLastMessage(roomId);
+
+            if (chatMessageRepository.findAllMessage(roomId) != null) {
+                ObjectMapper mapper = new ObjectMapper();
+
+                Map<String, List<ChatMessage>> z = chatMessageRepository.test(roomId);
+
+                List<ChatMessage> x = chatMessageRepository.findLastMessage(roomId);
+                System.out.println("x.getClass() = " + x.getClass());
+                ChatMessage lastMessage = x.get(x.size()-1);
+                System.out.println("lastMessage.getClass() = " + lastMessage.getClass());
+                System.out.println("lastMessage = " + lastMessage);
+                chatRoomDto.setLastMessage(lastMessage);
+            }
+
+//            List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
+//
+//            ChatMessage lastMessage = null;
+//            if(chatMessageList != null) {
+//                for(ChatMessage chatMessage : chatMessageList){
+//                    System.out.println("chatMessage = " + chatMessage);
+//                    System.out.println("chatMessage.getCreatedAt() = " + chatMessage.getCreatedAt());
+//                }
+////                lastMessage = chatMessageList.get(0);
+//            }
+//            chatRoomDto.setLastMessage(lastMessage);
+            chatRoomDtoList.add(chatRoomDto);
         }
-        return chatRoomList;
+
+        return chatRoomDtoList;
     }
 
     public ChatRoom findRoomById(String id) {

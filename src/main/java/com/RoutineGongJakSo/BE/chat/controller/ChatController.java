@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.chat.controller;
 
 
+import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
 import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.chat.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("Authorization") String token) {
+    public void message(ChatMessageDto message, @Header("Authorization") String token) {
         chatMessageService.save(message, token);
     }
 
