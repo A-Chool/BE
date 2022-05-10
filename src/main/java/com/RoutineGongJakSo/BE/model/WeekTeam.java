@@ -22,7 +22,7 @@ public class WeekTeam {
     private List<Member> memberList;
 
     @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.ALL)
-    private List<ToDo> toDo;
+    private List<ToDo> toDoList;
 
     @Column(nullable = false)
     private String teamName;
@@ -44,5 +44,9 @@ public class WeekTeam {
 
     public void addMember(Member member) {
         this.memberList.add(member);
+    }
+
+    public void addToDo(ToDo toDo) {
+        this.toDoList.add(toDo);
     }
 }
