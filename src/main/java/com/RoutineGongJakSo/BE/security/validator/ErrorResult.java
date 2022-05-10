@@ -6,7 +6,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class ErrorResult {
-
     private Boolean ok;
     private String message;
 }

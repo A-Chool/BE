@@ -4,6 +4,8 @@ import com.RoutineGongJakSo.BE.admin.dto.AdminDto;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.repository.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.exception.UserException;
+import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +29,14 @@ public class AdminService {
     @Transactional
     public HttpHeaders login(AdminDto.RequestDto adminDto) {
         User user = userRepository.findByUserEmail(adminDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 userId 입니다."));
+                .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_MEMBER));
 
         if (!passwordEncoder.matches(adminDto.getPassword(), user.getUserPw())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new UserException(UserExceptionType.WRONG_PASSWORD);
         }
 
         if (user.getUserLevel() < 5) {
-            throw new NullPointerException("접근 권한이 없습니다.");
+            throw new UserException(UserExceptionType.LOW_LEVER);
         }
 
         //Token -> Headers로 보내기
