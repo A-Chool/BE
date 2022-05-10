@@ -35,9 +35,7 @@ public class CheckInService {
     private final WeekTeamRepository weekTeamRepository;
     private final Validator validator;
 
-    ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-    String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
     //ToDo : 현재시간 이상하게 나오니까, checkInValidator.sumDateTime() 사용해서 초기화하기
 
@@ -46,6 +44,8 @@ public class CheckInService {
     public String checkIn(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
         Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
         checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
@@ -94,6 +94,8 @@ public class CheckInService {
     public CheckInListDto.CheckInDto getCheckIn(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails); // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
         Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
         checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
@@ -151,7 +153,7 @@ public class CheckInService {
 
         String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
 
-        for (CheckIn check : findCheckIn){
+        for (CheckIn check : findCheckIn) {
             CheckInListDto.TodayLogDto todayLogDto = CheckInListDto.TodayLogDto.builder()
                     .checkIn(check.getCheckIn())
                     .checkOut(check.getCheckOut())
@@ -186,11 +188,15 @@ public class CheckInService {
 
         User user = validator.userInfo(userDetails);   // 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
+        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
+
         Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
         checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
         Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
         checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+
+        ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
         if (today.compareTo(setDay) < 0) {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
@@ -232,6 +238,8 @@ public class CheckInService {
     public List<CheckInListDto.TeamListDto> getAllCheckList(UserDetailsImpl userDetails, String week) throws ParseException {
 
         validator.loginCheck(userDetails); // 로그인 여부 확인
+
+        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
         Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
         checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용

@@ -23,7 +23,6 @@ public class CheckInValidator {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
     SimpleDateFormat calenderFormatter = new SimpleDateFormat("HH:mm:ss");
-    ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
     // 캘린더 생성
     public Calendar todayCalender(String date) throws ParseException {
@@ -34,6 +33,7 @@ public class CheckInValidator {
 
     //String 현재시간
     public String nowTime() {
+        ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         return nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
@@ -50,6 +50,7 @@ public class CheckInValidator {
 
     //String yyyy-MM-dd HH:mm:ss 형식으로 return; 현재 시간
     public String sumDateTime() {
+        ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         String nowYear = String.valueOf(nowSeoul.getYear());
         String nowMonth = String.valueOf(nowSeoul.getMonthValue());
         String nowDay = String.valueOf(nowSeoul.getDayOfMonth());
@@ -98,32 +99,32 @@ public class CheckInValidator {
     }
 
     //온라인 여부 확인
-    public boolean onlineCheck(List<CheckIn> findCheckIns){
-        if (findCheckIns.size() == 0 || findCheckIns.get(findCheckIns.size()-1).getCheckOut() != null){
+    public boolean onlineCheck(List<CheckIn> findCheckIns) {
+        if (findCheckIns.size() == 0 || findCheckIns.get(findCheckIns.size() - 1).getCheckOut() != null) {
             return false;
         }
         return true;
     }
 
     //지각 여부 확인
-    public boolean lateCheck(List<CheckIn> findCheckIns){
+    public boolean lateCheck(List<CheckIn> findCheckIns) {
         int HH = 0; // 첫번째 체크인 시간
 
-        if (findCheckIns.size() != 0){
+        if (findCheckIns.size() != 0) {
             String timeCheck = findCheckIns.get(0).getCheckIn();
             String[] arrayTime = timeCheck.split(":");
             HH = Integer.parseInt(arrayTime[0]);
-            if (HH < 5){ //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조건
+            if (HH < 5) { //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조건
                 HH += 24;
             }
         }
-        if (findCheckIns.size() == 0 || HH > 9){
+        if (findCheckIns.size() == 0 || HH > 9) {
             return true;
         }
         return false;
     }
 
-    public String totalTime(List<Analysis> allUserList){
+    public String totalTime(List<Analysis> allUserList) {
 
         int total = 0; //총 누적 공부시간이 담김
 

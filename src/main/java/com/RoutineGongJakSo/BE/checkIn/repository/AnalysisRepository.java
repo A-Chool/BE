@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface AnalysisRepository extends JpaRepository<Analysis, Long> {
    Optional<Analysis> findByUserAndDate(User user, String date);
-
    List<Analysis> findByUser(User user);
 }
