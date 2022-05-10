@@ -8,8 +8,10 @@ import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.teamBoard.dto.GroundRuleDto;
 import com.RoutineGongJakSo.BE.teamBoard.dto.TeamBoardDto;
 import com.RoutineGongJakSo.BE.teamBoard.dto.WeekTeamDto;
+import com.RoutineGongJakSo.BE.teamBoard.dto.WorkSpaceDto;
 import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +62,7 @@ public class TeamBoardService {
         return teamBoardDto;
     }
 
-    public void updateGroundRule(UserDetailsImpl userDetails, Long weekTeamId, String groundRule) {
+    public void updateGroundRule(UserDetailsImpl userDetails, Long weekTeamId, GroundRuleDto groundRule) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         User user = userDetails.getUser();
@@ -69,13 +71,13 @@ public class TeamBoardService {
 
         Long memberId = memberRepository.findByUserAndWeekTeam(user,weekTeam).orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
-        weekTeam.setGroundRole(groundRule);
+        weekTeam.setGroundRole(groundRule.getGroundRule());
 
         weekTeamRepository.save(weekTeam);
 
     }
 
-    public void updateWorkSpace(UserDetailsImpl userDetails, Long weekTeamId, String workSpace) {
+    public void updateWorkSpace(UserDetailsImpl userDetails, Long weekTeamId, WorkSpaceDto workSpace) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         User user = userDetails.getUser();
@@ -86,7 +88,7 @@ public class TeamBoardService {
         Long memberId = memberRepository.findByUserAndWeekTeam(user,weekTeam)
                 .orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
-        weekTeam.setWorkSpace(workSpace);
+        weekTeam.setWorkSpace(workSpace.getWorkSpace());
 
         weekTeamRepository.save(weekTeam);
     }
