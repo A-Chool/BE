@@ -1,11 +1,9 @@
 package com.RoutineGongJakSo.BE.model;
 
+import com.RoutineGongJakSo.BE.toDo.ToDo;
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,6 +20,9 @@ public class WeekTeam {
 
     @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
     private List<Member> memberList;
+
+    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.ALL)
+    private List<ToDo> toDoList;
 
     @Column(nullable = false)
     private String teamName;
@@ -43,5 +44,9 @@ public class WeekTeam {
 
     public void addMember(Member member) {
         this.memberList.add(member);
+    }
+
+    public void addToDo(ToDo toDo) {
+        this.toDoList.add(toDo);
     }
 }

@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.teamBoard.dto;
 
-import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
+import com.RoutineGongJakSo.BE.admin.controller.dto.MemberDto;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +21,7 @@ public class TeamBoardDto {
     public List<MemberDto> memberList;
     public String groundRule;
     public String workSpace;
+    public List<ToDoDto> toDoList;
 
     public TeamBoardDto(WeekTeam weekTeam) {
         this.teamId = weekTeam.getWeekTeamId();
