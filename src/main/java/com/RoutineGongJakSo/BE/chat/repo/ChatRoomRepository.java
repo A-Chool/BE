@@ -19,10 +19,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -62,11 +59,15 @@ public class ChatRoomRepository {
             if (chatMessageRepository.findAllMessage(roomId) != null) {
                 ObjectMapper mapper = new ObjectMapper();
 
-                List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
-                List<ChatMessage> myObjects =
-                        mapper.readValue(chatMessageList.toString(), new TypeReference<List<ChatMessage>>(){});
-                ChatMessage lastMessage = chatMessageList.get(0);
+                Map<String, List<ChatMessage>> z = chatMessageRepository.test(roomId);
 
+                System.out.println("z = " + z);
+                
+                List<ChatMessage> x = chatMessageRepository.findLastMessage(roomId);
+                System.out.println("x.getClass() = " + x.getClass());
+                ChatMessage lastMessage = x.get(x.size()-1);
+                System.out.println("lastMessage.getClass() = " + lastMessage.getClass());
+                System.out.println("lastMessage = " + lastMessage);
                 chatRoomDto.setLastMessage(lastMessage);
             }
 

@@ -9,10 +9,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -53,4 +50,12 @@ public class ChatMessageRepository {// Redis
         return opsHashChatMessage.get(CHAT_MESSAGE, roomId);
     }
 
+    public List<ChatMessage> findLastMessage(String roomId){
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
+        return opsHashChatMessage.get(CHAT_MESSAGE,roomId);
+    }
+
+    public Map<String, List<ChatMessage>> test(String roomId) {
+        return opsHashChatMessage.entries(CHAT_MESSAGE);
+    }
 }
