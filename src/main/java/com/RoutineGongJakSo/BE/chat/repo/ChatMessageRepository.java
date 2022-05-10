@@ -50,9 +50,10 @@ public class ChatMessageRepository {// Redis
         return opsHashChatMessage.get(CHAT_MESSAGE, roomId);
     }
 
-    public List<ChatMessage> findLastMessage(String roomId){
+    public Object findLastMessage(String roomId){
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
-        return opsHashChatMessage.get(CHAT_MESSAGE,roomId);
+        if(opsHashChatMessage.get(CHAT_MESSAGE,roomId) == null) return null;
+        return opsHashChatMessage.get(CHAT_MESSAGE,roomId).get(opsHashChatMessage.get(CHAT_MESSAGE,roomId).size()-1);
     }
 
     public Map<String, List<ChatMessage>> test(String roomId) {
