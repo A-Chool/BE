@@ -10,7 +10,7 @@ import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
 import com.RoutineGongJakSo.BE.teamBoard.dto.*;
 import com.RoutineGongJakSo.BE.toDo.ToDo;
-import com.RoutineGongJakSo.BE.toDo.ToDoRepository;
+import com.RoutineGongJakSo.BE.toDo.ToDoValidator;
 import com.RoutineGongJakSo.BE.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class TeamBoardService {
     private final Validator validator;
     private final WeekTeamRepository weekTeamRepository;
     private final MemberRepository memberRepository;
-    private final ToDoRepository toDoRepository;
+    private final ToDoValidator toDoValidator;
 
 
     public TeamBoardDto getAllTeamBoard(UserDetailsImpl userDetails) {
@@ -45,7 +45,7 @@ public class TeamBoardService {
 
         WeekTeam lastTeam = weekTeamList.get(weekTeamList.size() - 1);
 
-        List<ToDo> toDoList = toDoRepository.findByWeekTeam(lastTeam);
+        List<ToDo> toDoList = toDoValidator.toDoList(lastTeam);
 
         List<ToDoDto> toDoDtoList = new ArrayList<>();
 
@@ -112,11 +112,10 @@ public class TeamBoardService {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        WeekTeam findWeekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(
-                () -> new NullPointerException("주차팀이 존재하지 않습니다.")
-        );
+        WeekTeam findWeekTeam = toDoValidator.findWeekTeam(weekTeamId); //Id로 주차팀 찾기
 
-        List<ToDo> toDoList = toDoRepository.findByWeekTeam(findWeekTeam);
+        List<ToDo> toDoList = toDoValidator.toDoList(findWeekTeam);
+
         List<ToDoDto> toDoDtoList = new ArrayList<>();
 
         for(ToDo todo : toDoList){

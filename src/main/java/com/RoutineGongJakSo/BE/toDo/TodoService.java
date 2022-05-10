@@ -1,10 +1,8 @@
 package com.RoutineGongJakSo.BE.toDo;
 
-import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
 import com.RoutineGongJakSo.BE.admin.repository.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.admin.repository.security.validator.Validator;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +13,19 @@ import javax.transaction.Transactional;
 public class TodoService {
 
     private final ToDoRepository toDoRepository;
-    private final UserRepository userRepository;
-    private final WeekTeamRepository weekTeamRepository;
     private final Validator validator;
+    private final ToDoValidator toDoValidator;
 
     @Transactional
     public void createToDo(UserDetailsImpl userDetails, ToDoDto.RequestToDoDto requestToDoDto) {
         validator.loginCheck(userDetails);
 
-        WeekTeam weekTeam = weekTeamRepository.findById(requestToDoDto.getTeamId()).orElseThrow(
-                () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
-        );
+        WeekTeam weekTeam = toDoValidator.findWeekTeam(requestToDoDto.getTeamId()); //Id로 주차팀 찾기
 
-       ToDo toDo = ToDo.builder()
-               .todoContent(requestToDoDto.getTodoContent())
-               .weekTeam(weekTeam)
-               .build();
+        ToDo toDo = ToDo.builder()
+                .todoContent(requestToDoDto.getTodoContent())
+                .weekTeam(weekTeam)
+                .build();
 
         toDoRepository.save(toDo);
     }
@@ -39,19 +34,16 @@ public class TodoService {
     public void deleteToDo(UserDetailsImpl userDetails, Long todoId) {
         validator.loginCheck(userDetails);
 
-        ToDo toDo = toDoRepository.findById(todoId).orElseThrow(
-                () -> new NullPointerException("할 일이 존재하지 않습니다.")
-        );
-        toDoRepository.delete(toDo);
+        ToDo todo = toDoValidator.findToDo(todoId); //Id 값으로 할 일 찾기
+
+        toDoRepository.delete(todo);
     }
 
     @Transactional
     public ToDoDto.ResponseDto updateToDo(UserDetailsImpl userDetails, ToDoDto.UpDateToDoDto dto, Long todoId) {
         validator.loginCheck(userDetails);
 
-        ToDo todo = toDoRepository.findById(todoId).orElseThrow(
-                () -> new NullPointerException("할 일이 존재하지 않습니다.")
-        );
+        ToDo todo = toDoValidator.findToDo(todoId); //Id 값으로 할 일 찾기
 
         todo.setTodoContent(dto.getTodoContent());
 
@@ -67,13 +59,11 @@ public class TodoService {
     public ToDoDto.ResponseDto updateCheck(UserDetailsImpl userDetails, Long todoId) {
         validator.loginCheck(userDetails);
 
-        ToDo todo = toDoRepository.findById(todoId).orElseThrow(
-                () -> new NullPointerException("할 일이 존재하지 않습니다.")
-        );
+        ToDo todo = toDoValidator.findToDo(todoId); //Id 값으로 할 일 찾기
 
-        if (todo.isTodoCheck() == false){
+        if (todo.isTodoCheck() == false) {
             todo.setTodoCheck(true);
-        }else {
+        } else {
             todo.setTodoCheck(false);
         }
 
