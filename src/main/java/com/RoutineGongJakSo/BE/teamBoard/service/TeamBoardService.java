@@ -1,13 +1,13 @@
 package com.RoutineGongJakSo.BE.teamBoard.service;
 
-import com.RoutineGongJakSo.BE.admin.controller.dto.MemberDto;
+import com.RoutineGongJakSo.BE.admin.dto.MemberDto;
 import com.RoutineGongJakSo.BE.admin.repository.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
-import com.RoutineGongJakSo.BE.admin.repository.security.UserDetailsImpl;
-import com.RoutineGongJakSo.BE.admin.repository.security.validator.Validator;
 import com.RoutineGongJakSo.BE.model.Member;
 import com.RoutineGongJakSo.BE.model.User;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.RoutineGongJakSo.BE.teamBoard.dto.*;
 import com.RoutineGongJakSo.BE.toDo.ToDo;
 import com.RoutineGongJakSo.BE.toDo.ToDoValidator;
@@ -49,7 +49,7 @@ public class TeamBoardService {
 
         List<ToDoDto> toDoDtoList = new ArrayList<>();
 
-        for(ToDo todo : toDoList){
+        for (ToDo todo : toDoList) {
             ToDoDto toDoDto = ToDoDto.builder()
                     .todoId(todo.getToDoId())
                     .todoContent(todo.getTodoContent())
@@ -82,9 +82,9 @@ public class TeamBoardService {
 
         User user = userDetails.getUser();
 
-        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(()->new IllegalArgumentException("팀없다."));
+        WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId).orElseThrow(() -> new IllegalArgumentException("팀없다."));
 
-        memberRepository.findByUserAndWeekTeam(user,weekTeam).orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
+        memberRepository.findByUserAndWeekTeam(user, weekTeam).orElseThrow(() -> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
         weekTeam.setGroundRole(groundRule.getGroundRule());
 
@@ -98,10 +98,10 @@ public class TeamBoardService {
         User user = userDetails.getUser();
 
         WeekTeam weekTeam = weekTeamRepository.findById(weekTeamId)
-                .orElseThrow(()->new IllegalArgumentException("팀없다."));
+                .orElseThrow(() -> new IllegalArgumentException("팀없다."));
 
-        memberRepository.findByUserAndWeekTeam(user,weekTeam)
-                .orElseThrow( ()-> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
+        memberRepository.findByUserAndWeekTeam(user, weekTeam)
+                .orElseThrow(() -> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
         weekTeam.setWorkSpace(workSpace.getWorkSpace());
 
@@ -118,7 +118,7 @@ public class TeamBoardService {
 
         List<ToDoDto> toDoDtoList = new ArrayList<>();
 
-        for(ToDo todo : toDoList){
+        for (ToDo todo : toDoList) {
             ToDoDto toDoDto = ToDoDto.builder()
                     .todoId(todo.getToDoId())
                     .todoContent(todo.getTodoContent())
@@ -138,7 +138,7 @@ public class TeamBoardService {
             WeekTeam weekTeam = member.getWeekTeam();
             weekTeamList.add(weekTeam);
             weekTeamDtoList.add(new WeekTeamDto(weekTeam));
-            if(weekTeamId.equals(weekTeam.getWeekTeamId())){
+            if (weekTeamId.equals(weekTeam.getWeekTeamId())) {
                 targetTeam = weekTeam;
             }
         }

@@ -1,8 +1,8 @@
 package com.RoutineGongJakSo.BE.toDo;
 
-import com.RoutineGongJakSo.BE.admin.repository.security.UserDetailsImpl;
-import com.RoutineGongJakSo.BE.admin.repository.security.validator.Validator;
 import com.RoutineGongJakSo.BE.model.WeekTeam;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

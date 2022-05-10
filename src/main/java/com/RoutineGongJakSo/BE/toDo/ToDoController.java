@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.toDo;
 
-import com.RoutineGongJakSo.BE.admin.repository.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
