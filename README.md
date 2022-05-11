@@ -43,6 +43,9 @@
 </div>
 </details>
 
+## 🍀 Service Architecture
+<img width="941" alt="스크린샷 2022-05-11 오후 10 00 48" src="https://user-images.githubusercontent.com/98807506/167856034-fe62c606-c1ae-4a02-9615-6cd035332637.png">
+
 ## 🐳 ERD
 ![thceGa68n5eY7SAPh](https://user-images.githubusercontent.com/98807506/167766657-44930880-15d8-438d-8b1d-871560ce42b3.png)
 
