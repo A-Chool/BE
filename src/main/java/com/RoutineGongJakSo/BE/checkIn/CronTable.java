@@ -40,7 +40,6 @@ public class CronTable {
 
         for (CheckIn check : checkInList){
             if (check.getCheckOut() == null){
-                check.setCheckIn("09:00:00");
                 check.setCheckOut("21:00:00");
 
                 checkInRepository.save(check);
