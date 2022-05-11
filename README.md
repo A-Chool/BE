@@ -43,6 +43,7 @@
 </details>
 
 ## 🐳 ERD
+![thceGa68n5eY7SAPh](https://user-images.githubusercontent.com/98807506/167766657-44930880-15d8-438d-8b1d-871560ce42b3.png)
 
 ## 🏹 Team Trouble Shooting
 1) 프로젝트 기획에 있어 해당 서비스의 당위성과 방향성을 정하는 것에 대한 어려움
