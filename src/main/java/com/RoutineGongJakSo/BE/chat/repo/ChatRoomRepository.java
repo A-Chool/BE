@@ -56,11 +56,7 @@ public class ChatRoomRepository {
             String roomId = member.getWeekTeam().getRoomId();
             chatRoomDto.setRoomId(roomId);
             chatRoomDto.setName(member.getWeekTeam().getRoomName());
-            Object lastMessage = chatMessageRepository.findLastMessage(roomId);
-
             if (chatMessageRepository.findAllMessage(roomId) != null) {
-                ObjectMapper mapper = new ObjectMapper();
-
                 Map<String, List<ChatMessage>> z = chatMessageRepository.test(roomId);
 
                 Object x = chatMessageRepository.findLastMessage(roomId);

@@ -2,10 +2,16 @@ package com.RoutineGongJakSo.BE.chat.model;
 
 
 import com.RoutineGongJakSo.BE.chat.dto.ChatMessageDto;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,7 +27,10 @@ public class ChatMessage {
     private String sender; // 메시지 보낸사람 id
     private String nickname;// 메시지 보낸사람 name
     private String message; // 메시지
-    private String createdAt;
+
+//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+//    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private Date createdAt;
 
     public ChatMessage(){
 
