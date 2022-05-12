@@ -48,32 +48,17 @@ public class ChatRoomRepository {
     public List<ChatRoomDto> findAllRoom(UserDetailsImpl userDetails) {
         User user = userRepository.findByUserEmail(userDetails.getUserEmail()).orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
         List<Member> memberList = memberRepository.findAllByUser(user);
-        System.out.println("memberList = " + memberList);
-        List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
         for (Member member : memberList) {
-            ChatRoomDto chatRoomDto = new ChatRoomDto();
+
             String roomId = member.getWeekTeam().getRoomId();
+            Object lastMessage = chatMessageRepository.findLastMessage(roomId);
+
+            ChatRoomDto chatRoomDto = new ChatRoomDto();
             chatRoomDto.setRoomId(roomId);
             chatRoomDto.setName(member.getWeekTeam().getRoomName());
-            if (chatMessageRepository.findAllMessage(roomId) != null) {
-                Map<String, List<ChatMessage>> z = chatMessageRepository.test(roomId);
+            chatRoomDto.setLastMessage(lastMessage);
 
-                Object x = chatMessageRepository.findLastMessage(roomId);
-                chatRoomDto.setLastMessage(x);
-            }
-
-//            List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
-//
-//            ChatMessage lastMessage = null;
-//            if(chatMessageList != null) {
-//                for(ChatMessage chatMessage : chatMessageList){
-//                    System.out.println("chatMessage = " + chatMessage);
-//                    System.out.println("chatMessage.getCreatedAt() = " + chatMessage.getCreatedAt());
-//                }
-////                lastMessage = chatMessageList.get(0);
-//            }
-//            chatRoomDto.setLastMessage(lastMessage);
             chatRoomDtoList.add(chatRoomDto);
         }
 
