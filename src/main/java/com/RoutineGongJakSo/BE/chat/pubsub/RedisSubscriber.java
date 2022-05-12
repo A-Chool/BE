@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.chat.pubsub;
 
 import com.RoutineGongJakSo.BE.chat.model.ChatMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -24,6 +25,7 @@ public class RedisSubscriber implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
+        objectMapper.registerModule(new JavaTimeModule());
         try {
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());

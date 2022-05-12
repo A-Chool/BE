@@ -9,6 +9,8 @@ import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class ChatMessageService {
 
         // 시간 세팅
         Date date = new Date();
-        message.setCreatedAt(date.toString().substring(11, 19));
+        message.setCreatedAt(date);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatRoomRepository.enterChatRoom(message.getRoomId());
 //            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
