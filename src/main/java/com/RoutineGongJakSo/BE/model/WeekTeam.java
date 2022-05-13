@@ -31,7 +31,7 @@ public class WeekTeam {
     private String week;
 
     @Column(nullable = false)
-    private String groundRole;
+    private String groundRule;
 
     @Column(nullable = false)
     private String workSpace;

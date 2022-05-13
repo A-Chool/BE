@@ -86,7 +86,7 @@ public class TeamBoardService {
 
         memberRepository.findByUserAndWeekTeam(user, weekTeam).orElseThrow(() -> new IllegalArgumentException("이 팀의 멤버가 아닙니다."));
 
-        weekTeam.setGroundRole(groundRule.getGroundRule());
+        weekTeam.setGroundRule(groundRule.getGroundRule());
 
         weekTeamRepository.save(weekTeam);
 
