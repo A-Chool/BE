@@ -46,7 +46,7 @@ public class TeamService {
         //이미 만들어진 팀이 있는지 확인
         validator.teamCheck(teamCheck);
 
-        String groundRole = "";
+        String groundRule = "";
         String workSpace = "";
 
         String roomName = teamDto.getWeek()+" "+ teamDto.getTeamName();
@@ -55,7 +55,7 @@ public class TeamService {
         WeekTeam weekTeam = WeekTeam.builder()
                 .teamName(teamDto.getTeamName())
                 .week(teamDto.getWeek())
-                .groundRole(groundRole)
+                .groundRule(groundRule)
                 .workSpace(workSpace)
                 .roomId(chatRoom.getRoomId())
                 .roomName(roomName)

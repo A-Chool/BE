@@ -27,7 +27,7 @@ public class TeamBoardDto {
         this.teamId = weekTeam.getWeekTeamId();
         this.teamName = weekTeam.getTeamName();
         this.weekName = weekTeam.getWeek();
-        this.groundRule = weekTeam.getGroundRole();
+        this.groundRule = weekTeam.getGroundRule();
         this.workSpace = weekTeam.getWorkSpace();
     }
 }
