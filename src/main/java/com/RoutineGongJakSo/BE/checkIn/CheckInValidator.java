@@ -118,7 +118,7 @@ public class CheckInValidator {
                 HH += 24;
             }
         }
-        if (findCheckIns.size() == 0 || HH > 9) {
+        if (findCheckIns.size() == 0 || HH >= 9) {
             return true;
         }
         return false;
@@ -139,7 +139,6 @@ public class CheckInValidator {
         String totalHH = String.valueOf(total / 60);
 //        String totalMM = String.valueOf(total % 60); 나중에 분 필요하다 그러면, 이거 내려주면됨
 //        String totalSumTime = totalHH + ":" + totalMM;
-
         return totalHH;
     }
 }
