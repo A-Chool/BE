@@ -118,7 +118,7 @@ public class CheckInValidator {
                 HH += 24;
             }
         }
-        if (findCheckIns.size() == 0 || HH > 9) {
+        if (findCheckIns.size() == 0 || HH >= 9) {
             return true;
         }
         return false;
