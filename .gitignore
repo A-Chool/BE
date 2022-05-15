@@ -39,3 +39,4 @@ application.properties
 static/
 login.html
 resources/
+Dockerfile
