@@ -1,0 +1,18 @@
+
+## SSL 관련
+#server:
+#  port: 443
+#  ssl:
+#    enabled: true
+#    key-store: classpath:ssl/keystore.p12
+#    key-store-type: PKCS12
+#    key-store-password: achool99
+
+# 채팅 관련
+spring:
+  profiles:
+    active: local
+  redis:
+    host: peertest.lhafft.ng.0001.apn2.cache.amazonaws.com
+#    host: localhost
+    port: 6379
