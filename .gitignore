@@ -36,6 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 application.properties
-static/
 login.html
-resources/
+keystore.p12
+application.yml
+Dockerfile
+login.html
