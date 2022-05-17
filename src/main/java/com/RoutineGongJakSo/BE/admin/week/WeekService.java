@@ -43,6 +43,7 @@ public class WeekService {
 
         checkWeekDuple(found);
         checkNameBlank(weekName);
+        checkNameLength(weekName);
 
         Week week = new Week(weekName);
         weekRepository.save(week);
@@ -98,6 +99,7 @@ public class WeekService {
         checkWeekPresent(foundById);
         checkWeekDuple(foundByName);
         checkNameBlank(weekName);
+        checkNameLength(weekName);
 
         Week week = foundById.get();
         week.setWeekName(requestDto.getWeekName());

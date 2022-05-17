@@ -12,6 +12,7 @@ public enum ErrorCode {
     ALREADY_EXIST_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_1", "중복된 주차가 존재합니다."),
     BLANK_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_2", "주차는 필수 입력값입니다."),
     DISPLAY_WEEK_ID(HttpStatus.BAD_REQUEST, "400_3", "이 주차는 현재 display 중이며, 지울 수 없습니다."),
+    TOO_LONG_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_4", "주차는 필수 입력값입니다."),
 
     // 404 Not Found
     NOT_FOUND_WEEK_ID(HttpStatus.NOT_FOUND, "404_1", "주차 아이디가 존재하지 않습니다."),

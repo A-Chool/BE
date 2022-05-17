@@ -22,6 +22,13 @@ public class WeekValidator {
             throw new CustomException(BLANK_WEEK_NAME);
         }
     }
+
+    public static void checkNameLength(String weekName){
+        if(weekName.length() > 6){
+            throw new CustomException(TOO_LONG_WEEK_NAME);
+        }
+    }
+
     public static void checkWeekPresent(Optional<Week> found){
         if (!found.isPresent()) {
             throw new CustomException(NOT_FOUND_WEEK_ID);
