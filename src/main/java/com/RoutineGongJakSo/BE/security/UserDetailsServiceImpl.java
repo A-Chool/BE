@@ -1,7 +1,9 @@
 package com.RoutineGongJakSo.BE.security;
 
-import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.client.user.UserRepository;
+import com.RoutineGongJakSo.BE.security.exception.UserException;
+import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
+                .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_MEMBER));
 
         return new UserDetailsImpl(user);
     }
