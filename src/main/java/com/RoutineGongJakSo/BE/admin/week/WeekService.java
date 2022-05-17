@@ -88,4 +88,24 @@ public class WeekService {
 
         return new WeekDto.ResponseDto(target);
     }
+
+    public WeekDto.ResponseDto changeWeekName(Long weekId, WeekDto.RequestDto requestDto) {
+        log.info("changeWeekName");
+        String weekName = requestDto.getWeekName();
+        Optional<Week> foundById = weekRepository.findById(weekId);
+        Optional<Week> foundByName = weekRepository.findByWeekName(weekName);
+
+        checkWeekPresent(foundById);
+        checkWeekDuple(foundByName);
+        checkNameBlank(weekName);
+
+        Week week = foundById.get();
+        week.setWeekName(requestDto.getWeekName());
+        weekRepository.save(week);
+
+        log.info("changeWeekName week " + week);
+
+        return new WeekDto.ResponseDto(week);
+
+    }
 }

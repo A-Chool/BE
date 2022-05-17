@@ -70,7 +70,7 @@ public class WeekController {
     @PostMapping("/api/admin/week/{weekId}")
     public ResponseEntity<Object> displayWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
 
-        log.info("POST /admin/admin/week"+ weekId);
+        log.info("POST /admin/admin/week/"+ weekId);
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
@@ -81,6 +81,23 @@ public class WeekController {
 
         log.info("Delete /admin/admin/" + weekId);
         return new ResponseEntity<>(new StatusResponseDto("주차 display 성공", week), HttpStatus.OK);
+    }
+
+    @PutMapping("/api/admin/week/{weekId}")
+    public ResponseEntity<Object> changeWeekName(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId, @RequestBody WeekDto.RequestDto weekName){
+
+        log.info("PUT /admin/admin/week/"+ weekId);
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //접근권한 확인
+        validator.adminCheck(userDetails);
+
+        WeekDto.ResponseDto week = weekService.changeWeekName(weekId, weekName);
+
+        log.info("Delete /admin/admin/" + weekId);
+        return new ResponseEntity<>(new StatusResponseDto("주차 display 성공", week), HttpStatus.OK);
+
     }
 
 }
