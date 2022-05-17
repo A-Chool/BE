@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.RoutineGongJakSo.BE.admin.week.WeekValidator.*;
 
 @Service
 @Slf4j
@@ -29,5 +32,19 @@ public class WeekService {
 
         log.info("getAllWeek responseDtoList " + responseDtoList);
         return responseDtoList;
+    }
+
+    public WeekDto.ResponseDto createWeek(WeekDto.RequestDto requestDto) {
+        String weekName = requestDto.getWeekName();
+
+        Optional<Week> found = weekRepository.findByWeekName(weekName);
+
+        checkWeek(found);
+        checkName(weekName);
+
+        Week week = new Week(weekName);
+        weekRepository.save(week);
+
+        return new WeekDto.ResponseDto(week);
     }
 }

@@ -8,8 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,14 +16,14 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class WeekController {
-    private final WeekRepository weekRepository;
     private final WeekService weekService;
     private final Validator validator;
 
+    // 모든 주차 조회
     @GetMapping("/api/admin/week")
     public ResponseEntity<Object> getAllWeek(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        log.info("/admin/admin/week");
+        log.info("GET /admin/admin/week");
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
@@ -32,7 +31,23 @@ public class WeekController {
         validator.adminCheck(userDetails);
 
         List<WeekDto.ResponseDto> weekList = weekService.getAllWeek();
-        log.info("/admin/admin/week weekList " + weekList);
+        log.info("GET /admin/admin/week weekList " + weekList);
         return new ResponseEntity<>(new StatusResponseDto("주차 전체 리스트 조회 성공", weekList), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/week")
+    public ResponseEntity<Object> createWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody WeekDto.RequestDto weekName) {
+
+        log.info("POST /admin/admin/week");
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //접근권한 확인
+        validator.adminCheck(userDetails);
+
+        WeekDto.ResponseDto week = weekService.createWeek(weekName);
+
+        log.info("POST /admin/admin/week week " + week);
+        return new ResponseEntity<>(new StatusResponseDto("주차 추가 성공", week), HttpStatus.OK);
     }
 }

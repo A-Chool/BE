@@ -18,4 +18,10 @@ public class WeekDto {
             this.display = week.getDisplay();
         }
     }
+
+    @Getter
+    @Setter
+    public static class RequestDto {
+        private String weekName;
+    }
 }
