@@ -1,6 +1,8 @@
+![스크린샷 2022-05-06 오후 9 35 54](https://user-images.githubusercontent.com/98807506/167132541-915e4ad0-e8dd-4a35-8501-b668642d0d78.png)
+
 ## 🤖 항해99 실전 프로젝트 A-Chool
 -
--test
+-
 
 
 ## 🗓 프로젝트 기간
@@ -16,6 +18,7 @@
 
 #### `Frontend`
  <a href="https://github.com/kyeongbong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=이경태 &color=61dafb&style=for-the-badge&>"/></a>
+  <a href="https://github.com/kyeongbong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=최경민 &color=61dafb&style=for-the-badge&>"/></a>
 
 
 **[(Front-end github)](https://github.com/Routine-GongJakSo/FE)**
@@ -40,7 +43,11 @@
 </div>
 </details>
 
+## 🍀 Service Architecture
+<img width="1019" alt="스크린샷 2022-05-17 오후 3 40 11" src="https://user-images.githubusercontent.com/98807506/168745670-1416ca94-a89a-4da7-8f6d-f590a1c18127.png">
+
 ## 🐳 ERD
+![thceGa68n5eY7SAPh](https://user-images.githubusercontent.com/98807506/167766657-44930880-15d8-438d-8b1d-871560ce42b3.png)
 
 ## 🏹 Team Trouble Shooting
 1) 프로젝트 기획에 있어 해당 서비스의 당위성과 방향성을 정하는 것에 대한 어려움

@@ -1,18 +1,14 @@
 package com.RoutineGongJakSo.BE.security.validator;
 
-import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.model.WeekTeam;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
+import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 @Component
