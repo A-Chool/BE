@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface WeekRepository extends JpaRepository<Week, Long> {
     Optional<Week> findByWeekName(String weekName);
+
+    Optional<Week> findByDisplay(boolean display);
 }

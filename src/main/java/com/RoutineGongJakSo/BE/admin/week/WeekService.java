@@ -3,6 +3,7 @@ package com.RoutineGongJakSo.BE.admin.week;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +66,20 @@ public class WeekService {
         weekRepository.delete(target);
     }
 
+    @Transactional
     public WeekDto.ResponseDto displayWeek(Long weekId) {
         log.info("displayWeek " + weekId);
 
         Optional<Week> found = weekRepository.findById(weekId);
         checkWeekPresent(found);
         Week target = found.get();
+
+        Optional<Week> displayWeek = weekRepository.findByDisplay(true);
+        if(displayWeek.isPresent()){
+            Week _displayWeek= displayWeek.get();
+            _displayWeek.setDisplay(false);
+            weekRepository.save(_displayWeek);
+        }
 
         log.info("displayWeek target " + target);
 
