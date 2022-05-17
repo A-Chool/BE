@@ -67,4 +67,20 @@ public class WeekController {
         return new ResponseEntity<>(new StatusResponseDto("주차 삭제 성공", weekId), HttpStatus.OK);
     }
 
+    @PostMapping("/api/admin/week/{weekId}")
+    public ResponseEntity<Object> displayWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
+
+        log.info("POST /admin/admin/week"+ weekId);
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //접근권한 확인
+        validator.adminCheck(userDetails);
+
+        WeekDto.ResponseDto week = weekService.displayWeek(weekId);
+
+        log.info("Delete /admin/admin/" + weekId);
+        return new ResponseEntity<>(new StatusResponseDto("주차 display 성공", week), HttpStatus.OK);
+    }
+
 }

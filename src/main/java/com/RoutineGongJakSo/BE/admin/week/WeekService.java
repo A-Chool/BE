@@ -63,4 +63,19 @@ public class WeekService {
 
         weekRepository.delete(target);
     }
+
+    public WeekDto.ResponseDto displayWeek(Long weekId) {
+        log.info("displayWeek " + weekId);
+
+        Optional<Week> found = weekRepository.findById(weekId);
+        checkWeekPresent(found);
+        Week target = found.get();
+
+        log.info("displayWeek target " + target);
+
+        target.setDisplay(true);
+        weekRepository.save(target);
+
+        return new WeekDto.ResponseDto(target);
+    }
 }
