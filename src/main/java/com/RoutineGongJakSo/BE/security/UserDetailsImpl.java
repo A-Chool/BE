@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.security;
 
-import com.RoutineGongJakSo.BE.model.User;
+import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +27,9 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUserLevel();
     }
 
-    public User getUser(){ return this.user; }
+    public User getUser() {
+        return this.user;
+    }
 
 
     @Override

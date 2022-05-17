@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.security;
 
-import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,10 @@
 package com.RoutineGongJakSo.BE.testData;
 
 
-//import com.RoutineGongJakSo.BE.admin.repository.WeekTeamRepository;
-//import com.RoutineGongJakSo.BE.admin.service.TeamService;
-//import com.RoutineGongJakSo.BE.model.WeekTeam;
-//import com.RoutineGongJakSo.BE.repository.UserRepository;
+//import com.RoutineGongJakSo.BE.admin.team.WeekTeamRepository;
+//import com.RoutineGongJakSo.BE.admin.team.TeamService;
+//import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
+//import com.RoutineGongJakSo.BE.user.UserRepository;
 //import com.RoutineGongJakSo.BE.user.JoinDto;
 //import com.RoutineGongJakSo.BE.user.UserService;
 //import org.springframework.beans.factory.annotation.Autowired;
