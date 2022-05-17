@@ -59,6 +59,7 @@ public class WeekService {
         checkWeekPresent(found);
         Week target = found.get();
 
+        checkWeekDisplay(target);
         log.info("deleteWeek target " + target);
 
         weekRepository.delete(target);

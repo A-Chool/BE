@@ -27,4 +27,9 @@ public class WeekValidator {
             throw new CustomException(NOT_FOUND_WEEK_ID);
         }
     }
+    public static void checkWeekDisplay(Week week){
+        if(week.getDisplay()){
+            throw new CustomException(DISPLAY_WEEK_ID);
+        }
+    }
 }
