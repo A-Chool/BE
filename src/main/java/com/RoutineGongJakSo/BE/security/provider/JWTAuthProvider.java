@@ -1,8 +1,8 @@
 package com.RoutineGongJakSo.BE.security.provider;
 
 
-import com.RoutineGongJakSo.BE.model.User;
-import com.RoutineGongJakSo.BE.repository.UserRepository;
+import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import com.RoutineGongJakSo.BE.security.jwt.JwtPreProcessingToken;
