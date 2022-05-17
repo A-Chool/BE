@@ -15,8 +15,20 @@ public class TeamDto {
     @Setter
     public static class CreateTeamDto {
         private String teamName;
-        private String week;
     }
+
+    @Getter
+    @Setter
+    public static class CreateResponseDto{
+        private Long teamId;
+        private String teamName;
+
+        public CreateResponseDto(Team team){
+            this.teamId = team.getTeamId();
+            this.teamName = team.getTeamName();
+        }
+    }
+
 
     @Getter
     public static class AddTeamDto {

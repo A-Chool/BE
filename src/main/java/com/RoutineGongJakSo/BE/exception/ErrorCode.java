@@ -14,11 +14,11 @@ public enum ErrorCode {
     DISPLAY_WEEK_ID(HttpStatus.BAD_REQUEST, "400_3", "이 주차는 현재 display 중이며, 지울 수 없습니다."),
     TOO_LONG_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_4", "주차는 필수 입력값입니다."),
 
+    ALREADY_EXIST_TEAM_NAME(HttpStatus.BAD_REQUEST, "400_5", "중복된 팀 이름이 존재합니다."),
+
     // 404 Not Found
     NOT_FOUND_WEEK_ID(HttpStatus.NOT_FOUND, "404_1", "주차 아이디가 존재하지 않습니다."),
-    NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_1", "유저 아이디가 존재하지 않습니다."),
-    NOT_FOUND_LOCATION_ID(HttpStatus.NOT_FOUND, "404_2", "지역 코드가 존재하지 않습니다."),
-    NOT_FOUND_CATEGORY_ID(HttpStatus.NOT_FOUND, "404_2", "카테고리 코드가 존재하지 않습니다.")
+    NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_1", "유저 아이디가 존재하지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;

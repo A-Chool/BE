@@ -3,6 +3,8 @@ package com.RoutineGongJakSo.BE.admin.team;
 import com.RoutineGongJakSo.BE.admin.member.Member;
 import com.RoutineGongJakSo.BE.admin.member.MemberDto;
 import com.RoutineGongJakSo.BE.admin.member.MemberRepository;
+import com.RoutineGongJakSo.BE.admin.week.Week;
+import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
@@ -11,73 +13,72 @@ import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
-import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
+import static com.RoutineGongJakSo.BE.admin.team.TeamValidator.checkTeamDuple;
+import static com.RoutineGongJakSo.BE.admin.week.WeekValidator.checkWeekPresent;
+
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
-    private final Validator validator;
     private final WeekTeamRepository weekTeamRepository;
     private final UserRepository userRepository;
+    private final WeekRepository weekRepository;
     private final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
     private final ChatRoomRepository chatRoomRepository;
 
     // 팀 추가
     @Transactional
-    public String createTeam(UserDetailsImpl userDetails, TeamDto.CreateTeamDto teamDto) {
-        // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
-        // ':' 사용 금지
-        validator.teamNameCheck(teamDto.getTeamName());
+    public TeamDto.CreateResponseDto createTeam(Long weekId, TeamDto.CreateTeamDto teamDto) {
+        Optional<Week> weekFound = weekRepository.findById(weekId);
+        checkWeekPresent(weekFound);
+        Week week = weekFound.get();
 
-        //중복 팀 체크
-        Optional<WeekTeam> teamCheck = weekTeamRepository.findByTeamNameAndWeek(teamDto.getTeamName(), teamDto.getWeek());
-
-        //이미 만들어진 팀이 있는지 확인
-        validator.teamCheck(teamCheck);
+        String teamName = teamDto.getTeamName();
+        Optional<Team> teamFound = teamRepository.findByTeamName(teamName);
+        checkTeamDuple(teamFound);
 
         String groundRule = "";
         String workSpace = "";
 
-        String roomName = teamDto.getWeek() + " " + teamDto.getTeamName();
+        String roomName = week.getWeekName()+ " " + teamDto.getTeamName();
         ChatRoom chatRoom = chatRoomRepository.createChatRoom(roomName);
 
-        WeekTeam weekTeam = WeekTeam.builder()
-                .teamName(teamDto.getTeamName())
-                .week(teamDto.getWeek())
+        Team team = Team.builder()
+                .teamName(teamName)
+                .week(week)
                 .groundRule(groundRule)
                 .workSpace(workSpace)
                 .roomId(chatRoom.getRoomId())
                 .roomName(roomName)
                 .build();
 
-        weekTeamRepository.save(weekTeam);
+        teamRepository.save(team);
 
-        return "팀 생성 완료!";
+        return new TeamDto.CreateResponseDto(team);
     }
 
     // 팀원 추가
     @Transactional
     public String addMembers(UserDetailsImpl userDetails, TeamDto.AddTeamDto addTeamDto) {
         // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         WeekTeam weekTeam = weekTeamRepository.findById(addTeamDto.getTeamId()).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
         );
 
         //유저아이디로 유저정보 찾기
-        User user = validator.findUserIdInfo(addTeamDto.getUserId());
+//        User user = validator.findUserIdInfo(addTeamDto.getUserId());
+
+        User user = userDetails.getUser();
 
 
         // 이미 소속된 팀이 존재하는지 확인
@@ -108,9 +109,9 @@ public class TeamService {
     @Transactional
     public String deleteTeam(Long teamId, UserDetailsImpl userDetails) {
         // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         WeekTeam weekTeam = weekTeamRepository.findById(teamId).orElseThrow(
                 () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
@@ -125,9 +126,9 @@ public class TeamService {
     @Transactional
     public String deleteMember(Long memberId, UserDetailsImpl userDetails) {
         // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new NullPointerException("해당 팀원은 존재하지 않습니다.")
@@ -141,9 +142,9 @@ public class TeamService {
     //해당 주차의 모든 팀을 조회
     public List<TeamDto.WeekTeamDto> getTeamList(UserDetailsImpl userDetails, String week) {
         // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         //해당 주차의 모든 팀을 조회
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
@@ -174,9 +175,9 @@ public class TeamService {
     //주차 정보
     public ArrayList<String> getWeeks(UserDetailsImpl userDetails) {
         // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         List<WeekTeam> findWeek = weekTeamRepository.findAll();
         List<String> weekList = new ArrayList<>();
@@ -200,10 +201,10 @@ public class TeamService {
 
     //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<TeamDto.GetNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
-        // 로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
+//        // 로그인 여부 확인
+//        validator.loginCheck(userDetails);
+//        //관리자 접근 권한 확인
+//        validator.adminCheck(userDetails);
 
         //해당 주차에 대한 팀 찾기
         List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
