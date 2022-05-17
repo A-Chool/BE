@@ -40,8 +40,8 @@ public class WeekService {
 
         Optional<Week> found = weekRepository.findByWeekName(weekName);
 
-        checkWeek(found);
-        checkName(weekName);
+        checkWeekDuple(found);
+        checkNameBlank(weekName);
 
         Week week = new Week(weekName);
         weekRepository.save(week);
@@ -50,5 +50,17 @@ public class WeekService {
         log.info("createWeek week " + week);
 
         return new WeekDto.ResponseDto(week);
+    }
+
+    public void deleteWeek(Long weekId) {
+        log.info("deleteWeek " + weekId);
+
+        Optional<Week> found = weekRepository.findById(weekId);
+        checkWeekPresent(found);
+        Week target = found.get();
+
+        log.info("deleteWeek target " + target);
+
+        weekRepository.delete(target);
     }
 }

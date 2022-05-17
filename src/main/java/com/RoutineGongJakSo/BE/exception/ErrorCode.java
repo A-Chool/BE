@@ -25,6 +25,7 @@ public enum ErrorCode {
     BLANK_USER_MBTI(HttpStatus.BAD_REQUEST, "400_11", "MBTI 전부 체크해주세요. null이 있습니다."),
 
     // 404 Not Found
+    NOT_FOUND_WEEK_ID(HttpStatus.NOT_FOUND, "404_1", "주차 아이디가 존재하지 않습니다."),
     NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_1", "유저 아이디가 존재하지 않습니다."),
     NOT_FOUND_LOCATION_ID(HttpStatus.NOT_FOUND, "404_2", "지역 코드가 존재하지 않습니다."),
     NOT_FOUND_CATEGORY_ID(HttpStatus.NOT_FOUND, "404_2", "카테고리 코드가 존재하지 않습니다.")

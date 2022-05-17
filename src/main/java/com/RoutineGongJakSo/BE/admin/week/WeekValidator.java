@@ -6,21 +6,25 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.ALREADY_EXIST_WEEK_NAME;
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.BLANK_WEEK_NAME;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
 public class WeekValidator {
-    public static void checkWeek(Optional<Week> found){
+    public static void checkWeekDuple(Optional<Week> found){
         if (found.isPresent()) {
             throw new CustomException(ALREADY_EXIST_WEEK_NAME);
         }
     }
 
-    public static void checkName(String weekName){
+    public static void checkNameBlank(String weekName){
         if(weekName.trim().length() == 0){
             throw new CustomException(BLANK_WEEK_NAME);
+        }
+    }
+    public static void checkWeekPresent(Optional<Week> found){
+        if (!found.isPresent()) {
+            throw new CustomException(NOT_FOUND_WEEK_ID);
         }
     }
 }
