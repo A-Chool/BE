@@ -35,6 +35,7 @@ public class WeekService {
     }
 
     public WeekDto.ResponseDto createWeek(WeekDto.RequestDto requestDto) {
+        log.info("createWeek");
         String weekName = requestDto.getWeekName();
 
         Optional<Week> found = weekRepository.findByWeekName(weekName);
@@ -44,6 +45,9 @@ public class WeekService {
 
         Week week = new Week(weekName);
         weekRepository.save(week);
+
+
+        log.info("createWeek week " + week);
 
         return new WeekDto.ResponseDto(week);
     }
