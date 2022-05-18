@@ -1,8 +1,12 @@
 package com.RoutineGongJakSo.BE.client.checkIn;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
+import com.RoutineGongJakSo.BE.admin.team.Team;
+import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeamRepository;
+import com.RoutineGongJakSo.BE.admin.week.Week;
+import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
@@ -37,6 +41,8 @@ public class CheckInService {
     private final AnalysisRepository analysisRepository;
     private final CheckInValidator checkInValidator;
     private final WeekTeamRepository weekTeamRepository;
+    private final TeamRepository teamRepository;
+    private final WeekRepository weekRepository;
     private final Validator validator;
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
@@ -239,7 +245,7 @@ public class CheckInService {
     }
 
     //해당 주차의 모든 유저들의 기록
-    public List<CheckInListDto.TeamListDto> getAllCheckList(UserDetailsImpl userDetails, String week) throws ParseException {
+    public List<CheckInListDto.TeamListDto> getAllCheckList(UserDetailsImpl userDetails) throws ParseException {
 
         validator.loginCheck(userDetails); // 로그인 여부 확인
 
@@ -257,13 +263,19 @@ public class CheckInService {
 
         String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
 
-        List<WeekTeam> weekTeams = weekTeamRepository.findByWeek(week); // 해당 주차 팀 찾기
+        // display 한 주차 찾기
+        Week week = weekRepository.findByDisplay(true).orElseThrow(
+                ()-> new IllegalArgumentException("기본주차 업다")
+        );
+        List<Team> teamList = teamRepository.findByWeek(week);
+
+//        List<WeekTeam> weekTeams = weekTeamRepository.findByWeek(week); // 해당 주차 팀 찾기
         List<CheckInListDto.TeamListDto> teamListDtos = new ArrayList<>(); //최종 return 값이 담길 곳
 
-        for (WeekTeam weekTeam : weekTeams) {
+        for (Team team : teamList) {
             List<CheckInListDto.UserDto> userDtos = new ArrayList<>();
 
-            for (Member member : weekTeam.getMemberList()) {
+            for (Member member : team.getMemberList()) {
                 List<CheckIn> findCheckIns = checkInRepository.findByUserAndDate(member.getUser(), setToday);
 
                 boolean online = checkInValidator.onlineCheck(findCheckIns); //온라인 여부
@@ -281,9 +293,10 @@ public class CheckInService {
             }
 
             CheckInListDto.TeamListDto teamListDto = CheckInListDto.TeamListDto.builder()
-                    .teamId(weekTeam.getWeekTeamId())
-                    .teamName(weekTeam.getTeamName())
-                    .week(weekTeam.getWeek())
+                    .teamId(team.getTeamId())
+                    .teamName(team.getTeamName())
+                    .weekId(team.getWeek().getWeekId())
+                    .weekName(team.getWeek().getWeekName())
                     .memberList(userDtos)
                     .build();
 
