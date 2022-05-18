@@ -1,0 +1,18 @@
+#S3 관련
+cloud:
+  aws:
+    credentials:
+      secret-key: +3LYJ1SD8Y6xP1Y5qkxeMVgJ3954yoAW6RWsZEIn
+      access-key: AKIAR6RFO67HBMICO3FA
+    s3:
+      bucket: myawsssam2
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
