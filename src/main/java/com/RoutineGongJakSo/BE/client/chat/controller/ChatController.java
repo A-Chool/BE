@@ -35,4 +35,10 @@ public class ChatController {
     public List<ChatMessage> getMessages(@PathVariable String roomId) {
         return chatMessageService.getMessages(roomId);
     }
+
+    @GetMapping("/chat/message/file/{roomId}")
+    @ResponseBody
+    public List<ChatMessage> getMessageFromFile(@PathVariable String roomId){
+        return chatMessageService.getMessageFromFile(roomId);
+    }
 }
