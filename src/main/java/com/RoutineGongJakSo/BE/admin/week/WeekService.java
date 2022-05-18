@@ -26,7 +26,7 @@ public class WeekService {
 
         List<WeekDto.ResponseDto> responseDtoList = new ArrayList<>();
 
-        for(Week week : weekList){
+        for (Week week : weekList) {
             WeekDto.ResponseDto responseDto = new WeekDto.ResponseDto(week);
             responseDtoList.add(responseDto);
         }
@@ -76,8 +76,8 @@ public class WeekService {
         Week target = found.get();
 
         Optional<Week> displayWeek = weekRepository.findByDisplay(true);
-        if(displayWeek.isPresent()){
-            Week _displayWeek= displayWeek.get();
+        if (displayWeek.isPresent()) {
+            Week _displayWeek = displayWeek.get();
             _displayWeek.setDisplay(false);
             weekRepository.save(_displayWeek);
         }

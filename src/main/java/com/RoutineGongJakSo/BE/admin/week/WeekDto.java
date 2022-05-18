@@ -7,7 +7,7 @@ public class WeekDto {
 
     @Getter
     @Setter
-    public static class ResponseDto{
+    public static class ResponseDto {
         private Long weekId;
         private String weekName;
         private boolean display;

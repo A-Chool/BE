@@ -48,12 +48,12 @@ public class ChatRoomRepository {
         List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
         for (Member member : memberList) {
 
-            String roomId = member.getWeekTeam().getRoomId();
+            String roomId = member.getTeam().getRoomId();
             Object lastMessage = chatMessageRepository.findLastMessage(roomId);
 
             ChatRoomDto chatRoomDto = new ChatRoomDto();
             chatRoomDto.setRoomId(roomId);
-            chatRoomDto.setName(member.getWeekTeam().getRoomName());
+            chatRoomDto.setName(member.getTeam().getRoomName());
             chatRoomDto.setLastMessage(lastMessage);
 
             chatRoomDtoList.add(chatRoomDto);

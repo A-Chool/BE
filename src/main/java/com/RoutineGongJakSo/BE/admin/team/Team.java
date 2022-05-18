@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.admin.team;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
+import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.client.toDo.ToDo;
 import lombok.*;
 
@@ -13,23 +14,23 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeekTeam {
-
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long WeekTeamId;
-
-    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
-    private List<Member> memberList;
-
-    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.ALL)
-    private List<ToDo> toDoList;
+    private Long teamId;
 
     @Column(nullable = false)
     private String teamName;
 
-    @Column(nullable = false)
-    private String week;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Member> memberList;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<ToDo> toDoList;
+
+    @ManyToOne
+    @JoinColumn(name = "WEEK_ID")
+    private Week week;
 
     @Column(nullable = false)
     private String groundRule;
@@ -49,5 +50,9 @@ public class WeekTeam {
 
     public void addToDo(ToDo toDo) {
         this.toDoList.add(toDo);
+    }
+
+    public Team(String teamName) {
+        this.teamName = teamName;
     }
 }

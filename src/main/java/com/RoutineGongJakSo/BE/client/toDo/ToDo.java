@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.client.toDo;
 
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +18,8 @@ public class ToDo {
     Long toDoId;
 
     @ManyToOne
-    @JoinColumn(name = "WEEK_TEAM_ID")
-    private WeekTeam weekTeam;
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     @Column
     private String todoContent;
