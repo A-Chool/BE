@@ -18,10 +18,10 @@ public enum ErrorCode {
     SOLD_OUT_USER(HttpStatus.BAD_REQUEST, "400_6", "이미 다른팀에 소속되어 있습니다."),
 
     // 404 Not Found
+    NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_0", "유저 아이디가 존재하지 않습니다."),
     NOT_FOUND_WEEK_ID(HttpStatus.NOT_FOUND, "404_1", "주차 아이디가 존재하지 않습니다."),
     NOT_FOUND_TEAM_ID(HttpStatus.NOT_FOUND, "404_2", "팀 아이디가 존재하지 않습니다."),
-    NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_1", "유저 아이디가 존재하지 않습니다.")
-    ;
+    NOT_FOUND_MEMBER_ID(HttpStatus.NOT_FOUND, "404_3", "멤버 아이디가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;

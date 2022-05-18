@@ -163,42 +163,4 @@ public class TeamService {
 //        return response;
 //    }
 //
-//    //해당 주차에 멤버아이디가 없는 유저 리스트
-//    public List<TeamDto.GetNoMember> getNoMember(UserDetailsImpl userDetails, String week) {
-////        // 로그인 여부 확인
-////        validator.loginCheck(userDetails);
-////        //관리자 접근 권한 확인
-////        validator.adminCheck(userDetails);
-//
-//        //해당 주차에 대한 팀 찾기
-//        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
-//
-//        //모든 유저를 찾기
-//        List<User> noMemberList = userRepository.findAll();
-//        //값을 return 할 CheckInListDto 만들기
-//        List<TeamDto.GetNoMember> noMembers = new ArrayList<>();
-//
-//        for (WeekTeam weekTeam : weekTeamList) {
-//            List<Member> member = memberRepository.findByWeekTeam(weekTeam);
-//            for (Member find : member) {
-//                User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
-//                        () -> new UserException(UserExceptionType.NOT_FOUND_MEMBER)
-//                );
-//                //제거 대상 제거
-//                noMemberList.remove(getUser);
-//            }
-//        }
-//
-//        //return 값 가공하기
-//        for (User user : noMemberList) {
-//            TeamDto.GetNoMember response = TeamDto.GetNoMember.builder()
-//                    .userId(user.getUserId())
-//                    .userName(user.getUserName())
-//                    .build();
-//
-//            noMembers.add(response);
-//        }
-//
-//        return noMembers;
-//    }
 }

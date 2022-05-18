@@ -73,9 +73,4 @@ public class TeamController {
 //        return teamService.getWeeks(userDetails);
 //    }
 //
-//    //해당 주차에 멤버아이디가 없는 유저 리스트
-//    @GetMapping("/noMember/{week}")
-//    public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
-//        return teamService.getNoMember(userDetails, week);
-//    }
 }
