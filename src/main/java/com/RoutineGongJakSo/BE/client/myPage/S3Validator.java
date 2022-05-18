@@ -53,17 +53,20 @@ public class S3Validator {
 
     // 이미지파일명 중복 방지
     public String createFileName(String fileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName)); // 확장자와 파일 이름을 붙여줌
     }
 
     //하나의 파일 업로드
     public String uploadOne(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         String imageUrl = "";
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
+        ObjectMetadata objectMetadata = new ObjectMetadata(); // ObjectMetadata Amazon S3와 함께 저장된 객체 메타데이터
+        objectMetadata.setContentLength(file.getSize()); //연결된 개체의 크기를 바이트 단위로 나타내는 Content-Length HTTP 헤더를 설정
+        objectMetadata.setContentType(file.getContentType()); //연결된 개체에 저장된 콘텐츠 유형을 나타내는 Content-Type HTTP 헤더를 설정
 
+        //Stream = 데이터가 전송되는 통로
+        //IntputStream 은 데이터를 byte 단위로 읽어들이는 통로
+        // 읽어들인 데이터를 byte로 돌려줌
         try(InputStream inputStream = file.getInputStream()) {
             s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -86,11 +89,11 @@ public class S3Validator {
         fileValidate.add(".JPG");
         fileValidate.add(".JPEG");
         fileValidate.add(".PNG");
-        String idxFileName = fileName.substring(fileName.lastIndexOf("."));
-        if (!fileValidate.contains(idxFileName)) { // 해당 문자열이 포함되엉 ㅣㅆ는지 확인
+        String idxFileName = fileName.substring(fileName.lastIndexOf(".")); //마지막 "." 을 찾음
+        if (!fileValidate.contains(idxFileName)) { // 해당 문자열이 포함되어 있는지 확인
             throw new CustomException(BAD_FORM_TYPE);
         }
-        return fileName.substring(fileName.lastIndexOf("."));
+        return idxFileName;
     }
 
 }
