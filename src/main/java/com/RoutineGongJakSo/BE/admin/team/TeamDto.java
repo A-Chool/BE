@@ -31,40 +31,6 @@ public class TeamDto {
 
 
     @Getter
-    public static class AddTeamDto {
-        private Long teamId;
-        private Long userId;
-    }
-
-    //주차별 팀 response
-    @Getter
-    @Builder
-    public static class ResponseDto {
-        private String teamName;
-        private List<GetUserList> userList;
-    }
-
-    @Getter
-    @Builder
-    public static class GetUserList {
-        private Long userId;
-        private String userName;
-        private String userEmail;
-        private String phoneNumber;
-        private Long kakaoId;
-        private String createdAt;
-        private Long teamId;
-        private Long memberId;
-    }
-
-    @Getter
-    @Builder
-    public static class GetNoMember {
-        private String userName;
-        private Long userId;
-    }
-
-    @Getter
     @Builder
     public static class WeekTeamDto {
         private Long teamId;

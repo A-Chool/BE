@@ -48,7 +48,7 @@ public class MemberController {
 
     //해당 주차에 멤버아이디가 없는 유저 리스트
     @GetMapping("/api/admin/noMember/{weekId}")
-    public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
+    public List<MemberDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
         log.info("GET /admin/admin/noMember/" + weekId);
         //로그인 여부 확인
         validator.loginCheck(userDetails);

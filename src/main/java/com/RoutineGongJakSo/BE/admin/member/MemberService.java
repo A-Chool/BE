@@ -89,7 +89,7 @@ public class MemberService {
 
 
     //    //해당 주차에 멤버아이디가 없는 유저 리스트
-    public List<TeamDto.GetNoMember> getNoMember(Long weekId) {
+    public List<MemberDto.GetNoMember> getNoMember(Long weekId) {
 
         Week targetWeek = weekRepository.findById(weekId).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
@@ -100,7 +100,7 @@ public class MemberService {
         //모든 유저를 찾기
         List<User> noMemberList = userRepository.findAll();
         //값을 return 할 CheckInListDto 만들기
-        List<TeamDto.GetNoMember> noMembers = new ArrayList<>();
+        List<MemberDto.GetNoMember> noMembers = new ArrayList<>();
 
         for (Team team : teamList) {
             List<Member> memberList = team.getMemberList();
@@ -115,7 +115,7 @@ public class MemberService {
 
         //return 값 가공하기
         for (User user : noMemberList) {
-            TeamDto.GetNoMember response = TeamDto.GetNoMember.builder()
+            MemberDto.GetNoMember response = MemberDto.GetNoMember.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
                     .build();
