@@ -43,8 +43,8 @@ public class TeamService {
 
         String roomName = week.getWeekName() + " " + teamDto.getTeamName();
         // Todo createChatRoom redis 서버 테스트 해야함
-//        ChatRoom chatRoom = chatRoomRepository.createChatRoom(roomName);
-        ChatRoom chatRoom = ChatRoom.create(roomName);
+        ChatRoom chatRoom = chatRoomRepository.createChatRoom(roomName);
+//        ChatRoom chatRoom = ChatRoom.create(roomName);
         Team team = Team.builder()
                 .teamName(teamName)
                 .week(week)

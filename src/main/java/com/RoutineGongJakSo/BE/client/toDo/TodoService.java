@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.client.toDo;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;

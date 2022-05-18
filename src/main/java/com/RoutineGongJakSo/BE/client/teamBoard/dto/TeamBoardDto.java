@@ -2,7 +2,6 @@ package com.RoutineGongJakSo.BE.client.teamBoard.dto;
 
 import com.RoutineGongJakSo.BE.admin.member.MemberDto;
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.client.toDo.ToDoDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

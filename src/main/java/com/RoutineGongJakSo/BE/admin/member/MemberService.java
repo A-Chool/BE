@@ -50,7 +50,7 @@ public class MemberService {
 
         if(!teamList.contains(targetTeam)){
             throw new CustomException(ErrorCode.NOT_FOUND_TEAM_IN_WEEK);
-        };
+        }
 
         for (Team _team : teamList) {
             List<Member> memberList = _team.getMemberList();
@@ -63,7 +63,6 @@ public class MemberService {
         }
 
         Member member = Member.builder()
-                .weekTeam(null)
                 .team(targetTeam)
                 .user(targetUser)
                 .build();

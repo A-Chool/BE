@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +19,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long memberId;
-
-    @ManyToOne
-    @JoinColumn(name = "WEEK_TEAM_ID")
-    private WeekTeam weekTeam;
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")

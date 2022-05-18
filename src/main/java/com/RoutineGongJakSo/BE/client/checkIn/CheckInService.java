@@ -3,8 +3,6 @@ package com.RoutineGongJakSo.BE.client.checkIn;
 import com.RoutineGongJakSo.BE.admin.member.Member;
 import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeamRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
@@ -40,7 +38,6 @@ public class CheckInService {
     private final CheckInRepository checkInRepository;
     private final AnalysisRepository analysisRepository;
     private final CheckInValidator checkInValidator;
-    private final WeekTeamRepository weekTeamRepository;
     private final TeamRepository teamRepository;
     private final WeekRepository weekRepository;
     private final Validator validator;
