@@ -47,7 +47,7 @@ public class User extends Timestamped {
     private String userGitHub;
 
     @Column
-    private String userImage;
+    private String userImageUrl;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CheckIn> checkIn;

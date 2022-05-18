@@ -52,20 +52,20 @@ public class MyPageService {
     public String updateImage(UserDetailsImpl userDetails, MultipartFile multipartFile) {
         User user = validator.userInfo(userDetails);
 
-        if (user.getUserImage() != null) {
-            String deleteUrl = user.getUserImage().replace("https://myawsssam2.s3.ap-northeast-2.amazonaws.com/", "");
+        if (user.getUserImageUrl() != null) {
+            String deleteUrl = user.getUserImageUrl().replace("https://myawsssam2.s3.ap-northeast-2.amazonaws.com/", "");
             boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
                 String ImageUrl = s3Validator.uploadOne(multipartFile);
 
-                user.setUserImage(ImageUrl);
+                user.setUserImageUrl(ImageUrl);
                 userRepository.save(user);
             }
         } else {
             String ImageUrl = s3Validator.uploadOne(multipartFile);
 
-            user.setUserImage(ImageUrl);
+            user.setUserImageUrl(ImageUrl);
             userRepository.save(user);
         }
 
