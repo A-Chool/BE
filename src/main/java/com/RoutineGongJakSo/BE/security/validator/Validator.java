@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.security.validator;
 
 import com.RoutineGongJakSo.BE.client.user.User;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
@@ -39,20 +38,6 @@ public class Validator {
     public void loginCheck(UserDetailsImpl userDetails) {
         if (userDetails == null) {
             throw new UserException(UserExceptionType.NOT_ONLINE);
-        }
-    }
-
-    //이미 만들어진 팀이 있는지 확인
-    public void teamCheck(Optional<WeekTeam> teamCheck) {
-        if (teamCheck.isPresent()) {
-            throw new UserException(UserExceptionType.YES_MEMBER);
-        }
-    }
-
-    // ':' 사용 금지
-    public void teamNameCheck(String teamName) {
-        if (teamName.contains(":")) {
-            throw new UserException(UserExceptionType.NOT_COLUM);
         }
     }
 

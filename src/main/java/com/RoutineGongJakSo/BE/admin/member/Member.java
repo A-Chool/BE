@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.client.user.User;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +21,8 @@ public class Member {
     private Long memberId;
 
     @ManyToOne
-    @JoinColumn(name = "WEEK_TEAM_ID")
-    private WeekTeam weekTeam;
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

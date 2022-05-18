@@ -12,7 +12,8 @@ public class CheckInListDto {
     public static class TeamListDto { //최종 결과값 담기는 곳
         private Long teamId;
         private String teamName;
-        private String week;
+        private Long weekId;
+        private String weekName;
         private List<UserDto> memberList;
 
     }
