@@ -19,11 +19,11 @@ public class TeamDto {
 
     @Getter
     @Setter
-    public static class CreateResponseDto{
+    public static class CreateResponseDto {
         private Long teamId;
         private String teamName;
 
-        public CreateResponseDto(Team team){
+        public CreateResponseDto(Team team) {
             this.teamId = team.getTeamId();
             this.teamName = team.getTeamName();
         }

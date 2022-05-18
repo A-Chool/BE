@@ -23,7 +23,7 @@ public class MemberController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody MemberDto.RequestDto addTeamDto,
             @PathVariable Long weekId) {
-        log.info("GET /admin/admin/member/"+weekId);
+        log.info("GET /admin/admin/member/" + weekId);
         log.info("teamId : " + addTeamDto.getTeamId() + "userId : " + addTeamDto.getUserId());
         //로그인 여부 확인
         validator.loginCheck(userDetails);
@@ -36,7 +36,7 @@ public class MemberController {
     //팀원 삭제
     @DeleteMapping("/api/admin/member/{memberId}")
     public String deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long memberId) {
-        log.info("DELETE /admin/admin/member/"+memberId);
+        log.info("DELETE /admin/admin/member/" + memberId);
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 
@@ -49,7 +49,7 @@ public class MemberController {
     //해당 주차에 멤버아이디가 없는 유저 리스트
     @GetMapping("/api/admin/noMember/{weekId}")
     public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
-        log.info("GET /admin/admin/noMember/"+weekId);
+        log.info("GET /admin/admin/noMember/" + weekId);
         //로그인 여부 확인
         validator.loginCheck(userDetails);
 

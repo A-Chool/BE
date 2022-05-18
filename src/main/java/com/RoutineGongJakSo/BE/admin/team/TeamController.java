@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,7 +53,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/{teamId}")
-    public String deleteTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId){
+    public String deleteTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId) {
 
         log.info("DELETE /admin/admin/teams/" + teamId);
         //로그인 여부 확인

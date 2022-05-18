@@ -1,8 +1,8 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
+import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

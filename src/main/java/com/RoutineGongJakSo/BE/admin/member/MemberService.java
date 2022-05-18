@@ -3,15 +3,12 @@ package com.RoutineGongJakSo.BE.admin.member;
 import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamDto;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
-import com.RoutineGongJakSo.BE.client.user.UserController;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
-import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +34,7 @@ public class MemberService {
         Long targetUserId = addTeamDto.getUserId();
 
         Week targetWeek = weekRepository.findById(weekId).orElseThrow(
-                ()-> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
+                () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
         );
 
         Team targetTeam = teamRepository.findById(targetTeamId).orElseThrow(
@@ -45,18 +42,18 @@ public class MemberService {
         );
 
         User targetUser = userRepository.findById(targetUserId).orElseThrow(
-                ()-> new CustomException(ErrorCode.NOT_FOUND_USER_ID)
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER_ID)
         );
 
         // 이미 소속된 팀이 존재하는지 확인
         List<Team> teamList = targetWeek.getTeamList();
-        for(Team _team : teamList){
+        for (Team _team : teamList) {
             List<Member> memberList = _team.getMemberList();
             System.out.println("_team.getTeamId() = " + _team.getTeamId());
             System.out.println("_team.getTeamName() = " + _team.getTeamName());
 
-            for(Member _member : memberList){
-                if(_member.getUser() == targetUser){
+            for (Member _member : memberList) {
+                if (_member.getUser() == targetUser) {
                     System.out.println("_member.getUser().getUserName() = " + _member.getUser().getUserName());
                     System.out.println("targetUser.getUserName() = " + targetUser.getUserName());
                     throw new CustomException(ErrorCode.SOLD_OUT_USER);
@@ -90,11 +87,11 @@ public class MemberService {
     }
 
 
-//    //해당 주차에 멤버아이디가 없는 유저 리스트
+    //    //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<TeamDto.GetNoMember> getNoMember(Long weekId) {
 
         Week targetWeek = weekRepository.findById(weekId).orElseThrow(
-                ()-> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
+                () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
         );
 
         List<Team> teamList = targetWeek.getTeamList();

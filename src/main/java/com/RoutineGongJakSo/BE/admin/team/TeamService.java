@@ -2,16 +2,13 @@ package com.RoutineGongJakSo.BE.admin.team;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
 import com.RoutineGongJakSo.BE.admin.member.MemberDto;
-import com.RoutineGongJakSo.BE.admin.member.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.client.user.UserDto;
-import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
-import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +23,7 @@ import static com.RoutineGongJakSo.BE.admin.week.WeekValidator.checkWeekPresent;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-    private final WeekTeamRepository weekTeamRepository;
-    private final UserRepository userRepository;
     private final WeekRepository weekRepository;
-    private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
     private final ChatRoomRepository chatRoomRepository;
 

@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.week;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.client.toDo.ToDo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
