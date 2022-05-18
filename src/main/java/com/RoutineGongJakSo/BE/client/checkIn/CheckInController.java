@@ -33,9 +33,10 @@ public class CheckInController {
         return checkInService.checkOut(userDetails);
     }
 
-    @GetMapping("/checkInList/{week}")
-    public List<CheckInListDto.TeamListDto> getAllCheckList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) throws ParseException {
-       return checkInService.getAllCheckList(userDetails, week);
+    //유저 로그인 한 후 checkin page 접속시 나가는 것
+    @GetMapping("/checkInList")
+    public List<CheckInListDto.TeamListDto> getAllCheckList(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
+       return checkInService.getAllCheckList(userDetails);
     }
 
 }

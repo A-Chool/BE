@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.client.teamBoard.dto;
 
 import com.RoutineGongJakSo.BE.admin.member.MemberDto;
-import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.client.toDo.ToDoDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,20 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamBoardDto {
-    public List<WeekTeamDto> weekTeamList;
+    public List<TeamDto> teamDtoList;
     public Long teamId;
     public String teamName;
     public String weekName;
-    public List<MemberDto> memberList;
+    public List<MemberDto.ResponseDto> memberList;
     public String groundRule;
     public String workSpace;
     public List<ToDoDto.OriginToDoDto> toDoList;
 
-    public TeamBoardDto(WeekTeam weekTeam) {
-        this.teamId = weekTeam.getWeekTeamId();
-        this.teamName = weekTeam.getTeamName();
-        this.weekName = weekTeam.getWeek();
-        this.groundRule = weekTeam.getGroundRule();
-        this.workSpace = weekTeam.getWorkSpace();
+    public TeamBoardDto(Team team) {
+        this.teamId = team.getTeamId();
+        this.teamName = team.getTeamName();
+        this.weekName = team.getWeek().getWeekName();
+        this.groundRule = team.getGroundRule();
+        this.workSpace = team.getWorkSpace();
     }
 }
