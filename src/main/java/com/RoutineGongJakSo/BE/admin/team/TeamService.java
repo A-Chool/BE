@@ -11,6 +11,7 @@ import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +70,6 @@ public class TeamService {
     //해당 주차의 모든 팀을 조회
     public List<TeamDto.WeekTeamDto> getTeamList(Long weekId) {
         //해당 주차의 모든 팀을 조회
-//        List<WeekTeam> weekTeamList = weekTeamRepository.findByWeek(week);
         Week week = weekRepository.findById(weekId).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
         );
@@ -77,7 +77,6 @@ public class TeamService {
         List<Team> teamList = week.getTeamList();
 
         List<TeamDto.WeekTeamDto> weekTeamDtoList = new ArrayList<>();
-//        List<TeamDto.
         for (Team team : teamList) {
             List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
 
@@ -100,67 +99,17 @@ public class TeamService {
         return weekTeamDtoList;
     }
 
-//
-//    //팀 삭제
-//    @Transactional
-//    public String deleteTeam(Long teamId, UserDetailsImpl userDetails) {
-//        // 로그인 여부 확인
-////        validator.loginCheck(userDetails);
-////        //관리자 접근 권한 확인
-////        validator.adminCheck(userDetails);
-//
-//        WeekTeam weekTeam = weekTeamRepository.findById(teamId).orElseThrow(
-//                () -> new NullPointerException("해당 팀이 존재하지 않습니다.")
-//        );
-//
-//        weekTeamRepository.delete(weekTeam);
-//
-//        return "삭제 완료";
-//    }
-//
-//    //팀원 삭제
-//    @Transactional
-//    public String deleteMember(Long memberId, UserDetailsImpl userDetails) {
-//        // 로그인 여부 확인
-////        validator.loginCheck(userDetails);
-////        //관리자 접근 권한 확인
-////        validator.adminCheck(userDetails);
-//
-//        Member member = memberRepository.findById(memberId).orElseThrow(
-//                () -> new NullPointerException("해당 팀원은 존재하지 않습니다.")
-//        );
-//
-//        memberRepository.delete(member);
-//
-//        return "삭제 완료";
-//    }
-//
-//
-//    //주차 정보
-//    public ArrayList<String> getWeeks(UserDetailsImpl userDetails) {
-//        // 로그인 여부 확인
-////        validator.loginCheck(userDetails);
-////        //관리자 접근 권한 확인
-////        validator.adminCheck(userDetails);
-//
-//        List<WeekTeam> findWeek = weekTeamRepository.findAll();
-//        List<String> weekList = new ArrayList<>();
-//
-//        for (WeekTeam find : findWeek) {
-//            weekList.add(find.getWeek());
-//        }
-//
-//        //중복 제거
-//        HashSet<String> responseDto = new HashSet<>();
-//        responseDto.addAll(weekList);
-//
-//        //리스트로 변환(정렬)
-//        ArrayList<String> response = new ArrayList<>(responseDto);
-//
-//        //정렬
-//        Collections.sort(response);
-//
-//        return response;
-//    }
-//
+
+    //팀 삭제
+    @Transactional
+    public String deleteTeam(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_TEAM_ID)
+        );
+
+        teamRepository.delete(team);
+
+        return "삭제 완료";
+    }
+
 }

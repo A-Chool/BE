@@ -51,26 +51,18 @@ public class TeamController {
         //접근권한 확인
         validator.adminCheck(userDetails);
         return teamService.getTeamList(weekId);
-//        return null;
     }
 
-//
-//    //팀 삭제
-//    @DeleteMapping("/{teamId}")
-//    public String deleteTeam(@PathVariable Long teamId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return teamService.deleteTeam(teamId, userDetails);
-//    }
-//
-//    //팀원 삭제
-//    @DeleteMapping("/members/{memberId}")
-//    public String deleteMember(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return teamService.deleteMember(memberId, userDetails);
-//    }
-//
-//    //주차 정보
-//    @GetMapping("/week")
-//    public ArrayList<String> getWeeks(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return teamService.getWeeks(userDetails);
-//    }
-//
+    @DeleteMapping("/{teamId}")
+    public String deleteTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId){
+
+        log.info("DELETE /admin/admin/teams/" + teamId);
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //접근권한 확인
+        validator.adminCheck(userDetails);
+        return teamService.deleteTeam(teamId);
+
+    }
 }
