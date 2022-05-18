@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,10 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "WEEK_TEAM_ID")
     private WeekTeam weekTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

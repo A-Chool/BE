@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.toDo;
 
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
@@ -20,14 +21,16 @@ public class TodoService {
     public void createToDo(UserDetailsImpl userDetails, ToDoDto.RequestToDoDto requestToDoDto) {
         validator.loginCheck(userDetails);
 
-        WeekTeam weekTeam = toDoValidator.findWeekTeam(requestToDoDto.getTeamId()); //Id로 주차팀 찾기
-
+//        WeekTeam weekTeam = toDoValidator.findWeekTeam(requestToDoDto.getTeamId()); //Id로 주차팀 찾기
+        Team team = toDoValidator.findTeam(requestToDoDto.getTeamId());
         ToDo toDo = ToDo.builder()
                 .todoContent(requestToDoDto.getTodoContent())
-                .weekTeam(weekTeam)
+//                .weekTeam(weekTeam)
+                .team(team)
                 .build();
 
-        weekTeam.addToDo(toDo);
+//        weekTeam.addToDo(toDo);
+        team.addToDo(toDo);
         toDoRepository.save(toDo);
     }
 

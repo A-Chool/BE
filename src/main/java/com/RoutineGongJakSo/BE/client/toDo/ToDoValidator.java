@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.toDo;
 
+import com.RoutineGongJakSo.BE.admin.team.Team;
+import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ public class ToDoValidator {
 
     private final ToDoRepository toDoRepository;
     private final WeekTeamRepository weekTeamRepository;
+    private final TeamRepository teamRepository;
 
     //Id 값으로 할 일 찾기
     public ToDo findToDo(Long todoId) {
@@ -29,8 +32,16 @@ public class ToDoValidator {
         return weekTeam;
     }
 
-    public List<ToDo> toDoList(WeekTeam weekTeam) {
-        List<ToDo> toDoList = toDoRepository.findByWeekTeam(weekTeam);
+    //Id로 팀 찾기
+    public Team findTeam(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new NullPointerException("해당 팀이 존재하지 않습니다."));
+        return team;
+    }
+
+    public List<ToDo> toDoList(Team team) {
+        List<ToDo> toDoList = toDoRepository.findByTeam(team);
         return toDoList;
     }
+
 }

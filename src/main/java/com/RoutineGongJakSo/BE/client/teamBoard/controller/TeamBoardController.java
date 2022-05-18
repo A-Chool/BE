@@ -22,27 +22,27 @@ public class TeamBoardController {
     }
 
     // TeamBoard 클릭 시
-    @GetMapping("/api/user/teamBoard/{weekTeamId}")
-    public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekTeamId) {
-        return teamBoardService.getTeamBoard(userDetails, weekTeamId);
+    @GetMapping("/api/user/teamBoard/{teamId}")
+    public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId) {
+        return teamBoardService.getTeamBoard(userDetails, teamId);
     }
 
     // 그라운드 룰 수정
-    @PutMapping("/api/user/teamBoard/groundRule/{weekTeamId}")
+    @PutMapping("/api/user/teamBoard/groundRule/{teamId}")
     public void updateGroundRule(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long weekTeamId,
+            @PathVariable Long teamId,
             @RequestBody GroundRuleDto groundRule) {
-        teamBoardService.updateGroundRule(userDetails, weekTeamId, groundRule);
+        teamBoardService.updateGroundRule(userDetails, teamId, groundRule);
     }
 
     // 워크스페이스 수정
-    @PutMapping("/api/user/teamBoard/workSpace/{weekTeamId}")
+    @PutMapping("/api/user/teamBoard/workSpace/{teamId}")
     public void updateWorkSpace(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long weekTeamId,
+            @PathVariable Long teamId,
             @RequestBody WorkSpaceDto workSpace) {
-        teamBoardService.updateWorkSpace(userDetails, weekTeamId, workSpace);
+        teamBoardService.updateWorkSpace(userDetails, teamId, workSpace);
     }
 
 }

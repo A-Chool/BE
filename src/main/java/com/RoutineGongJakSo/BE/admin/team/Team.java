@@ -22,10 +22,10 @@ public class Team {
     @Column(nullable = false)
     private String teamName;
 
-    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Member> memberList;
 
-    @OneToMany(mappedBy = "weekTeam", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<ToDo> toDoList;
 
     @ManyToOne

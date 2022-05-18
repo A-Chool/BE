@@ -19,7 +19,7 @@ public class TeamBoardDto {
     public Long teamId;
     public String teamName;
     public String weekName;
-    public List<MemberDto> memberList;
+    public List<MemberDto.ResponseDto> memberList;
     public String groundRule;
     public String workSpace;
     public List<ToDoDto.OriginToDoDto> toDoList;

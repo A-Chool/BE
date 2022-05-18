@@ -3,6 +3,7 @@ package com.RoutineGongJakSo.BE.client.teamBoard.service;
 import com.RoutineGongJakSo.BE.admin.member.Member;
 import com.RoutineGongJakSo.BE.admin.member.MemberDto;
 import com.RoutineGongJakSo.BE.admin.member.MemberRepository;
+import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeam;
 import com.RoutineGongJakSo.BE.admin.team.WeekTeamRepository;
 import com.RoutineGongJakSo.BE.client.teamBoard.dto.*;
@@ -38,14 +39,19 @@ public class TeamBoardService {
         List<WeekTeam> weekTeamList = new ArrayList<>();
         List<WeekTeamDto> weekTeamDtoList = new ArrayList<>();
 
+        List<Team> teamList = new ArrayList<>();
         for (Member member : userMemberList) {
             WeekTeam weekTeam = member.getWeekTeam();
+            Team team = member.getTeam();
             weekTeamList.add(weekTeam);
+            teamList.add(team);
             weekTeamDtoList.add(new WeekTeamDto(weekTeam));
         }
 
-        WeekTeam lastTeam = weekTeamList.get(weekTeamList.size() - 1);
+//        WeekTeam lastTeam = weekTeamList.get(weekTeamList.size() - 1);
+        //Todo lastTeam display true 인걸로 수정해야함
 
+        Team lastTeam = teamList.get(0);
         List<ToDo> toDoList = toDoValidator.toDoList(lastTeam);
 
         List<ToDoDto.OriginToDoDto> originToDoDtoList = new ArrayList<>();
@@ -60,17 +66,18 @@ public class TeamBoardService {
         }
 
         List<Member> teamMemberList = lastTeam.getMemberList();
-        List<MemberDto> teamMemberDtoList = new ArrayList<>();
+        List<MemberDto.ResponseDto> teamResponseDtoList = new ArrayList<>();
         for (Member member : teamMemberList) {
-            MemberDto memberDto = new MemberDto();
-            memberDto.setMemberId(member.getMemberId());
-            memberDto.setUser(new UserDto(member.getUser()));
-            teamMemberDtoList.add(memberDto);
+            MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
+            responseDto.setMemberId(member.getMemberId());
+            responseDto.setUser(new UserDto(member.getUser()));
+            teamResponseDtoList.add(responseDto);
         }
-        TeamBoardDto teamBoardDto = new TeamBoardDto(lastTeam);
+//        TeamBoardDto teamBoardDto = new TeamBoardDto(lastTeam);
+        TeamBoardDto teamBoardDto = new TeamBoardDto();
 
         teamBoardDto.setWeekTeamList(weekTeamDtoList);
-        teamBoardDto.setMemberList(teamMemberDtoList);
+        teamBoardDto.setMemberList(teamResponseDtoList);
         teamBoardDto.setToDoList(originToDoDtoList);
 
         System.out.println("teamBoardDto = " + teamBoardDto);
@@ -109,13 +116,15 @@ public class TeamBoardService {
         weekTeamRepository.save(weekTeam);
     }
 
-    public TeamBoardDto getTeamBoard(UserDetailsImpl userDetails, Long weekTeamId) {
+    public TeamBoardDto getTeamBoard(UserDetailsImpl userDetails, Long teamId) {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
-        WeekTeam findWeekTeam = toDoValidator.findWeekTeam(weekTeamId); //Id로 주차팀 찾기
+//        WeekTeam findWeekTeam = toDoValidator.findWeekTeam(weekTeamId); //Id로 주차팀 찾기
 
-        List<ToDo> toDoList = toDoValidator.toDoList(findWeekTeam);
+        Team findTeam = toDoValidator.findTeam(teamId);
+
+        List<ToDo> toDoList = toDoValidator.toDoList(findTeam);
 
         List<ToDoDto.OriginToDoDto> originToDoDtoList = new ArrayList<>();
 
@@ -139,22 +148,22 @@ public class TeamBoardService {
             WeekTeam weekTeam = member.getWeekTeam();
             weekTeamList.add(weekTeam);
             weekTeamDtoList.add(new WeekTeamDto(weekTeam));
-            if (weekTeamId.equals(weekTeam.getWeekTeamId())) {
+            if (teamId.equals(weekTeam.getWeekTeamId())) {
                 targetTeam = weekTeam;
             }
         }
         List<Member> teamMemberList = targetTeam.getMemberList();
-        List<MemberDto> teamMemberDtoList = new ArrayList<>();
+        List<MemberDto.ResponseDto> teamResponseDtoList = new ArrayList<>();
         for (Member member : teamMemberList) {
-            MemberDto memberDto = new MemberDto();
-            memberDto.setMemberId(member.getMemberId());
-            memberDto.setUser(new UserDto(member.getUser()));
-            teamMemberDtoList.add(memberDto);
+            MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
+            responseDto.setMemberId(member.getMemberId());
+            responseDto.setUser(new UserDto(member.getUser()));
+            teamResponseDtoList.add(responseDto);
         }
         TeamBoardDto teamBoardDto = new TeamBoardDto(targetTeam);
 
         teamBoardDto.setWeekTeamList(weekTeamDtoList);
-        teamBoardDto.setMemberList(teamMemberDtoList);
+        teamBoardDto.setMemberList(teamResponseDtoList);
         teamBoardDto.setToDoList(originToDoDtoList);
 
         System.out.println("teamBoardDto = " + teamBoardDto);

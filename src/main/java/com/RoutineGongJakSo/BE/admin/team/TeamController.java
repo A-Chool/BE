@@ -41,38 +41,41 @@ public class TeamController {
     }
 
     //해당 주차의 모든 팀을 조회
-    @GetMapping("/{week}")
-    public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
-        return teamService.getTeamList(userDetails, week);
+    @GetMapping("/{weekId}")
+    public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
+
+        log.info("GET /admin/admin/teams/" + weekId);
+        //로그인 여부 확인
+        validator.loginCheck(userDetails);
+
+        //접근권한 확인
+        validator.adminCheck(userDetails);
+        return teamService.getTeamList(weekId);
+//        return null;
     }
 
-    //팀원 추가
-    @PostMapping("/members")
-    public String addMembers(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TeamDto.AddTeamDto addTeamDto) {
-        return teamService.addMembers(userDetails, addTeamDto);
-    }
-
-    //팀 삭제
-    @DeleteMapping("/{teamId}")
-    public String deleteTeam(@PathVariable Long teamId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return teamService.deleteTeam(teamId, userDetails);
-    }
-
-    //팀원 삭제
-    @DeleteMapping("/members/{memberId}")
-    public String deleteMember(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return teamService.deleteMember(memberId, userDetails);
-    }
-
-    //주차 정보
-    @GetMapping("/week")
-    public ArrayList<String> getWeeks(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return teamService.getWeeks(userDetails);
-    }
-
-    //해당 주차에 멤버아이디가 없는 유저 리스트
-    @GetMapping("/noMember/{week}")
-    public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
-        return teamService.getNoMember(userDetails, week);
-    }
+//
+//    //팀 삭제
+//    @DeleteMapping("/{teamId}")
+//    public String deleteTeam(@PathVariable Long teamId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return teamService.deleteTeam(teamId, userDetails);
+//    }
+//
+//    //팀원 삭제
+//    @DeleteMapping("/members/{memberId}")
+//    public String deleteMember(@PathVariable Long memberId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return teamService.deleteMember(memberId, userDetails);
+//    }
+//
+//    //주차 정보
+//    @GetMapping("/week")
+//    public ArrayList<String> getWeeks(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return teamService.getWeeks(userDetails);
+//    }
+//
+//    //해당 주차에 멤버아이디가 없는 유저 리스트
+//    @GetMapping("/noMember/{week}")
+//    public List<TeamDto.GetNoMember> getNoMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable String week) {
+//        return teamService.getNoMember(userDetails, week);
+//    }
 }
