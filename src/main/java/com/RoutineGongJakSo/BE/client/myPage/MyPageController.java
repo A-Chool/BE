@@ -3,10 +3,7 @@ package com.RoutineGongJakSo.BE.client.myPage;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -20,6 +17,12 @@ public class MyPageController {
     public String updateImage(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @RequestPart("imageUrl") MultipartFile multipartFile){
         return myPageService.updateImage(userDetails, multipartFile);
+    }
+
+    @PutMapping("/api/user/mypage")
+    public String updateUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @RequestBody MyPageDto myPageDto) {
+        return myPageService.updateUserInfo(userDetails, myPageDto);
     }
 
     //프로필 이미지 삭제

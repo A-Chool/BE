@@ -77,6 +77,7 @@ public class MyPageService {
     }
 
     // 프로필 이미지 삭제
+    @Transactional
     public String deleteImage(UserDetailsImpl userDetails) {
         User user = validator.userInfo(userDetails);
         if (user.getUserImageUrl() != null) {
@@ -92,6 +93,21 @@ public class MyPageService {
         }
 
         return "프로필 이미지 삭제 완료!";
+    }
+
+    //프로필 정보 업데이트
+    @Transactional
+    public String updateUserInfo(UserDetailsImpl userDetails, MyPageDto myPageDto) {
+        User user = validator.userInfo(userDetails);
+
+        user.setUserName(myPageDto.getUserNickName());
+        user.setUserTag(myPageDto.getUserTag());
+        user.setUserGitHub(myPageDto.getUserGitHub());
+        user.setKakaoNickName(myPageDto.getUserKakao());
+
+        userRepository.save(user);
+
+        return "저장 완료";
     }
 
 
