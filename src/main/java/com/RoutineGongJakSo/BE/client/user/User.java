@@ -40,6 +40,15 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String naverId;
 
+    @Column
+    private String userTag;
+
+    @Column
+    private String userGitHub;
+
+    @Column
+    private String userImage;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CheckIn> checkIn;
 
