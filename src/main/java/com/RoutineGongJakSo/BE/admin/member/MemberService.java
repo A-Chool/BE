@@ -47,15 +47,16 @@ public class MemberService {
 
         // 이미 소속된 팀이 존재하는지 확인
         List<Team> teamList = targetWeek.getTeamList();
+
+        if(!teamList.contains(targetTeam)){
+            throw new CustomException(ErrorCode.NOT_FOUND_TEAM_IN_WEEK);
+        };
+
         for (Team _team : teamList) {
             List<Member> memberList = _team.getMemberList();
-            System.out.println("_team.getTeamId() = " + _team.getTeamId());
-            System.out.println("_team.getTeamName() = " + _team.getTeamName());
 
             for (Member _member : memberList) {
                 if (_member.getUser() == targetUser) {
-                    System.out.println("_member.getUser().getUserName() = " + _member.getUser().getUserName());
-                    System.out.println("targetUser.getUserName() = " + targetUser.getUserName());
                     throw new CustomException(ErrorCode.SOLD_OUT_USER);
                 }
             }
