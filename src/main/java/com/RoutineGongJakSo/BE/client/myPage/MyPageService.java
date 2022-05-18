@@ -86,7 +86,7 @@ public class MyPageService {
     public String deleteImage(UserDetailsImpl userDetails) {
         User user = validator.userInfo(userDetails);
         if (user.getUserImageUrl() != null) {
-            String deleteUrl = user.getUserImageUrl().replace("https://myawsssam2.s3.ap-northeast-2.amazonaws.com/", "");
+            String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/", "");
             boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);

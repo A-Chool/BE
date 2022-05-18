@@ -23,7 +23,7 @@ public enum ErrorCode {
     NOT_FOUND_CATEGORY_ID(HttpStatus.NOT_FOUND, "404_2", "카테고리 코드가 존재하지 않습니다."),
 
     // 500 Sever  Error
-    FAIL_FILE_UPLODA(HttpStatus.INTERNAL_SERVER_ERROR, "505_50", "파일 업로드에 실패 했습니다.")
+    FAIL_FILE_UPLOAD(HttpStatus.INTERNAL_SERVER_ERROR, "505_50", "파일 업로드에 실패 했습니다.")
     ;
 
     private final HttpStatus httpStatus;

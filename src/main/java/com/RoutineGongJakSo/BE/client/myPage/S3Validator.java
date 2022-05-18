@@ -72,7 +72,7 @@ public class S3Validator {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             imageUrl = s3Client.getUrl(bucket, fileName).toString();
         }catch (IOException e){
-            throw new CustomException(FAIL_FILE_UPLODA);
+            throw new CustomException(FAIL_FILE_UPLOAD);
         }
         return imageUrl;
     }
