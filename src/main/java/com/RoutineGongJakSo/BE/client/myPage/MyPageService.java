@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.myPage;
 
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
+import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.amazonaws.auth.AWSCredentials;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +60,7 @@ public class MyPageService {
             boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
+
                 String ImageUrl = s3Validator.uploadOne(multipartFile);
 
                 user.setUserImageUrl(ImageUrl);
@@ -69,7 +73,25 @@ public class MyPageService {
             userRepository.save(user);
         }
 
-        return "업로드 성공";
+        return "프로필 이미지가 변경되었습니다.";
+    }
+
+    // 프로필 이미지 삭제
+    public String deleteImage(UserDetailsImpl userDetails) {
+        User user = validator.userInfo(userDetails);
+        if (user.getUserImageUrl() != null) {
+            String deleteUrl = user.getUserImageUrl().replace("https://myawsssam2.s3.ap-northeast-2.amazonaws.com/", "");
+            boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
+            if (isExitstObject) {
+                s3Client.deleteObject(bucket, deleteUrl);
+                user.setUserImageUrl(null);
+                userRepository.save(user);
+            }
+        } else {
+            throw new CustomException(LIAR_USER_IMAGE);
+        }
+
+        return "프로필 이미지 삭제 완료!";
     }
 
 
