@@ -13,8 +13,8 @@ public enum ErrorCode {
     BLANK_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_2", "주차는 필수 입력값입니다."),
     DISPLAY_WEEK_ID(HttpStatus.BAD_REQUEST, "400_3", "이 주차는 현재 display 중이며, 지울 수 없습니다."),
     TOO_LONG_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_4", "주차는 필수 입력값입니다."),
-    BAD_FORM_TYPE(HttpStatus.BAD_REQUEST, "400_5", "이미지 형식이 올바르지 않습니다."),
-    LIAR_USER_IMAGE(HttpStatus.BAD_REQUEST, "400_6", "업로드된 이미지가 존재하지 않습니다."),
+    BAD_FORM_TYPE(HttpStatus.BAD_REQUEST, "400_50", "이미지 형식이 올바르지 않습니다."),
+    LIAR_USER_IMAGE(HttpStatus.BAD_REQUEST, "400_51", "업로드된 이미지가 존재하지 않습니다."),
 
     // 404 Not Found
     NOT_FOUND_WEEK_ID(HttpStatus.NOT_FOUND, "404_1", "주차 아이디가 존재하지 않습니다."),
@@ -23,7 +23,7 @@ public enum ErrorCode {
     NOT_FOUND_CATEGORY_ID(HttpStatus.NOT_FOUND, "404_2", "카테고리 코드가 존재하지 않습니다."),
 
     // 500 Sever  Error
-    FAIL_FILE_UPLODA(HttpStatus.INTERNAL_SERVER_ERROR, "505_1", "파일 업로드에 실패 했습니다.")
+    FAIL_FILE_UPLODA(HttpStatus.INTERNAL_SERVER_ERROR, "505_50", "파일 업로드에 실패 했습니다.")
     ;
 
     private final HttpStatus httpStatus;
