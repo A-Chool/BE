@@ -12,6 +12,11 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
+    //마이페이지 조회
+    @GetMapping("/api/user/mypage")
+    public MyPageDto.ResponseDto getMyPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return myPageService.getMyPage(userDetails);
+    }
     //프로필 이미지 수정
     @PutMapping("/api/user/mypage/image")
     public String updateImage(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -20,8 +25,8 @@ public class MyPageController {
     }
 
     @PutMapping("/api/user/mypage")
-    public String updateUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @RequestBody MyPageDto myPageDto) {
+    public MyPageDto.ResponseDto updateUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @RequestBody MyPageDto.PutRequestDto myPageDto) {
         return myPageService.updateUserInfo(userDetails, myPageDto);
     }
 
@@ -30,5 +35,4 @@ public class MyPageController {
     public String deleteImage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return myPageService.deleteImage(userDetails);
     }
-
 }
