@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.myPage;
 
+import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -11,16 +12,16 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Slf4j
 @Component
@@ -68,7 +69,7 @@ public class S3Validator {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             imageUrl = s3Client.getUrl(bucket, fileName).toString();
         }catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
+            throw new CustomException(FAIL_FILE_UPLODA);
         }
         return imageUrl;
     }
@@ -76,7 +77,7 @@ public class S3Validator {
     // 파일 유효성 검사
     private String getFileExtension(String fileName) {
         if (fileName.length() == 0) {
-            throw new NullPointerException("이미지 형식이 올바르지 않습니다.");
+            throw new CustomException(BAD_FORM_TYPE);
         }
         ArrayList<String> fileValidate = new ArrayList<>();
         fileValidate.add(".jpg");
@@ -87,7 +88,7 @@ public class S3Validator {
         fileValidate.add(".PNG");
         String idxFileName = fileName.substring(fileName.lastIndexOf("."));
         if (!fileValidate.contains(idxFileName)) { // 해당 문자열이 포함되엉 ㅣㅆ는지 확인
-            throw new NullPointerException("이미지 형식이 올바르지 않습니다.");
+            throw new CustomException(BAD_FORM_TYPE);
         }
         return fileName.substring(fileName.lastIndexOf("."));
     }
