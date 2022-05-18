@@ -16,14 +16,14 @@ public class TeamBoardController {
     private final TeamBoardService teamBoardService;
 
     // TeamBoard 클릭 시
-    @GetMapping("/api/user/teamBoard")
-    public TeamBoardDto getAllTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return teamBoardService.getAllTeamBoard(userDetails);
-    }
+//    @GetMapping("/api/user/teamBoard")
+//    public TeamBoardDto getAllTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return teamBoardService.getAllTeamBoard(userDetails);
+//    }
 
     // TeamBoard 클릭 시
-    @GetMapping("/api/user/teamBoard/{teamId}")
-    public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId) {
+    @GetMapping("/api/user/teamBoard")
+    public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(required = false) Long teamId) {
         return teamBoardService.getTeamBoard(userDetails, teamId);
     }
 
