@@ -25,10 +25,11 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                         final Authentication authentication) {
+
         final UserDetailsImpl userDetails = ((UserDetailsImpl) authentication.getPrincipal());
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
-        final String refreshToken = JwtTokenUtils.generateRefreshToken(userDetails.getUserEmail());
+        final String refreshToken = JwtTokenUtils.generateRefreshToken();
         log.info("refreshToken : " + refreshToken);
         log.info("accessToken : " + token);
         // todo: generateJwtToken - JWT 토큰이 만들어진다.
@@ -38,9 +39,9 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         //리프레쉬 토큰을 저장
         RefreshToken refresh = RefreshToken.builder()
                 .refreshToken(refreshToken)
+                .userEmail(userDetails.getUserEmail())
                 .build();
 
         refreshTokenRepository.save(refresh);
-
     }
 }

@@ -61,13 +61,12 @@ public class JwtTokenUtils {
     }
 
     // Refresh Token
-    public static String generateRefreshToken(String userEmail){
+    public static String generateRefreshToken(){
         String token = null;
         try{
             long refreshToken = 60 * 60 * 60 * 1000;
             token = JWT.create()
                     .withIssuer("Mr.A-Chool")
-                    .withClaim(CLAIM_USER_EMAIL, userEmail)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date((System.currentTimeMillis() + refreshToken)))
                     .sign(generateAlgorithm());
         } catch (Exception e) {

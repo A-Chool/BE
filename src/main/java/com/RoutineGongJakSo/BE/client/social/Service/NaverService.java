@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.social.Service;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -43,6 +45,7 @@ public class NaverService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     // 네이버 로그인
     public void naverLogin(String code, HttpServletResponse response) throws JsonProcessingException {
@@ -178,13 +181,21 @@ public class NaverService {
         // response header에 token 추가
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
-        String refreshToken = JwtTokenUtils.generateRefreshToken(userDetailsImpl.getUserEmail());
+        String refreshToken = JwtTokenUtils.generateRefreshToken();
 
         response.addHeader("Authorization", "BEARER" + " " + token);
         response.addHeader("RefreshAuthorization", "BEARER" + " " + refreshToken);
 
         log.info("JWT_TOKEN: " + token);
         log.info("RefreshToken: " + refreshToken);
+
+        //리프레쉬 토큰을 저장
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .userEmail(userDetailsImpl.getUserEmail())
+                .build();
+
+        refreshTokenRepository.save(refresh);
 
     }
 }

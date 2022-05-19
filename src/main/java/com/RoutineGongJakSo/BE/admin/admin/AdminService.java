@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.admin.admin;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -24,6 +26,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     //관리자 로그인
     @Transactional
@@ -42,11 +45,20 @@ public class AdminService {
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "BEARER " + JwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
-        headers.add("RefreshAuthorization", "BEARER" + JwtTokenUtils.generateRefreshToken(user.getUserEmail()));
+        headers.add("RefreshAuthorization", "BEARER " + JwtTokenUtils.generateRefreshToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         log.info("Headers access Token 값 확인: " + headers.get("Authorization"));
         log.info("Headers refresh Token 값 확인: " + headers.get("RefreshAuthorization"));
+
+        //리프레쉬 토큰을 저장
+        //PK = userEmail
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(JwtTokenUtils.generateRefreshToken())
+                .userEmail(user.getUserEmail())
+                .build();
+
+        refreshTokenRepository.save(refresh);
 
         return headers;
     }

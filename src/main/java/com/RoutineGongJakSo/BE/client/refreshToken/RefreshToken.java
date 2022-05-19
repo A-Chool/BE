@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshToken {
@@ -15,7 +14,10 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long refreshTokenId;
 
-    @Column
+    @Column(nullable = false)
     private String refreshToken;
+
+    @Column(nullable = false)
+    private String userEmail;
 
 }
