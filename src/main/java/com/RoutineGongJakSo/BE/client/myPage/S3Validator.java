@@ -58,7 +58,8 @@ public class S3Validator {
 
     //하나의 파일 업로드
     public String uploadOne(MultipartFile file) {
-        String fileName = createFileName(file.getOriginalFilename());
+        String dirname = "userProfile";
+        String fileName = dirname + "/" + createFileName(file.getOriginalFilename());
         String imageUrl = "";
         ObjectMetadata objectMetadata = new ObjectMetadata(); // ObjectMetadata Amazon S3와 함께 저장된 객체 메타데이터
         objectMetadata.setContentLength(file.getSize()); //연결된 개체의 크기를 바이트 단위로 나타내는 Content-Length HTTP 헤더를 설정
