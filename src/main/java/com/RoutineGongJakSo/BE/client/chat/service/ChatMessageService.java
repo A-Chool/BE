@@ -1,19 +1,24 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
 import com.RoutineGongJakSo.BE.client.chat.dto.ChatMessageDto;
+import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.pubsub.RedisPublisher;
+import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatMessageRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
+import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +28,9 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
-    private final ChatMessageSaveService chatMessageSaveService;
-    private final RedisTemplate redisTemplate;
+    private final ChatFileService chatFileService;
+    private final S3Validator s3Validator;
+    private final ChatFileRepository chatFileRepository;
 
     public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
@@ -57,19 +63,40 @@ public class ChatMessageService {
     public List<ChatMessage> getMessages(String roomId) {
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
 
-        try {
-            chatMessageSaveService.fileWriter(chatMessageList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (chatMessageList.size() > 3) {
+            try {
+                // 메시지 리스트 txt 파일로 저장
+                List<ChatFile> foundList = chatFileRepository.findAllByRoomId(roomId);
+                int cnt = foundList.size();
 
+                String[] detail = chatFileService.fileWriter(chatMessageList.subList(0, 3), roomId, cnt);
+                String path = detail[0];
+                String fileName = detail[1];
+
+                File file = new File(path + fileName);
+
+                //S3 에 txt 파일 업로드
+                String s3FileName = s3Validator.uploadTxtFile(file);
+
+                // 파일 db 에 저장
+                ChatFile chatFile = ChatFile.builder()
+                        .roomId(roomId)
+                        .fileUrl(s3FileName)
+                        .build();
+                chatFileRepository.save(chatFile);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         return chatMessageList;
     }
 
-    public List<ChatMessage> getMessageFromFile(String roomId){
+    // 파일 -> List<ChatMessage> 로 읽어오기
+    public List<ChatMessage> getMessageFromFile(String roomId) {
         try {
-            String result = chatMessageSaveService.fileReader();
+            String result = chatFileService.fileReader();
             System.out.println("result = " + result);
             ObjectMapper mapper = new ObjectMapper();
 

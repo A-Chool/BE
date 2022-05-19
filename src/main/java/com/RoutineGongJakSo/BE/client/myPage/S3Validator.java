@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -96,4 +97,12 @@ public class S3Validator {
         return idxFileName;
     }
 
+    // file 업로드
+    public String uploadTxtFile(File file) {
+        PutObjectRequest putObjectRequest =
+                new PutObjectRequest(bucket+"/chat",file.getName(),file);
+        putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
+        amazonS3Client().putObject(putObjectRequest);
+        return file.getName();
+    }
 }
