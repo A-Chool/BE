@@ -168,7 +168,12 @@ public class KakaoService {
         // response header에 token 추가
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
-        System.out.println("JWT토큰 : " + token);
+        String refreshToken = JwtTokenUtils.generateRefreshToken(userDetailsImpl.getUserEmail());
+
         response.addHeader("Authorization", "BEARER" + " " + token);
+        response.addHeader("RefreshAuthorization", "BEARER" + " " + refreshToken);
+
+        log.info("JWT_TOKEN: " + token);
+        log.info("RefreshToken: " + refreshToken);
     }
 }
