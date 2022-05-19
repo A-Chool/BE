@@ -8,6 +8,7 @@ import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,11 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
     private final UserRepository userRepository;
-    private final JwtTokenUtils jwtTokenUtils;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
 
@@ -40,10 +41,12 @@ public class AdminService {
 
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + jwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
+        headers.add("Authorization", "BEARER " + JwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
+        headers.add("RefreshAuthorization", "BEARER" + JwtTokenUtils.generateRefreshToken(user.getUserEmail()));
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        System.out.println("Headers 토큰값 확인: " + headers.get("Authorization"));
+        log.info("Headers access Token 값 확인: " + headers.get("Authorization"));
+        log.info("Headers refresh Token 값 확인: " + headers.get("RefreshAuthorization"));
 
         return headers;
     }
