@@ -6,6 +6,7 @@ import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
@@ -28,7 +29,7 @@ public class MemberService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(Long weekId, MemberDto.RequestDto addTeamDto) {
+    public List<MemberDto.ResponseDto> addMembers(Long weekId, MemberDto.RequestDto addTeamDto) {
 
         Long targetTeamId = addTeamDto.getTeamId();
         Long targetUserId = addTeamDto.getUserId();
@@ -70,9 +71,19 @@ public class MemberService {
         targetUser.addMember(member);
         targetTeam.addMember(member);
 
+        // 팀원 추가
         memberRepository.save(member);
 
-        return "팀원 추가 완료!";
+        List<Member> memberList = targetTeam.getMemberList();
+        List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
+        for(Member _member : memberList){
+            MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
+            responseDto.setMemberId(_member.getMemberId());
+            responseDto.setUser(new UserDto(_member.getUser()));
+            responseDtoList.add(responseDto);
+        }
+
+        return responseDtoList;
     }
 
     //팀원 삭제

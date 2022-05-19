@@ -19,7 +19,7 @@ public class MemberController {
 
     //팀원 추가
     @PostMapping("/api/admin/member/{weekId}")
-    public String addMembers(
+    public List<MemberDto.ResponseDto> addMembers(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody MemberDto.RequestDto addTeamDto,
             @PathVariable Long weekId) {
