@@ -7,8 +7,11 @@ import com.RoutineGongJakSo.BE.client.chat.repo.ChatMessageRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +23,8 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
+    private final ChatMessageSaveService chatMessageSaveService;
+    private final RedisTemplate redisTemplate;
 
     public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
@@ -52,6 +57,27 @@ public class ChatMessageService {
     public List<ChatMessage> getMessages(String roomId) {
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
 
+        try {
+            chatMessageSaveService.fileWriter(chatMessageList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return chatMessageList;
+    }
+
+    public List<ChatMessage> getMessageFromFile(String roomId){
+        try {
+            String result = chatMessageSaveService.fileReader();
+            System.out.println("result = " + result);
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
+            return test;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
