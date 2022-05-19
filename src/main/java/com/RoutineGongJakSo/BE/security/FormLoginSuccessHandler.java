@@ -36,6 +36,13 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         response.addHeader(AUTH_HEADER, TOKEN_TYPE + " " + token);
         response.addHeader(REFRESH_HEADER,TOKEN_TYPE + " " + refreshToken);
 
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetails.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(refreshToken);
+            return;
+        }
+
         //리프레쉬 토큰을 저장
         RefreshToken refresh = RefreshToken.builder()
                 .refreshToken(refreshToken)

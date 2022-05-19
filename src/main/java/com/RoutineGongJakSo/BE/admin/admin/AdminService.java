@@ -51,6 +51,13 @@ public class AdminService {
         log.info("Headers access Token 값 확인: " + headers.get("Authorization"));
         log.info("Headers refresh Token 값 확인: " + headers.get("RefreshAuthorization"));
 
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(user.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            return headers;
+        }
+
         //리프레쉬 토큰을 저장
         //PK = userEmail
         RefreshToken refresh = RefreshToken.builder()

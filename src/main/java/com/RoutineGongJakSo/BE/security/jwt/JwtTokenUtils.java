@@ -16,6 +16,7 @@ public class JwtTokenUtils {
     public static final String CLAIM_USER_NAME = "USER_NAME";
     public static final String CLAIM_USER_EMAIL = "USER_EMAIL";
     public static final String CLAIM_USER_LEVEL = "USER_LEVEL";
+    public static final String REFRESH_MESSAGE = "REFRESH_MESSAGE";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {

@@ -189,6 +189,13 @@ public class NaverService {
         log.info("JWT_TOKEN: " + token);
         log.info("RefreshToken: " + refreshToken);
 
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetailsImpl.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            return;
+        }
+
         //리프레쉬 토큰을 저장
         RefreshToken refresh = RefreshToken.builder()
                 .refreshToken(refreshToken)
