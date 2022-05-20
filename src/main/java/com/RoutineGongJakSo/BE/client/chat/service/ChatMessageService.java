@@ -1,7 +1,6 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
 import com.RoutineGongJakSo.BE.client.chat.dto.ChatMessageDto;
-import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.pubsub.RedisPublisher;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
@@ -10,16 +9,15 @@ import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
@@ -61,42 +59,16 @@ public class ChatMessageService {
     }
 
     public List<ChatMessage> getMessages(String roomId) {
+        log.info("getMessage");
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
-
-        if (chatMessageList.size() > 3) {
-            try {
-                // 메시지 리스트 txt 파일로 저장
-                List<ChatFile> foundList = chatFileRepository.findAllByRoomId(roomId);
-                int cnt = foundList.size();
-
-                String[] detail = chatFileService.fileWriter(chatMessageList.subList(0, 3), roomId, cnt);
-                String path = detail[0];
-                String fileName = detail[1];
-
-                File file = new File(path + fileName);
-
-                //S3 에 txt 파일 업로드
-                String s3FileName = s3Validator.uploadTxtFile(file);
-
-                // 파일 db 에 저장
-                ChatFile chatFile = ChatFile.builder()
-                        .roomId(roomId)
-                        .fileUrl(s3FileName)
-                        .build();
-                chatFileRepository.save(chatFile);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         return chatMessageList;
     }
 
     // 파일 -> List<ChatMessage> 로 읽어오기
-    public List<ChatMessage> getMessageFromFile(String roomId) {
+    public List<ChatMessage> getMessageFromFile(String roomId, Long prevId) {
         try {
-            String result = chatFileService.fileReader();
+            String result = chatFileService.fileReader(roomId, prevId);
             System.out.println("result = " + result);
             ObjectMapper mapper = new ObjectMapper();
 

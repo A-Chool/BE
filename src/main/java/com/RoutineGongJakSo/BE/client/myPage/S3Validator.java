@@ -6,9 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,5 +102,12 @@ public class S3Validator {
         putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3Client().putObject(putObjectRequest);
         return file.getName();
+    }
+
+    public S3Object getTxtFile(String fileName){
+        GetObjectRequest getObjectRequest =
+                new GetObjectRequest(bucket+"/chat", fileName);
+        S3Object targetFile = amazonS3Client().getObject(getObjectRequest);
+        return targetFile;
     }
 }

@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface ChatFileRepository extends JpaRepository<ChatFile, Long> {
 
-    Optional<ChatFile> findByRoomId(String roomId);
+    List<ChatFile> findByRoomId(String roomId);
 
     List<ChatFile> findAllByRoomId(String roomId);
+
+    ChatFile findByPrevId(Long prevId);
 }

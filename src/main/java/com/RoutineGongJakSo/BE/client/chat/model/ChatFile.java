@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.chat.model;
 
 import com.RoutineGongJakSo.BE.util.Timestamped;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -19,7 +20,7 @@ public class ChatFile extends Timestamped {
     @Column
     private String roomId;
 
-    @Column
+    @Column(columnDefinition = "integer default 0")
     private Long prevId;
 
     @Column

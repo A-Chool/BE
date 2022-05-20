@@ -1,20 +1,25 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
+import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
+import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
+import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
-import java.util.Scanner;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatFileService {
+    private final ChatFileRepository chatFileRepository;
+    private final S3Validator s3Validator;
+
     // 파일에 내용 저장하기
     public String[] fileWriter(List<ChatMessage> chatMessageList, String roomId, int cnt) throws Exception {
 
@@ -60,20 +65,31 @@ public class ChatFileService {
         return new String[]{path, fileName};
     }
 
-    public String fileReader() throws Exception {
-        String path = "/home/ubuntu/test/testName.txt";
+    public String fileReader(String roomId, Long prevId) throws Exception {
+        log.info("roomId : {} ", roomId);
+        log.info("prevId : {} ", prevId);
+        String targetFileUrl;
+        if (prevId == null) {
+            List<ChatFile> foundList = chatFileRepository.findByRoomId(roomId);
+            targetFileUrl = foundList.get(foundList.size() - 1).getFileUrl();
+        } else {
+            ChatFile _found = chatFileRepository.findById(prevId).orElseThrow(
+                    () -> new IllegalArgumentException("파일없다")
+            );
+            targetFileUrl = _found.getFileUrl();
+        }
 
-        File file = new File(path);
+        S3Object s3Object = s3Validator.getTxtFile(targetFileUrl);
+
         String temp = "";
 
+        BufferedReader bf = new BufferedReader(new InputStreamReader(s3Object.getObjectContent()));
         try {
-            Scanner scan = new Scanner(file);
-            temp += scan.nextLine();
+            temp += bf.readLine();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("fileReader 에러 : " + e.toString());
         }
-
         return temp;
     }
 }
