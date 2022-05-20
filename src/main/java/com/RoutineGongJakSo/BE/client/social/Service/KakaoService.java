@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.social.Service;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -39,6 +41,7 @@ public class KakaoService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가코드" 로 "액세스 토큰" 요청
@@ -168,7 +171,27 @@ public class KakaoService {
         // response header에 token 추가
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
-        System.out.println("JWT토큰 : " + token);
+        String refreshToken = JwtTokenUtils.generateRefreshToken();
+
         response.addHeader("Authorization", "BEARER" + " " + token);
+        response.addHeader("RefreshAuthorization", "BEARER" + " " + refreshToken);
+
+        log.info("JWT_TOKEN: " + token);
+        log.info("RefreshToken: " + refreshToken);
+
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetailsImpl.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            return;
+        }
+
+        //리프레쉬 토큰을 저장
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .userEmail(userDetailsImpl.getUserEmail())
+                .build();
+
+        refreshTokenRepository.save(refresh);
     }
 }

@@ -61,14 +61,30 @@ public class JwtTokenUtils {
     }
 
     // Refresh Token
-    public static String generateRefreshToken(String userEmail){
+    public static String generateRefreshToken(){
         String token = null;
         try{
             long refreshToken = 60 * 60 * 60 * 1000;
             token = JWT.create()
                     .withIssuer("Mr.A-Chool")
-                    .withClaim(CLAIM_USER_EMAIL, userEmail)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date((System.currentTimeMillis() + refreshToken)))
+                    .sign(generateAlgorithm());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return token;
+    }
+
+    public static String generateReJwtToken(String userName, String userEmail, int userLevel) {
+        String token = null;
+        try {
+            token = JWT.create()
+                    .withIssuer("Mr.A-Chool")
+                    .withClaim(CLAIM_USER_NAME, userName)
+                    .withClaim(CLAIM_USER_EMAIL, userEmail)
+                    .withClaim(CLAIM_USER_LEVEL, userLevel)
+                    // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
+                    .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
         } catch (Exception e) {
             System.out.println(e.getMessage());
