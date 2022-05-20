@@ -19,6 +19,7 @@ public enum ErrorCode {
   
     BAD_FORM_TYPE(HttpStatus.BAD_REQUEST, "400_50", "이미지 형식이 올바르지 않습니다."),
     LIAR_USER_IMAGE(HttpStatus.BAD_REQUEST, "400_51", "업로드된 이미지가 존재하지 않습니다."),
+    BAD_TOKEN(HttpStatus.BAD_REQUEST, "400_52", "유효하지 않은 토큰입니다."),
 
     // 404 Not Found
     NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_0", "유저 아이디가 존재하지 않습니다."),
@@ -30,7 +31,8 @@ public enum ErrorCode {
 
 
     // 500 Sever  Error
-    FAIL_FILE_UPLOAD(HttpStatus.INTERNAL_SERVER_ERROR, "505_50", "파일 업로드에 실패 했습니다.")
+    FAIL_FILE_UPLOAD(HttpStatus.INTERNAL_SERVER_ERROR, "505_50", "파일 업로드에 실패 했습니다."),
+    TRY_SUBSTRING(HttpStatus.INTERNAL_SERVER_ERROR, "505_51", "refreshToken 보낼 때, Bearer 붙여서 보내주는지 확인")
     ;
 
 
