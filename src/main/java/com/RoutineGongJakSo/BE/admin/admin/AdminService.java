@@ -48,13 +48,13 @@ public class AdminService {
         headers.add("RefreshAuthorization", "BEARER " + JwtTokenUtils.generateRefreshToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-
+        log.info("Headers access Token 값 확인: " + headers.get("Authorization"));
+        log.info("Headers refresh Token 값 확인: " + headers.get("RefreshAuthorization"));
 
         RefreshToken findToken = refreshTokenRepository.findByUserEmail(user.getUserEmail());
 
         if (findToken != null){
             findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
-            log.info("액세스 토큰 {}, 리프레쉬 토큰 {}", headers.get("Authorization"), headers.get("RefreshAuthorization"));
             return headers;
         }
 
@@ -67,7 +67,6 @@ public class AdminService {
 
         refreshTokenRepository.save(refresh);
 
-        log.info("액세스 토큰 {}, 리프레쉬 토큰 {}", headers.get("Authorization"), headers.get("RefreshAuthorization"));
         return headers;
     }
 
@@ -98,8 +97,6 @@ public class AdminService {
             responseDtos.add(findDto);
         }
 
-        log.info("전체 유저 조회 {}", responseDtos);
-
         return responseDtos;
     }
 
@@ -114,8 +111,6 @@ public class AdminService {
         //유저아이디로 유저정보 찾기
         User user = validator.findUserIdInfo(userId);
         user.setUserLevel(update.getUserLevel());
-
-        log.info("권한 변경 유저 {}", user);
 
         return "권한이 수정 되었습니다.";
     }
@@ -132,9 +127,6 @@ public class AdminService {
         User user = validator.findUserIdInfo(userId);
 
         userRepository.delete(user);
-
-        log.info("확인 삭제된 유저 {}", user);
-
         return "해당 유저 정보가 삭제되었습니다.";
     }
 }
