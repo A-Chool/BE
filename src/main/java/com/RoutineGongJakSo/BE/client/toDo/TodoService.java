@@ -4,10 +4,12 @@ import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TodoService {
@@ -30,6 +32,8 @@ public class TodoService {
 
 //        weekTeam.addToDo(toDo);
         team.addToDo(toDo);
+
+        log.info("추가된 할 일 {}", toDo);
         toDoRepository.save(toDo);
     }
 
@@ -38,6 +42,8 @@ public class TodoService {
         validator.loginCheck(userDetails);
 
         ToDo todo = toDoValidator.findToDo(todoId); //Id 값으로 할 일 찾기
+
+        log.info("삭제된 할 일 {}", todo);
 
         toDoRepository.delete(todo);
     }
@@ -55,6 +61,8 @@ public class TodoService {
                 .todoContent(todo.getTodoContent())
                 .todoCheck(todo.isTodoCheck())
                 .build();
+
+        log.info("수정된 할 일 {}", responseDto);
         return responseDto;
     }
 
@@ -76,6 +84,7 @@ public class TodoService {
                 .todoCheck(todo.isTodoCheck())
                 .build();
 
+        log.info("완료 여부 {}", responseDto);
         return responseDto;
     }
 }

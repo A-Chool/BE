@@ -10,6 +10,7 @@ import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -94,6 +97,8 @@ public class CheckInService {
                 .build();
         checkInRepository.save(checkIn);
 
+        log.info("체크인 {}", response);
+
         return response;
     }
 
@@ -133,6 +138,8 @@ public class CheckInService {
                     .totalSumTime(total)
                     .todayLog(todayLogDtoList)
                     .build();
+
+            log.info("체크인 기록이 없음 {}", checkInDto);
 
             return checkInDto;
 
@@ -176,6 +183,8 @@ public class CheckInService {
                     .totalSumTime(total)
                     .todayLog(todayLogDtoList)
                     .build();
+
+            log.info("체크인 기록이 1회 이상 있음 {}", checkInDto);
             return checkInDto;
         }
 
@@ -185,6 +194,8 @@ public class CheckInService {
                 .totalSumTime(total)
                 .todayLog(todayLogDtoList)
                 .build();
+
+        log.info("체크인 기록이 있음 {}", checkInDto);
 
         return checkInDto;
     }
@@ -219,15 +230,19 @@ public class CheckInService {
         String daySum = getCheckIn(userDetails).getDaySumTime(); //총 공부시간
 
         if (lastCheckIn.getCheckOut() != null) {
-            throw new NullPointerException("Start 를 먼저 눌러주세요");
+            throw new CustomException(TRY_START);
         }
 
         if (findAnalysis.isPresent()) {
             lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             lastCheckIn.setAnalysis(findCheckIns.get(0).getAnalysis());
             findAnalysis.get().setDaySum(daySum); // 총 공부 시간
+
+            log.info("체크아웃 {}", getCheckIn(userDetails));
+
             return getCheckIn(userDetails);
         }
+
         lastCheckIn.setCheckOut(nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         Analysis analysis = Analysis.builder()
                 .daySum(daySum)
@@ -237,6 +252,8 @@ public class CheckInService {
                 .build();
         lastCheckIn.setAnalysis(analysis);
         analysisRepository.save(analysis);
+
+        log.info("체크아웃 {}", getCheckIn(userDetails));
 
         return getCheckIn(userDetails);
     }
@@ -262,7 +279,7 @@ public class CheckInService {
 
         // display 한 주차 찾기
         Week week = weekRepository.findByDisplay(true).orElseThrow(
-                ()-> new IllegalArgumentException("기본주차 업다")
+                ()-> new CustomException(NO_WEEK)
         );
         List<Team> teamList = teamRepository.findByWeek(week);
 
@@ -299,6 +316,7 @@ public class CheckInService {
 
             teamListDtos.add(teamListDto);
         }
+        log.info("해당 주차 모든 유저의 기록 {}", teamListDtos);
         return teamListDtos;
     }
 }

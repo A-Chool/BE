@@ -10,6 +10,7 @@ import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static com.RoutineGongJakSo.BE.admin.team.TeamValidator.checkTeamDuple;
 import static com.RoutineGongJakSo.BE.admin.week.WeekValidator.checkWeekPresent;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -58,6 +60,8 @@ public class TeamService {
 
         teamRepository.save(team);
 
+        log.info("추가된 팀원 {}", new TeamDto.CreateResponseDto(team));
+
         return new TeamDto.CreateResponseDto(team);
     }
 
@@ -90,6 +94,9 @@ public class TeamService {
                     .build();
             weekTeamDtoList.add(weekTeamDto);
         }
+
+        log.info("해당 주차의 모든 팀 {}", weekTeamDtoList);
+
         return weekTeamDtoList;
     }
 
@@ -102,6 +109,8 @@ public class TeamService {
         );
 
         teamRepository.delete(team);
+
+        log.info("삭제된 팀 {}", team);
 
         return "삭제 완료";
     }

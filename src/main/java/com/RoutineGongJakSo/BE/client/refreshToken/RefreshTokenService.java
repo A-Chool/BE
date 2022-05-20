@@ -6,6 +6,7 @@ import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 
 import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
@@ -38,6 +40,8 @@ public class RefreshTokenService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         findRefresh.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+
+        log.info("재발급 된 액세스 토큰 {}, 재발급 된 리프레쉬 토큰 {}", headers.get("Authorization"), headers.get("RefreshAuthorization"));
 
         return headers;
     }
