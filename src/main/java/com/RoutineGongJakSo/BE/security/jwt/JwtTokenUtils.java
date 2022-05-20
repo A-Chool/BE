@@ -16,7 +16,6 @@ public class JwtTokenUtils {
     public static final String CLAIM_USER_NAME = "USER_NAME";
     public static final String CLAIM_USER_EMAIL = "USER_EMAIL";
     public static final String CLAIM_USER_LEVEL = "USER_LEVEL";
-    public static final String REFRESH_MESSAGE = "REFRESH_MESSAGE";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {
@@ -69,6 +68,23 @@ public class JwtTokenUtils {
             token = JWT.create()
                     .withIssuer("Mr.A-Chool")
                     .withClaim(CLAIM_EXPIRED_DATE, new Date((System.currentTimeMillis() + refreshToken)))
+                    .sign(generateAlgorithm());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return token;
+    }
+
+    public static String generateReJwtToken(String userName, String userEmail, int userLevel) {
+        String token = null;
+        try {
+            token = JWT.create()
+                    .withIssuer("Mr.A-Chool")
+                    .withClaim(CLAIM_USER_NAME, userName)
+                    .withClaim(CLAIM_USER_EMAIL, userEmail)
+                    .withClaim(CLAIM_USER_LEVEL, userLevel)
+                    // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
+                    .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
         } catch (Exception e) {
             System.out.println(e.getMessage());
