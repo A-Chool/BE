@@ -16,6 +16,7 @@ public class RefreshTokenController {
     // Token 재발급
     @GetMapping("/aip/refreshToken")
     public HttpHeaders regenerateToken(@RequestHeader("RefreshAuthorization") String refreshToken){
+        log.info("요청 메서드 [GET] /aip/refreshToken");
         return refreshTokenService.regenerateToken(refreshToken);
     }
 }

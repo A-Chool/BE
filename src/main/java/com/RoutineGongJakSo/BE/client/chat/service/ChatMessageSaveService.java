@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.chat.service;
 
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.ResolvableTypeProvider;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatMessageSaveService {
@@ -60,11 +62,11 @@ public class ChatMessageSaveService {
             writer.write(insertStr);
 
             writer.flush();
-            System.out.println("file write 완료 ... ");
-            System.out.println("file write 내용 : " + insertStr);
+            log.info("file write 완료 ... ");
+            log.info("file write 내용 {}", insertStr);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("fileWriter 에러 : " + e.toString());
+            log.info("fileWriter 에러 {}",  e.toString());
         } finally {
             try {
                 if (writer != null) {
@@ -96,7 +98,7 @@ public class ChatMessageSaveService {
         catch(FileNotFoundException  e)
         {
             e.printStackTrace();
-            System.out.println("fileReader 에러 : " + e.toString());
+            log.info("fileReader 에러 {}", e.toString());
         }
 
         return temp;

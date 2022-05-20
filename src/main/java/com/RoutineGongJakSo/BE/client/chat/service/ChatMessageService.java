@@ -7,6 +7,7 @@ import com.RoutineGongJakSo.BE.client.chat.repo.ChatMessageRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
@@ -63,17 +65,18 @@ public class ChatMessageService {
             e.printStackTrace();
         }
 
-
+        log.info("챗 메시지 리스트 {}", chatMessageList);
         return chatMessageList;
     }
 
     public List<ChatMessage> getMessageFromFile(String roomId){
         try {
             String result = chatMessageSaveService.fileReader();
-            System.out.println("result = " + result);
+            log.info("결과 {}", result);
             ObjectMapper mapper = new ObjectMapper();
 
             List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
+            log.info("테스트 {}", test);
             return test;
         } catch (Exception e) {
             e.printStackTrace();
