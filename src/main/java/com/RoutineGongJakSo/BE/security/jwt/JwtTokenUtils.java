@@ -41,7 +41,7 @@ public class JwtTokenUtils {
     }
 
     //관리자용 로그인 토큰 생성
-    public String generateAdminJwtToken(String userName, String userEmail, int userLevel) {
+    public static String generateAdminJwtToken(String userName, String userEmail, int userLevel) {
         String token = null;
         try {
             //어드민용 토큰 유효시간
@@ -53,6 +53,22 @@ public class JwtTokenUtils {
                     .withClaim(CLAIM_USER_LEVEL, userLevel)
                     // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + adminTokenTime))
+                    .sign(generateAlgorithm());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return token;
+    }
+
+    // Refresh Token
+    public static String generateRefreshToken(String userEmail){
+        String token = null;
+        try{
+            long refreshToken = 60 * 60 * 60 * 1000;
+            token = JWT.create()
+                    .withIssuer("Mr.A-Chool")
+                    .withClaim(CLAIM_USER_EMAIL, userEmail)
+                    .withClaim(CLAIM_EXPIRED_DATE, new Date((System.currentTimeMillis() + refreshToken)))
                     .sign(generateAlgorithm());
         } catch (Exception e) {
             System.out.println(e.getMessage());
