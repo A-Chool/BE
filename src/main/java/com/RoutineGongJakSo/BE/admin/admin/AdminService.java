@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.admin.admin;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -24,6 +26,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     //관리자 로그인
     @Transactional
@@ -42,12 +45,29 @@ public class AdminService {
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "BEARER " + JwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
-        headers.add("RefreshAuthorization", "BEARER" + JwtTokenUtils.generateRefreshToken(user.getUserEmail()));
+        headers.add("RefreshAuthorization", "BEARER " + JwtTokenUtils.generateRefreshToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        log.info("Headers access Token 값 확인: " + headers.get("Authorization"));
-        log.info("Headers refresh Token 값 확인: " + headers.get("RefreshAuthorization"));
 
+
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(user.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            log.info("액세스 토큰 {}, 리프레쉬 토큰 {}", headers.get("Authorization"), headers.get("RefreshAuthorization"));
+            return headers;
+        }
+
+        //리프레쉬 토큰을 저장
+        //PK = userEmail
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(JwtTokenUtils.generateRefreshToken())
+                .userEmail(user.getUserEmail())
+                .build();
+
+        refreshTokenRepository.save(refresh);
+
+        log.info("액세스 토큰 {}, 리프레쉬 토큰 {}", headers.get("Authorization"), headers.get("RefreshAuthorization"));
         return headers;
     }
 
@@ -78,6 +98,8 @@ public class AdminService {
             responseDtos.add(findDto);
         }
 
+        log.info("전체 유저 조회 {}", responseDtos);
+
         return responseDtos;
     }
 
@@ -92,6 +114,8 @@ public class AdminService {
         //유저아이디로 유저정보 찾기
         User user = validator.findUserIdInfo(userId);
         user.setUserLevel(update.getUserLevel());
+
+        log.info("권한 변경 유저 {}", user);
 
         return "권한이 수정 되었습니다.";
     }
@@ -108,6 +132,9 @@ public class AdminService {
         User user = validator.findUserIdInfo(userId);
 
         userRepository.delete(user);
+
+        log.info("확인 삭제된 유저 {}", user);
+
         return "해당 유저 정보가 삭제되었습니다.";
     }
 }

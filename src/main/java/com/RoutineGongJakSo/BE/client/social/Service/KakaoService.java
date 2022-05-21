@@ -1,10 +1,12 @@
 package com.RoutineGongJakSo.BE.client.social.Service;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
+import com.RoutineGongJakSo.BE.client.social.Dto.KakaoUserInfoDto;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
-import com.RoutineGongJakSo.BE.client.social.Dto.KakaoUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +28,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -39,6 +40,7 @@ public class KakaoService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가코드" 로 "액세스 토큰" 요청
@@ -70,7 +72,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId);
-        body.add("redirect_uri", "https://a-chool.web.app/api/user/kakao/callback");
+        body.add("redirect_uri", "https://a-chool.com/api/user/kakao/callback");
         body.add("code", code);
 
         //HTTP 요청 보내기
@@ -89,6 +91,7 @@ public class KakaoService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        log.info("인가코드로 액세스 토큰 요청 {}", jsonNode.get("access_token").asText());
         return jsonNode.get("access_token").asText();
     }
 
@@ -150,8 +153,10 @@ public class KakaoService {
                     .build();
 
             repository.save(kakaoUser);
+            log.info("카카오 아이디로 회원가입 {}", kakaoUser);
             return kakaoUser;
         }
+        log.info("카카오 아이디가 있는 경우 {}", findKakao);
         return findKakao;
     }
 
@@ -160,6 +165,7 @@ public class KakaoService {
         UserDetails userDetails = new UserDetailsImpl(kakaoUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("강제 로그인 {}", authentication);
         return authentication;
     }
 
@@ -168,7 +174,29 @@ public class KakaoService {
         // response header에 token 추가
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
-        System.out.println("JWT토큰 : " + token);
+        String refreshToken = JwtTokenUtils.generateRefreshToken();
+
         response.addHeader("Authorization", "BEARER" + " " + token);
+        response.addHeader("RefreshAuthorization", "BEARER" + " " + refreshToken);
+
+        log.info("액세스 토큰 {}", token);
+        log.info("리프레쉬 토큰 {} ", refreshToken);
+
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetailsImpl.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            log.info("리프레쉬 토큰 저장 {}", findToken);
+            return;
+        }
+
+        //리프레쉬 토큰을 저장
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .userEmail(userDetailsImpl.getUserEmail())
+                .build();
+
+        log.info("리프레쉬 토큰 저장 {}", refresh);
+        refreshTokenRepository.save(refresh);
     }
 }

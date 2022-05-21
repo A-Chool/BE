@@ -21,12 +21,18 @@ import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
+
+@Slf4j
 @Service
+
 @RequiredArgsConstructor
 public class TeamBoardService {
 
@@ -86,44 +92,48 @@ public class TeamBoardService {
 //        teamBoardDto.setMemberList(teamResponseDtoList);
 //        teamBoardDto.setToDoList(originToDoDtoList);
 
-        System.out.println("teamBoardDto = " + teamBoardDto);
+        log.info("팀보드 {}", teamBoardDto);
 
         return teamBoardDto;
     }
 
+    @Transactional
     public void updateGroundRule(UserDetailsImpl userDetails, Long weekTeamId, GroundRuleDto groundRule) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         User user = userDetails.getUser();
 
         Team team = teamRepository.findById(weekTeamId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_TEAM_ID)
+                () -> new CustomException(NOT_FOUND_TEAM_ID)
         );
 
         memberRepository.findByUserAndTeam(user, team).orElseThrow(
-                () -> new IllegalArgumentException("이 팀의 멤버가 아닙니다.")
+                () -> new CustomException(NO_WEEK_MEMBER)
         );
 
         team.setGroundRule(groundRule.getGroundRule());
 
+        log.info("수정된 그라운드룰 {}", team);
         teamRepository.save(team);
-
     }
 
+    @Transactional
     public void updateWorkSpace(UserDetailsImpl userDetails, Long weekTeamId, WorkSpaceDto workSpace) {
         validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
 
         User user = userDetails.getUser();
 
         Team team = teamRepository.findById(weekTeamId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_TEAM_ID)
+                () -> new CustomException(NOT_FOUND_TEAM_ID)
         );
 
         memberRepository.findByUserAndTeam(user, team).orElseThrow(
-                () -> new IllegalArgumentException("이 팀의 멤버가 아닙니다.")
+                () -> new CustomException(NO_WEEK_MEMBER)
         );
 
         team.setWorkSpace(workSpace.getWorkSpace());
+
+        log.info("수정된 워크스페이스 {}", team);
 
         teamRepository.save(team);
     }
@@ -146,7 +156,7 @@ public class TeamBoardService {
         Team targetTeam = null;
         if(teamId != null){
             targetTeam = teamRepository.findById(teamId).orElseThrow(
-                    ()-> new CustomException(ErrorCode.NOT_FOUND_TEAM_ID)
+                    ()-> new CustomException(NOT_FOUND_TEAM_ID)
             );
         } else {
             targetTeam = teamRepository.findByUserAndDisplayWeek(user);
@@ -177,6 +187,8 @@ public class TeamBoardService {
         teamBoardDto.setTeamDtoList(teamDtoList);
         teamBoardDto.setMemberList(memberResponseDtoList);
         teamBoardDto.setToDoList(toDoResponseDtoList);
+
+        log.info("팀보드 {}", teamBoardDto);
 
         return teamBoardDto;
 
