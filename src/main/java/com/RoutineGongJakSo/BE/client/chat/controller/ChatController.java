@@ -3,6 +3,7 @@ package com.RoutineGongJakSo.BE.client.chat.controller;
 
 import com.RoutineGongJakSo.BE.client.chat.dto.ChatMessageDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
+import com.RoutineGongJakSo.BE.client.chat.service.ChatFileService;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatMessageService chatMessageService;
+    private final ChatFileService chatFileService;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
@@ -40,6 +42,6 @@ public class ChatController {
     @GetMapping("/chat/message/file/{roomId}")
     @ResponseBody
     public List<ChatMessage> getMessageFromFile(@PathVariable String roomId, @RequestParam(required = false) Long prevId){
-        return chatMessageService.getMessageFromFile(roomId, prevId);
+        return chatFileService.getMessageFromFile(roomId, prevId);
     }
 }

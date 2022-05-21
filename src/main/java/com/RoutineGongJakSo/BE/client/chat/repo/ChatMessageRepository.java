@@ -61,7 +61,7 @@ public class ChatMessageRepository {// Redis
 
                 log.info("cnt : {}", cnt);
 
-                String[] detail = chatFileService.fileWriter(chatMessageList.subList(0, 5), roomId, cnt);
+                String[] detail = chatFileService.fileWriter(chatMessageList.subList(0, 5), roomId);
                 String path = detail[0];
                 String fileName = detail[1];
 
@@ -69,7 +69,8 @@ public class ChatMessageRepository {// Redis
 
                 log.info("fileName : {}", file.getName());
                 //S3 에 txt 파일 업로드
-                String s3FileName = s3Validator.uploadTxtFile(file);
+                //fileName = roomId _ cnt
+                String s3FileName = s3Validator.uploadTxtFile(file, cnt);
 
                 // 파일 db 에 저장
                 ChatFile chatFile = ChatFile.builder()
@@ -102,7 +103,7 @@ public class ChatMessageRepository {// Redis
     public void deleteMessage(String roomId) {
         log.info("deleteMessage");
         List<ChatMessage> chatMessageList = opsHashChatMessage.get(CHAT_MESSAGE, roomId);
-        List<ChatMessage> newList = chatMessageList.subList(5, chatMessageList.size()-1);
+        List<ChatMessage> newList = chatMessageList.subList(5, chatMessageList.size());
         opsHashChatMessage.put(CHAT_MESSAGE, roomId, newList);
     }
 }

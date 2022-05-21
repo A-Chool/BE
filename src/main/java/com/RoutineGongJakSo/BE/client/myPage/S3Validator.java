@@ -96,12 +96,16 @@ public class S3Validator {
     }
 
     // file 업로드
-    public String uploadTxtFile(File file) {
+    public String uploadTxtFile(File file, int cnt) {
+        String fileName = file.getName();
+        String onlyFileName = fileName.split("\\.")[0];
+        String saveName = onlyFileName+"_"+cnt+".txt";
+
         PutObjectRequest putObjectRequest =
-                new PutObjectRequest(bucket+"/chat",file.getName(),file);
+                new PutObjectRequest(bucket+"/chat",saveName,file);
         putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3Client().putObject(putObjectRequest);
-        return file.getName();
+        return saveName;
     }
 
     public S3Object getTxtFile(String fileName){

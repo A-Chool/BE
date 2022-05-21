@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -21,10 +22,11 @@ public class ChatFileService {
     private final S3Validator s3Validator;
 
     // 파일에 내용 저장하기
-    public String[] fileWriter(List<ChatMessage> chatMessageList, String roomId, int cnt) throws Exception {
+    // fileName = roomId
+    public String[] fileWriter(List<ChatMessage> chatMessageList, String roomId) throws Exception {
 
         String path = "/home/ubuntu/test/";
-        String fileName = roomId + "_" + cnt + ".txt";
+        String fileName = roomId+".txt";
         ObjectMapper mapper = new ObjectMapper();
 
         String insertStr = mapper.writeValueAsString(chatMessageList);
@@ -65,7 +67,22 @@ public class ChatFileService {
         return new String[]{path, fileName};
     }
 
-    public String fileReader(String roomId, Long prevId) throws Exception {
+    // 파일 -> List<ChatMessage> 로 읽어오기
+    public List<ChatMessage> getMessageFromFile(String roomId, Long prevId) {
+        try {
+            String result = fileReader(roomId, prevId);
+            System.out.println("result = " + result);
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
+            return test;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String fileReader(String roomId, Long prevId) throws Exception {
         log.info("roomId : {} ", roomId);
         log.info("prevId : {} ", prevId);
         String targetFileUrl;

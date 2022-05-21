@@ -26,9 +26,6 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
-    private final ChatFileService chatFileService;
-    private final S3Validator s3Validator;
-    private final ChatFileRepository chatFileRepository;
 
     public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
@@ -58,25 +55,11 @@ public class ChatMessageService {
         redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
     }
 
+    // redis 에 저장되어 있는 message 출력
     public List<ChatMessage> getMessages(String roomId) {
         log.info("getMessage");
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
 
         return chatMessageList;
-    }
-
-    // 파일 -> List<ChatMessage> 로 읽어오기
-    public List<ChatMessage> getMessageFromFile(String roomId, Long prevId) {
-        try {
-            String result = chatFileService.fileReader(roomId, prevId);
-            System.out.println("result = " + result);
-            ObjectMapper mapper = new ObjectMapper();
-
-            List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
-            return test;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
