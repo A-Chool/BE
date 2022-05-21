@@ -2,11 +2,11 @@ package com.RoutineGongJakSo.BE.client.social.Service;
 
 import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
 import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
+import com.RoutineGongJakSo.BE.client.social.Dto.KakaoUserInfoDto;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
-import com.RoutineGongJakSo.BE.client.social.Dto.KakaoUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -73,7 +72,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId);
-        body.add("redirect_uri", "https://a-chool.web.app/api/user/kakao/callback");
+        body.add("redirect_uri", "https://a-chool.com/api/user/kakao/callback");
         body.add("code", code);
 
         //HTTP 요청 보내기
