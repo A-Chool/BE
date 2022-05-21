@@ -17,6 +17,7 @@ public class AdminController {
     private final AdminService adminService;
 
     //관리자 로그인
+
     @PostMapping("/login")
     public HttpHeaders login(@RequestBody AdminDto.RequestDto adminDto) {
         log.info("요청 메소드 [POST] /api/admin/login");
