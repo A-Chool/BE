@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
-import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.client.chat.dto.EnterRoomDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
@@ -99,11 +98,11 @@ public class ChatFileService {
             List<ChatFile> foundList = chatFileRepository.findByRoomId(roomId);
             targetFileUrl = foundList.get(foundList.size() - 1).getFileUrl();
             prevId = foundList.get(foundList.size() - 1).getPrevId().toString();
-        } else if (id == 0) {
+        } else if (id == 0L) {
             throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         } else {
             ChatFile _found = chatFileRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("파일없다")
+                    () -> new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE)
             );
             targetFileUrl = _found.getFileUrl();
             prevId = _found.getPrevId().toString();
