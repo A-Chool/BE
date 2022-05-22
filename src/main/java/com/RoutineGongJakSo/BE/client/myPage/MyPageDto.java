@@ -16,8 +16,11 @@ public class MyPageDto {
     @Getter
     @Builder
     public static class ResponseDto{
+        private Long userId;
+        private String userEmail;
         private String userImage;
         private String userNickName;
+        private String userPhoneNumber;
         private String userTag;
         private String userGitHub;
         private String userKakao;
