@@ -6,9 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -97,4 +96,23 @@ public class S3Validator {
         return idxFileName;
     }
 
+    // file 업로드
+    public String uploadTxtFile(File file, int cnt) {
+        String fileName = file.getName();
+        String onlyFileName = fileName.split("\\.")[0];
+        String saveName = onlyFileName+"_"+cnt+".txt";
+
+        PutObjectRequest putObjectRequest =
+                new PutObjectRequest(bucket+"/chat",saveName,file);
+        putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
+        amazonS3Client().putObject(putObjectRequest);
+        return saveName;
+    }
+
+    public S3Object getTxtFile(String fileName){
+        GetObjectRequest getObjectRequest =
+                new GetObjectRequest(bucket+"/chat", fileName);
+        S3Object targetFile = amazonS3Client().getObject(getObjectRequest);
+        return targetFile;
+    }
 }
