@@ -94,13 +94,16 @@ public class ChatFileService {
         log.info("prevId : {} ", id);
         String targetFileUrl;
         String prevId;
+
         if (id == null) {
             List<ChatFile> foundList = chatFileRepository.findByRoomId(roomId);
             targetFileUrl = foundList.get(foundList.size() - 1).getFileUrl();
             prevId = foundList.get(foundList.size() - 1).getPrevId().toString();
+        } else if (id == 0) {
+            throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         } else {
             ChatFile _found = chatFileRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE)
+                    () -> new IllegalArgumentException("파일없다")
             );
             targetFileUrl = _found.getFileUrl();
             prevId = _found.getPrevId().toString();
