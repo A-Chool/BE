@@ -5,6 +5,8 @@ import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.pubsub.RedisPublisher;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatMessageRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
+import com.RoutineGongJakSo.BE.exception.CustomException;
+import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.NO_MESSAGE;
 
 @Slf4j
 @Service
@@ -23,10 +27,16 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
 
+
     public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
         String username = "";
         String sender = "";
+
+        if(messageDto.getMessage().trim().equals("")){
+            throw new CustomException(NO_MESSAGE);
+        }
+
         if (!(String.valueOf(token).equals("Authorization") || String.valueOf(token).equals("null"))) {
             String tokenInfo = token.substring(7); // Bearer빼고
             username = jwtDecoder.decodeNickName(tokenInfo);
