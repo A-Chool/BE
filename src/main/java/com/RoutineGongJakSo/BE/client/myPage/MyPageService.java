@@ -135,7 +135,10 @@ public class MyPageService {
         }
 
         MyPageDto.ResponseDto responseDto = MyPageDto.ResponseDto.builder()
+                .userId(user.getUserId())
+                .userEmail(user.getUserEmail())
                 .userImage(userImage)
+                .userPhoneNumber(user.getPhoneNumber())
                 .userNickName(user.getKakaoNickName())
                 .userTag(user.getUserTag())
                 .userGitHub(user.getUserGitHub())
