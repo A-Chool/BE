@@ -1,4 +1,4 @@
-package com.RoutineGongJakSo.BE.client.util;
+package com.RoutineGongJakSo.BE.util;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

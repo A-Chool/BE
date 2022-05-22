@@ -8,11 +8,8 @@ import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +22,6 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
-    private final ChatMessageSaveService chatMessageSaveService;
-    private final RedisTemplate redisTemplate;
 
     public void save(ChatMessageDto messageDto, String token) {
         // username 세팅
@@ -56,31 +51,11 @@ public class ChatMessageService {
         redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
     }
 
+    // redis 에 저장되어 있는 message 출력
     public List<ChatMessage> getMessages(String roomId) {
+        log.info("getMessage");
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
 
-        try {
-            chatMessageSaveService.fileWriter(chatMessageList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        log.info("챗 메시지 리스트 {}", chatMessageList);
         return chatMessageList;
-    }
-
-    public List<ChatMessage> getMessageFromFile(String roomId){
-        try {
-            String result = chatMessageSaveService.fileReader();
-            log.info("결과 {}", result);
-            ObjectMapper mapper = new ObjectMapper();
-
-            List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
-            log.info("테스트 {}", test);
-            return test;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
