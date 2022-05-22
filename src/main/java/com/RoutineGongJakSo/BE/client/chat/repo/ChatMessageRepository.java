@@ -4,6 +4,7 @@ import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatFileService;
 import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
+import com.RoutineGongJakSo.BE.event.CustomEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -28,6 +29,7 @@ public class ChatMessageRepository {// Redis
     private final ChatFileRepository chatFileRepository;
     private final S3Validator s3Validator;
     private final ChatFileService chatFileService;
+    private final CustomEventPublisher customEventPublisher;
 
     @PostConstruct
     private void init() {
@@ -44,6 +46,7 @@ public class ChatMessageRepository {// Redis
 
 
         if (chatMessageList.size() > 5) {
+            customEventPublisher.publish(roomId);
             try {
                 // 메시지 리스트 txt 파일로 저장
                 List<ChatFile> foundList = chatFileRepository.findAllByRoomId(roomId);

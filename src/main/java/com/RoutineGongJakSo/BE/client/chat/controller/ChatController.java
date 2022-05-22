@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.chat.controller;
 
 
 import com.RoutineGongJakSo.BE.client.chat.dto.ChatMessageDto;
+import com.RoutineGongJakSo.BE.client.chat.dto.EnterRoomDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatFileService;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatMessageService;
@@ -41,7 +42,7 @@ public class ChatController {
 
     @GetMapping("/chat/message/file/{roomId}")
     @ResponseBody
-    public List<ChatMessage> getMessageFromFile(@PathVariable String roomId, @RequestParam(required = false) Long prevId){
+    public EnterRoomDto getMessageFromFile(@PathVariable String roomId, @RequestParam(required = false) Long prevId){
         return chatFileService.getMessageFromFile(roomId, prevId);
     }
 }

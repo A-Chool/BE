@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
+import com.RoutineGongJakSo.BE.client.chat.dto.EnterRoomDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
@@ -68,32 +69,38 @@ public class ChatFileService {
     }
 
     // 파일 -> List<ChatMessage> 로 읽어오기
-    public List<ChatMessage> getMessageFromFile(String roomId, Long prevId) {
+    public EnterRoomDto getMessageFromFile(String roomId, Long prevId) {
         try {
-            String result = fileReader(roomId, prevId);
-            System.out.println("result = " + result);
+            String[] result = fileReader(roomId, prevId);
+
             ObjectMapper mapper = new ObjectMapper();
 
-            List<ChatMessage> test = Arrays.asList(mapper.readValue(result, ChatMessage[].class));
-            return test;
+            List<ChatMessage> chatMessageList = Arrays.asList(mapper.readValue(result[0], ChatMessage[].class));
+            EnterRoomDto enterRoomDto = new EnterRoomDto();
+            enterRoomDto.setPrevId(Long.parseLong(result[1]));
+            enterRoomDto.setChatMessageList(chatMessageList);
+            return enterRoomDto;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private String fileReader(String roomId, Long prevId) throws Exception {
+    private String[] fileReader(String roomId, Long id) throws Exception {
         log.info("roomId : {} ", roomId);
-        log.info("prevId : {} ", prevId);
+        log.info("prevId : {} ", id);
         String targetFileUrl;
-        if (prevId == null) {
+        String prevId;
+        if (id == null) {
             List<ChatFile> foundList = chatFileRepository.findByRoomId(roomId);
             targetFileUrl = foundList.get(foundList.size() - 1).getFileUrl();
+            prevId = foundList.get(foundList.size() - 1).getPrevId().toString();
         } else {
-            ChatFile _found = chatFileRepository.findById(prevId).orElseThrow(
+            ChatFile _found = chatFileRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("파일없다")
             );
             targetFileUrl = _found.getFileUrl();
+            prevId = _found.getPrevId().toString();
         }
 
         S3Object s3Object = s3Validator.getTxtFile(targetFileUrl);
@@ -107,6 +114,9 @@ public class ChatFileService {
             e.printStackTrace();
             System.out.println("fileReader 에러 : " + e.toString());
         }
-        return temp;
+        String[] rtStArr = new String[2];
+        rtStArr[0] = temp;
+        rtStArr[1] = prevId;
+        return rtStArr;
     }
 }
