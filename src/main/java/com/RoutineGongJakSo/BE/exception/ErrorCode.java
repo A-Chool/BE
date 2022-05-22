@@ -16,6 +16,8 @@ public enum ErrorCode {
     TOO_LONG_WEEK_NAME(HttpStatus.BAD_REQUEST, "400_4", "주차 이름은 공백 포함 6글자 이내로 입력해주세요."),
     ALREADY_EXIST_TEAM_NAME(HttpStatus.BAD_REQUEST, "400_5", "중복된 팀 이름이 존재합니다."),
     SOLD_OUT_USER(HttpStatus.BAD_REQUEST, "400_6", "이미 다른팀에 소속되어 있습니다."),
+
+    NO_MESSAGE(HttpStatus.BAD_REQUEST, "400_7", "메세지가 빈 값입니다."),
   
     BAD_FORM_TYPE(HttpStatus.BAD_REQUEST, "400_50", "이미지 형식이 올바르지 않습니다."),
     LIAR_USER_IMAGE(HttpStatus.BAD_REQUEST, "400_51", "업로드된 이미지가 존재하지 않습니다."),
