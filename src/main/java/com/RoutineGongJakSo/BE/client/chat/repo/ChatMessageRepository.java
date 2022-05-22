@@ -37,15 +37,15 @@ public class ChatMessageRepository {// Redis
     }
 
     public ChatMessage save(ChatMessage chatMessage) {
+        log.info("save");
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         String roomId = chatMessage.getRoomId();
         List<ChatMessage> chatMessageList = opsHashChatMessage.get(CHAT_MESSAGE, roomId);
         if (chatMessageList == null) chatMessageList = new ArrayList<>();
         chatMessageList.add(chatMessage);
-        opsHashChatMessage.put(CHAT_MESSAGE, roomId, chatMessageList);
-
 
         if (chatMessageList.size() > 5) {
+            log.info("chatMessageList size : {}", chatMessageList.size());
             customEventPublisher.publish(roomId);
             try {
                 // 메시지 리스트 txt 파일로 저장
@@ -83,13 +83,14 @@ public class ChatMessageRepository {// Redis
                         .build();
                 chatFileRepository.save(chatFile);
 
-                deleteMessage(roomId);
+                chatMessageList = deleteMessage(roomId, chatMessageList);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+        opsHashChatMessage.put(CHAT_MESSAGE, roomId, chatMessageList);
 
         return chatMessage;
     }
@@ -103,10 +104,11 @@ public class ChatMessageRepository {// Redis
         return opsHashChatMessage.get(CHAT_MESSAGE, roomId).get(opsHashChatMessage.get(CHAT_MESSAGE, roomId).size() - 1);
     }
 
-    public void deleteMessage(String roomId) {
+    public List<ChatMessage> deleteMessage(String roomId, List<ChatMessage> chatMessageList) {
         log.info("deleteMessage");
-        List<ChatMessage> chatMessageList = opsHashChatMessage.get(CHAT_MESSAGE, roomId);
+        log.info("chatMessageList size : {}", chatMessageList.size());
         List<ChatMessage> newList = chatMessageList.subList(5, chatMessageList.size());
-        opsHashChatMessage.put(CHAT_MESSAGE, roomId, newList);
+//        opsHashChatMessage.put(CHAT_MESSAGE, roomId, newList);
+        return newList;
     }
 }
