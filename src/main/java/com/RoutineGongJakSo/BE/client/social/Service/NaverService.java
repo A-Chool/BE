@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.social.Service;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
@@ -43,6 +45,7 @@ public class NaverService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     // 네이버 로그인
     public void naverLogin(String code, HttpServletResponse response) throws JsonProcessingException {
@@ -96,6 +99,7 @@ public class NaverService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        log.info("인가코드로 액세스 토큰 요청 {}", jsonNode.get("access_token").asText());
         return jsonNode.get("access_token").asText();
     }
 
@@ -157,11 +161,13 @@ public class NaverService {
                     .userLevel(0)
                     .build();
 
-            repository.save(naverUser);
+            log.info("네이버 아이디로 회원가입 {}", naverUser);
 
+            repository.save(naverUser);
             return naverUser;
 
         }
+        log.info("네이버 아이디가 있는 경우 {}", findNaver);
         return findNaver;
     }
 
@@ -170,6 +176,7 @@ public class NaverService {
         UserDetails userDetails = new UserDetailsImpl(naverUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("강제 로그인 {}", authentication);
         return authentication;
     }
 
@@ -178,8 +185,29 @@ public class NaverService {
         // response header에 token 추가
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
-        System.out.println("JWT토큰 : " + token);
+        String refreshToken = JwtTokenUtils.generateRefreshToken();
+
         response.addHeader("Authorization", "BEARER" + " " + token);
+        response.addHeader("RefreshAuthorization", "BEARER" + " " + refreshToken);
+
+        log.info("액세스 토큰 {}", token);
+        log.info("리프레쉬 토큰 {} ", refreshToken);
+
+        RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetailsImpl.getUserEmail());
+
+        if (findToken != null){
+            findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
+            log.info("리프레쉬 토큰 저장 {}", findToken);
+            return;
+        }
+
+        //리프레쉬 토큰을 저장
+        RefreshToken refresh = RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .userEmail(userDetailsImpl.getUserEmail())
+                .build();
+        log.info("리프레쉬 토큰 저장 {}", refresh);
+        refreshTokenRepository.save(refresh);
 
     }
 }

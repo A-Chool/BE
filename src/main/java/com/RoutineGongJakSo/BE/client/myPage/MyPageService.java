@@ -11,6 +11,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 
 import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyPageService {
@@ -59,7 +61,7 @@ public class MyPageService {
         User user = validator.userInfo(userDetails);
 
         if (user.getUserImageUrl() != null) {
-            String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/", "");
+            String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
             boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
             String imageUrl = "";
             if (isExitstObject) {
@@ -70,14 +72,19 @@ public class MyPageService {
                 user.setUserImageUrl(imageUrl);
                 userRepository.save(user);
             }
+
+            log.info("수정된 이미지 {}", imageUrl);
+
             return imageUrl;
         } else {
-            String ImageUrl = s3Validator.uploadOne(multipartFile);
+            String imageUrl = s3Validator.uploadOne(multipartFile);
 
-            user.setUserImageUrl(ImageUrl);
+            user.setUserImageUrl(imageUrl);
             userRepository.save(user);
 
-            return ImageUrl;
+            log.info("수정된 이미지 {}", imageUrl);
+
+            return imageUrl;
         }
     }
 
@@ -86,12 +93,13 @@ public class MyPageService {
     public String deleteImage(UserDetailsImpl userDetails) {
         User user = validator.userInfo(userDetails);
         if (user.getUserImageUrl() != null) {
-            String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/", "");
+            String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
             boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
                 user.setUserImageUrl(null);
                 userRepository.save(user);
+                log.info("삭제된 이미지 {}", deleteUrl);
             }
         } else {
             throw new CustomException(LIAR_USER_IMAGE);
@@ -110,6 +118,8 @@ public class MyPageService {
         user.setKakaoNickName(myPageDto.getUserKakao());
 
         userRepository.save(user);
+
+        log.info("업데이트된 정보 {}", getMyPage(userDetails));
 
         return getMyPage(userDetails);
     }
@@ -131,6 +141,8 @@ public class MyPageService {
                 .userGitHub(user.getUserGitHub())
                 .userKakao(user.getKakaoNickName())
                 .build();
+
+        log.info("마이페이지 조회 {}", responseDto);
 
         return responseDto;
     }

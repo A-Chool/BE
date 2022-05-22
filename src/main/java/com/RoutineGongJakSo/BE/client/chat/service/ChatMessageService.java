@@ -3,17 +3,13 @@ package com.RoutineGongJakSo.BE.client.chat.service;
 import com.RoutineGongJakSo.BE.client.chat.dto.ChatMessageDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.pubsub.RedisPublisher;
-import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatMessageRepository;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
-import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
 import com.RoutineGongJakSo.BE.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

@@ -1,23 +1,25 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
-import com.RoutineGongJakSo.BE.admin.team.TeamDto;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -28,7 +30,7 @@ public class MemberService {
 
     // 팀원 추가
     @Transactional
-    public String addMembers(Long weekId, MemberDto.RequestDto addTeamDto) {
+    public List<MemberDto.ResponseDto> addMembers(Long weekId, MemberDto.RequestDto addTeamDto) {
 
         Long targetTeamId = addTeamDto.getTeamId();
         Long targetUserId = addTeamDto.getUserId();
@@ -48,7 +50,7 @@ public class MemberService {
         // 이미 소속된 팀이 존재하는지 확인
         List<Team> teamList = targetWeek.getTeamList();
 
-        if(!teamList.contains(targetTeam)){
+        if (!teamList.contains(targetTeam)) {
             throw new CustomException(ErrorCode.NOT_FOUND_TEAM_IN_WEEK);
         }
 
@@ -70,9 +72,21 @@ public class MemberService {
         targetUser.addMember(member);
         targetTeam.addMember(member);
 
+        // 팀원 추가
         memberRepository.save(member);
 
-        return "팀원 추가 완료!";
+        List<Member> memberList = targetTeam.getMemberList();
+        List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
+        for (Member _member : memberList) {
+            MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
+            responseDto.setMemberId(_member.getMemberId());
+            responseDto.setUser(new UserDto(_member.getUser()));
+            responseDtoList.add(responseDto);
+        }
+
+        log.info("추가된 팀원 리스트 {}", responseDtoList);
+
+        return responseDtoList;
     }
 
     //팀원 삭제
@@ -83,11 +97,14 @@ public class MemberService {
         );
 
         memberRepository.delete(member);
+
+        log.info("삭제된 멤버 {}", member);
+
         return "삭제 완료";
     }
 
 
-    //    //해당 주차에 멤버아이디가 없는 유저 리스트
+    //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<MemberDto.GetNoMember> getNoMember(Long weekId) {
 
         Week targetWeek = weekRepository.findById(weekId).orElseThrow(
@@ -121,6 +138,8 @@ public class MemberService {
 
             noMembers.add(response);
         }
+
+        log.info("해당 주차에 멤버 아이디가 없는 유저 리스트 {}", noMembers);
 
         return noMembers;
     }

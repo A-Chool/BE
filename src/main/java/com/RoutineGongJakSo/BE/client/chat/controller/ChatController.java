@@ -32,17 +32,20 @@ public class ChatController {
     @MessageMapping("/chat/message")
     public void message(ChatMessageDto message, @Header("Authorization") String token) {
         chatMessageService.save(message, token);
+        log.info("요청 메서드 [Message] /chat/message");
     }
 
     @GetMapping("/chat/message/{roomId}")
     @ResponseBody
     public List<ChatMessage> getMessages(@PathVariable String roomId) {
+        log.info("요청 메서드 [GET] /chat/message/{roomId}");
         return chatMessageService.getMessages(roomId);
     }
 
     @GetMapping("/chat/message/file/{roomId}")
     @ResponseBody
     public EnterRoomDto getMessageFromFile(@PathVariable String roomId, @RequestParam(required = false) Long prevId){
+        log.info("요청 메서드 [GET] /chat/message/file/{roomId}");
         return chatFileService.getMessageFromFile(roomId, prevId);
     }
 }

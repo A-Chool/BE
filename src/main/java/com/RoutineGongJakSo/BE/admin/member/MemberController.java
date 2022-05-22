@@ -1,6 +1,5 @@
 package com.RoutineGongJakSo.BE.admin.member;
 
-import com.RoutineGongJakSo.BE.admin.team.TeamDto;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class MemberController {
 
     //팀원 추가
     @PostMapping("/api/admin/member/{weekId}")
-    public String addMembers(
+    public List<MemberDto.ResponseDto> addMembers(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody MemberDto.RequestDto addTeamDto,
             @PathVariable Long weekId) {

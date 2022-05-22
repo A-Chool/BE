@@ -6,9 +6,11 @@ import com.RoutineGongJakSo.BE.client.teamBoard.dto.WorkSpaceDto;
 import com.RoutineGongJakSo.BE.client.teamBoard.service.TeamBoardService;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TeamBoardController {
@@ -24,6 +26,7 @@ public class TeamBoardController {
     // TeamBoard 클릭 시
     @GetMapping("/api/user/teamBoard")
     public TeamBoardDto getTeamBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(required = false) Long teamId) {
+        log.info("요청 메서드 [GET] /api/user/teamBoard");
         return teamBoardService.getTeamBoard(userDetails, teamId);
     }
 
@@ -33,6 +36,7 @@ public class TeamBoardController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long teamId,
             @RequestBody GroundRuleDto groundRule) {
+        log.info("요청 메서드 [PUT] /api/user/teamBoard/groundRule/{teamId}");
         teamBoardService.updateGroundRule(userDetails, teamId, groundRule);
     }
 
@@ -42,6 +46,7 @@ public class TeamBoardController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long teamId,
             @RequestBody WorkSpaceDto workSpace) {
+        log.info("요청 메서드 [PUT] /api/user/teamBoard/workSpace/{teamId}");
         teamBoardService.updateWorkSpace(userDetails, teamId, workSpace);
     }
 
