@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.security;
 
+import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.security.filter.FormLoginFilter;
 import com.RoutineGongJakSo.BE.security.filter.JwtAuthFilter;
 import com.RoutineGongJakSo.BE.security.jwt.HeaderTokenExtractor;
@@ -33,6 +34,7 @@ import java.util.List;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
     public BCryptPasswordEncoder encodePassword() {
@@ -100,6 +102,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://localhost:3000");
+        configuration.addAllowedOrigin("https://a-chool.com:443");
+        configuration.addAllowedOrigin("https://a-chool.com");
+        configuration.addAllowedOrigin("https://www.a-chool.com");
+        configuration.addAllowedOrigin("https://www.a-chool.com:443");
+        configuration.addAllowedOrigin("https://www.achool.shop:443");
+        configuration.addAllowedOrigin("https://master.d3lzm8oh83exkx.amplifyapp.com");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
@@ -115,14 +123,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public FormLoginFilter formLoginFilter() throws Exception {
         FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
         formLoginFilter.setFilterProcessesUrl("/user/login");
-        formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
+        formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler(refreshTokenRepository));
         formLoginFilter.afterPropertiesSet();
         return formLoginFilter;
     }
 
     @Bean
-    public FormLoginSuccessHandler formLoginSuccessHandler() {
-        return new FormLoginSuccessHandler();
+    public FormLoginSuccessHandler formLoginSuccessHandler(RefreshTokenRepository refreshTokenRepository) {
+        return new FormLoginSuccessHandler(refreshTokenRepository);
     }
 
     @Bean

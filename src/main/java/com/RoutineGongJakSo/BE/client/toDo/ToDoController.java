@@ -2,9 +2,11 @@ package com.RoutineGongJakSo.BE.client.toDo;
 
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ToDoController {
@@ -15,6 +17,7 @@ public class ToDoController {
     @PostMapping("/api/user/teamBoard")
     public void createToDo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                            @RequestBody ToDoDto.RequestToDoDto requestToDoDto) {
+        log.info("요청 메서드 [POST] /api/user/teamBoard");
         todoService.createToDo(userDetails, requestToDoDto);
     }
 
@@ -22,6 +25,7 @@ public class ToDoController {
     @DeleteMapping("/api/user/teamBoard/{todoId}")
     public void deleteToDo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                            @PathVariable Long todoId) {
+        log.info("요청 메서드 [DELETE] /api/user/teamBoard/{todoId}");
         todoService.deleteToDo(userDetails, todoId);
     }
 
@@ -30,6 +34,7 @@ public class ToDoController {
     public ToDoDto.ResponseDto updateToDo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                           @RequestBody ToDoDto.UpDateToDoDto dto,
                                           @PathVariable Long todoId) {
+        log.info("요청 메서드 [PUT] /api/user/teamBoard/{todoId}");
         return todoService.updateToDo(userDetails, dto, todoId);
     }
 
@@ -37,6 +42,7 @@ public class ToDoController {
     @PutMapping("/api/user/teamBoard/check/{todoId}")
     public ToDoDto.ResponseDto updateCheck(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                            @PathVariable Long todoId) {
+        log.info("요청 메서드 [PUT] /api/user/teamBoard/check/{todoId}");
         return todoService.updateCheck(userDetails, todoId);
     }
 }

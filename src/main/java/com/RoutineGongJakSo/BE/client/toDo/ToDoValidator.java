@@ -2,10 +2,13 @@ package com.RoutineGongJakSo.BE.client.toDo;
 
 import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
+import com.RoutineGongJakSo.BE.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class ToDoValidator {
     //Id 값으로 할 일 찾기
     public ToDo findToDo(Long todoId) {
         ToDo toDo = toDoRepository.findById(todoId).orElseThrow(
-                () -> new NullPointerException("할 일이 존재하지 않습니다.")
+                () -> new CustomException(NOT_FOUND_TODO)
         );
         return toDo;
     }
@@ -25,7 +28,7 @@ public class ToDoValidator {
     //Id로 팀 찾기
     public Team findTeam(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(
-                () -> new NullPointerException("해당 팀이 존재하지 않습니다."));
+                () -> new CustomException(NOT_FOUND_TEAM_ID));
         return team;
     }
 
