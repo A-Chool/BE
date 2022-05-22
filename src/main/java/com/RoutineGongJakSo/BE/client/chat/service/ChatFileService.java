@@ -1,10 +1,13 @@
 package com.RoutineGongJakSo.BE.client.chat.service;
 
+import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.client.chat.dto.EnterRoomDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
 import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
+import com.RoutineGongJakSo.BE.exception.CustomException;
+import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +73,9 @@ public class ChatFileService {
 
     // 파일 -> List<ChatMessage> 로 읽어오기
     public EnterRoomDto getMessageFromFile(String roomId, Long prevId) {
+        if (prevId == 0) {
+            throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
+        }
         try {
             String[] result = fileReader(roomId, prevId);
 
