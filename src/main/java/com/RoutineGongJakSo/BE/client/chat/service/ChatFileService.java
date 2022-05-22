@@ -101,7 +101,7 @@ public class ChatFileService {
         } else if (id == 0L) {
             throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         } else {
-            ChatFile _found = chatFileRepository.findById(id).orElseThrow(
+            ChatFile _found = chatFileRepository.findByFileIdAndRoomId(id, roomId).orElseThrow(
                     () -> new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE)
             );
             targetFileUrl = _found.getFileUrl();

@@ -13,4 +13,6 @@ public interface ChatFileRepository extends JpaRepository<ChatFile, Long> {
     List<ChatFile> findAllByRoomId(String roomId);
 
     ChatFile findByPrevId(Long prevId);
+
+    Optional<ChatFile> findByFileIdAndRoomId(Long id, String roomId);
 }
