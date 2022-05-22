@@ -44,7 +44,7 @@ public class ChatMessageRepository {// Redis
         if (chatMessageList == null) chatMessageList = new ArrayList<>();
         chatMessageList.add(chatMessage);
 
-        if (chatMessageList.size() > 5) {
+        if (chatMessageList.size() > 10) {
             log.info("chatMessageList size : {}", chatMessageList.size());
             customEventPublisher.publish(roomId);
             try {
@@ -83,7 +83,7 @@ public class ChatMessageRepository {// Redis
                         .build();
                 chatFileRepository.save(chatFile);
 
-                chatMessageList = deleteMessage(roomId, chatMessageList);
+                chatMessageList = deleteMessage(chatMessageList);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -96,15 +96,17 @@ public class ChatMessageRepository {// Redis
     }
 
     public List<ChatMessage> findAllMessage(String roomId) {
+        log.info("findAllMessage");
         return opsHashChatMessage.get(CHAT_MESSAGE, roomId);
     }
 
     public Object findLastMessage(String roomId) {
+        log.info("findLastMessage");
         if (opsHashChatMessage.get(CHAT_MESSAGE, roomId) == null || opsHashChatMessage.get(CHAT_MESSAGE, roomId).size() == 0) return null;
         return opsHashChatMessage.get(CHAT_MESSAGE, roomId).get(opsHashChatMessage.get(CHAT_MESSAGE, roomId).size() - 1);
     }
 
-    public List<ChatMessage> deleteMessage(String roomId, List<ChatMessage> chatMessageList) {
+    public List<ChatMessage> deleteMessage(List<ChatMessage> chatMessageList) {
         log.info("deleteMessage");
         log.info("chatMessageList size : {}", chatMessageList.size());
         List<ChatMessage> newList = chatMessageList.subList(5, chatMessageList.size());
