@@ -3,7 +3,7 @@ package com.RoutineGongJakSo.BE.exception;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends Exception{
+public class CustomException extends IllegalArgumentException{
 
     private final ErrorCode errorCode;
 
