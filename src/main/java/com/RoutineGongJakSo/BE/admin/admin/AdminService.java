@@ -103,9 +103,8 @@ public class AdminService {
     public String updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
 
         //로그인 여부 확인, 접근권한 확인
-        validator.adminCheck(userDetails);
-        //유저아이디로 유저정보 찾기
-        User user = validator.findUserIdInfo(userId);
+        User user = validator.adminCheck(userDetails);
+
         user.setUserLevel(update.getUserLevel());
 
         log.info("권한 변경 유저 {}", user);

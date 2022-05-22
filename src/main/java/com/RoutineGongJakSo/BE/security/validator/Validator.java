@@ -24,7 +24,7 @@ public class Validator {
     }
 
     //로그인, 관리자 접근 권한 확인
-    public void adminCheck(UserDetailsImpl userDetails) {
+    public User adminCheck(UserDetailsImpl userDetails) {
 
         loginCheck(userDetails);
 
@@ -34,6 +34,7 @@ public class Validator {
         if (user.getUserLevel() < 5) {
             throw new UserException(UserExceptionType.LOW_LEVER);
         }
+        return user;
     }
 
     //로그인 유저 확인
