@@ -73,9 +73,6 @@ public class ChatFileService {
 
     // 파일 -> List<ChatMessage> 로 읽어오기
     public EnterRoomDto getMessageFromFile(String roomId, Long prevId) {
-        if (prevId == 0) {
-            throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
-        }
         try {
             String[] result = fileReader(roomId, prevId);
 
@@ -103,7 +100,7 @@ public class ChatFileService {
             prevId = foundList.get(foundList.size() - 1).getPrevId().toString();
         } else {
             ChatFile _found = chatFileRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("파일없다")
+                    () -> new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE)
             );
             targetFileUrl = _found.getFileUrl();
             prevId = _found.getPrevId().toString();
