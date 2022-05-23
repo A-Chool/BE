@@ -9,6 +9,7 @@ import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class ChatRoomRepository {
@@ -79,6 +81,7 @@ public class ChatRoomRepository {
      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
      */
     public void enterChatRoom(String roomId) {
+        log.info("enterChatRoom roomId : {}", roomId);
         ChannelTopic topic = topics.get(roomId);
         if (topic == null)
             topic = new ChannelTopic(roomId);

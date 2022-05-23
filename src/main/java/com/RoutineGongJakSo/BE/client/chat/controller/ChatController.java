@@ -31,8 +31,8 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessageDto message, @Header("Authorization") String token) {
-        chatMessageService.save(message, token);
         log.info("요청 메서드 [Message] /chat/message");
+        chatMessageService.save(message, token);
     }
 
     @GetMapping("/chat/message/{roomId}")
