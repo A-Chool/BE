@@ -29,6 +29,6 @@ public class JoinDto {
     private String userPwCheck;
 
     @NotBlank(message = "핸드폰 번호는 필수 입력 값입니다.")
-    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "올바른 형식의 전화번호가 아닙니다.")
+    @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$", message = "올바른 형식의 전화번호가 아닙니다.")
     private String phoneNumber;
 }

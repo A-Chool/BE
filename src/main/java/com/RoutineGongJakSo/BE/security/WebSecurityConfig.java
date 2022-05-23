@@ -107,6 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("https://www.a-chool.com");
         configuration.addAllowedOrigin("https://www.a-chool.com:443");
         configuration.addAllowedOrigin("https://www.achool.shop:443");
+        configuration.addAllowedOrigin("https://achool.shop");
         configuration.addAllowedOrigin("https://master.d3lzm8oh83exkx.amplifyapp.com");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");

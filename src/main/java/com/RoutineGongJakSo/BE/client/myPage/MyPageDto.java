@@ -7,10 +7,11 @@ public class MyPageDto {
 
     @Getter
     public static class PutRequestDto{
-        private String userNickName;
+        private String userName;
         private String userTag;
         private String userGitHub;
-        private String userKakao;
+        private String findKakaoId;
+        private String phoneNumber;
     }
 
     @Getter
@@ -19,11 +20,12 @@ public class MyPageDto {
         private Long userId;
         private String userEmail;
         private String userImage;
-        private String kakaoNickName;
+        private String username;
         private String userPhoneNumber;
         private String userTag;
         private String userGitHub;
-        private String userKakao;
+        private String findKakaoId;
+        private Long kakaoId;
     }
 }
 
