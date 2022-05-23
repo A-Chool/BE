@@ -19,7 +19,7 @@ public class MyPageDto {
         private Long userId;
         private String userEmail;
         private String userImage;
-        private String userNickName;
+        private String kakaoNickName;
         private String userPhoneNumber;
         private String userTag;
         private String userGitHub;
