@@ -112,10 +112,11 @@ public class MyPageService {
     public MyPageDto.ResponseDto updateUserInfo(UserDetailsImpl userDetails, MyPageDto.PutRequestDto myPageDto) {
         User user = validator.userInfo(userDetails);
 
-        user.setUserName(myPageDto.getUserNickName());
+        user.setUserName(myPageDto.getUserName());
         user.setUserTag(myPageDto.getUserTag());
         user.setUserGitHub(myPageDto.getUserGitHub());
-        user.setKakaoNickName(myPageDto.getUserKakao());
+        user.setFindKakaoId(myPageDto.getFindKakaoId());
+        user.setPhoneNumber(myPageDto.getPhoneNumber());
 
         userRepository.save(user);
 
@@ -131,18 +132,19 @@ public class MyPageService {
         String userImage = user.getUserImageUrl();
 
         if (user.getUserImageUrl() == null){
-            userImage = "https://i.esdrop.com/d/f/zoDvw3Gypq/LDMVjgddH1.png";
+            userImage = "https://i.esdrop.com/d/f/zoDvw3Gypq/575gyh5UjD.png";
         }
 
         MyPageDto.ResponseDto responseDto = MyPageDto.ResponseDto.builder()
                 .userId(user.getUserId())
+                .kakaoId(user.getKakaoId())
+                .findKakaoId(user.getFindKakaoId())
                 .userEmail(user.getUserEmail())
                 .userImage(userImage)
                 .userPhoneNumber(user.getPhoneNumber())
-                .kakaoNickName(user.getKakaoNickName())
+                .username(user.getUserName())
                 .userTag(user.getUserTag())
                 .userGitHub(user.getUserGitHub())
-                .userKakao(user.getKakaoNickName())
                 .build();
 
         log.info("마이페이지 조회 {}", responseDto);
