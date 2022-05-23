@@ -40,4 +40,4 @@ keystore.p12
 application.yml
 static/
 S3Application.yml
-Dockerfile
+Dockerfilebuild/
