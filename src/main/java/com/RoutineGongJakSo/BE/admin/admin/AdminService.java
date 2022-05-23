@@ -48,8 +48,6 @@ public class AdminService {
         headers.add("RefreshAuthorization", "BEARER " + JwtTokenUtils.generateRefreshToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-
-
         RefreshToken findToken = refreshTokenRepository.findByUserEmail(user.getUserEmail());
 
         if (findToken != null){
@@ -74,10 +72,7 @@ public class AdminService {
     //전체 유저 조회
     public List<AdminDto.ResponseDto> getAllUser(UserDetailsImpl userDetails) {
 
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
-
-        //접근권한 확인
+        //로그인 여부 확인, 접근권한 확인
         validator.adminCheck(userDetails);
 
         List<User> users = userRepository.findAll();
@@ -107,12 +102,9 @@ public class AdminService {
     @Transactional
     public String updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
 
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
-        validator.adminCheck(userDetails);
-        //유저아이디로 유저정보 찾기
-        User user = validator.findUserIdInfo(userId);
+        //로그인 여부 확인, 접근권한 확인
+        User user = validator.adminCheck(userDetails);
+
         user.setUserLevel(update.getUserLevel());
 
         log.info("권한 변경 유저 {}", user);
@@ -124,9 +116,7 @@ public class AdminService {
     @Transactional
     public String deleteUser(Long userId, UserDetailsImpl userDetails) {
 
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
-        //관리자 접근 권한 확인
+        //로그인 여부 확인, 접근권한 확인
         validator.adminCheck(userDetails);
         //유저아이디로 유저정보 찾기
         User user = validator.findUserIdInfo(userId);
