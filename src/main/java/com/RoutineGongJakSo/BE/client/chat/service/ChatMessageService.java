@@ -34,7 +34,7 @@ public class ChatMessageService {
         String username = "";
         String sender = "";
 
-        if(messageDto.getMessage().trim().equals("")){
+        if(messageDto.getMessage().trim().equals("") && messageDto.getType()!= ChatMessage.MessageType.ENTER){
             throw new CustomException(NO_MESSAGE);
         }
 

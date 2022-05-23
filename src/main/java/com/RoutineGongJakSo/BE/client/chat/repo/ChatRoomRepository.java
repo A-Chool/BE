@@ -90,6 +90,8 @@ public class ChatRoomRepository {
     }
 
     public ChannelTopic getTopic(String roomId) {
+        log.info("getTopic");
+        log.info("roomId : {}", roomId);
         return topics.get(roomId);
     }
 }
