@@ -88,7 +88,7 @@ public class ChatFileService {
         }
     }
 
-    private String[] fileReader(String roomId, Long id) throws Exception {
+    private String[] fileReader(String roomId, Long id) throws IOException{
         log.info("roomId : {} ", roomId);
         log.info("prevId : {} ", id);
         String targetFileUrl;
