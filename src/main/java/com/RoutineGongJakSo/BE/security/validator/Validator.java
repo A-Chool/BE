@@ -23,8 +23,10 @@ public class Validator {
         }
     }
 
-    //관리자 접근 권한 확인
-    public void adminCheck(UserDetailsImpl userDetails) {
+    //로그인, 관리자 접근 권한 확인
+    public User adminCheck(UserDetailsImpl userDetails) {
+
+        loginCheck(userDetails);
 
         User user = userRepository.findByUserEmail(userDetails.getUserEmail())
                 .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_MEMBER));
@@ -32,6 +34,7 @@ public class Validator {
         if (user.getUserLevel() < 5) {
             throw new UserException(UserExceptionType.LOW_LEVER);
         }
+        return user;
     }
 
     //로그인 유저 확인
