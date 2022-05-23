@@ -5,6 +5,8 @@ import com.RoutineGongJakSo.BE.client.chat.model.ChatFile;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
 import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
+import com.RoutineGongJakSo.BE.exception.CustomException;
+import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,13 +93,16 @@ public class ChatFileService {
         log.info("prevId : {} ", id);
         String targetFileUrl;
         String prevId;
+
         if (id == null) {
             List<ChatFile> foundList = chatFileRepository.findByRoomId(roomId);
             targetFileUrl = foundList.get(foundList.size() - 1).getFileUrl();
             prevId = foundList.get(foundList.size() - 1).getPrevId().toString();
+        } else if (id == 0L) {
+            throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         } else {
-            ChatFile _found = chatFileRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("파일없다")
+            ChatFile _found = chatFileRepository.findByFileIdAndRoomId(id, roomId).orElseThrow(
+                    () -> new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE)
             );
             targetFileUrl = _found.getFileUrl();
             prevId = _found.getPrevId().toString();

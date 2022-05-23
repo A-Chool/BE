@@ -32,6 +32,9 @@ public enum ErrorCode {
     NOT_FOUND_TEAM_ID(HttpStatus.NOT_FOUND, "404_2", "팀 아이디가 존재하지 않습니다."),
     NOT_FOUND_MEMBER_ID(HttpStatus.NOT_FOUND, "404_3", "멤버 아이디가 존재하지 않습니다."),
     NOT_FOUND_TEAM_IN_WEEK(HttpStatus.NOT_FOUND, "404_4", "팀 아이디가 해당 주차에 존재하지 않습니다."),
+
+    NOT_EXIST_CHAT_FILE(HttpStatus.NOT_FOUND, "404_5", "마지막 채팅 내역입니다."),
+
     NO_WEEK(HttpStatus.NOT_FOUND, "404_50", "기본 주차가 존재하지 않습니다."),
     NOT_FOUND_TODO(HttpStatus.NOT_FOUND, "404_51", "할 일이 존재하지 않습니다."),
 
