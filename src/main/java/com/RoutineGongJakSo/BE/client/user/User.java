@@ -49,8 +49,8 @@ public class User extends Timestamped {
     @Column
     private String userImageUrl;
 
-    @Column
-    private String KakaoNickName;
+    @Column //카톡 친추용 아이디
+    private String findKakaoId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CheckIn> checkIn;
