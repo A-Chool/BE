@@ -139,7 +139,7 @@ public class MyPageService {
                 .userEmail(user.getUserEmail())
                 .userImage(userImage)
                 .userPhoneNumber(user.getPhoneNumber())
-                .userNickName(user.getKakaoNickName())
+                .kakaoNickName(user.getKakaoNickName())
                 .userTag(user.getUserTag())
                 .userGitHub(user.getUserGitHub())
                 .userKakao(user.getKakaoNickName())
