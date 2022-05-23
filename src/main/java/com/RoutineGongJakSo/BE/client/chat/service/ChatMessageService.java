@@ -29,6 +29,7 @@ public class ChatMessageService {
 
 
     public void save(ChatMessageDto messageDto, String token) {
+        log.info("save Message : {}", messageDto.getMessage());
         // username 세팅
         String username = "";
         String sender = "";
@@ -63,7 +64,7 @@ public class ChatMessageService {
 
     // redis 에 저장되어 있는 message 출력
     public List<ChatMessage> getMessages(String roomId) {
-        log.info("getMessage");
+        log.info("getMessages roomId : {}", roomId);
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllMessage(roomId);
 
         return chatMessageList;
