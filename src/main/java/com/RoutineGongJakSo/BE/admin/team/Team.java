@@ -22,7 +22,7 @@ public class Team {
     @Column(nullable = false)
     private String teamName;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
     private List<Member> memberList;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
