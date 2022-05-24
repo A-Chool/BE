@@ -16,4 +16,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     List<Team> findByWeek(Week week);
 
+    @Query("select t from Team t where t.week.weekId = :weekId")
+    List<Team> findByWeekId(Long weekId);
 }
