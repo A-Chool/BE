@@ -67,12 +67,20 @@ public class TeamService {
 
     //해당 주차의 모든 팀을 조회
     public List<TeamDto.WeekTeamDto> getTeamList(Long weekId) {
-        //해당 주차의 모든 팀을 조회
-        Week week = weekRepository.findById(weekId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
-        );
 
-        List<Team> teamList = week.getTeamList();
+        Optional<Week> week;
+        //해당 주차의 디폴트 팀
+        if (weekId == null) {
+            week = weekRepository.findByDisplay(true);
+        } else {
+            //해당 주차의 모든 팀을 조회
+        Week findWeek = weekRepository.findById(weekId).orElseThrow(
+                    () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
+            );
+            week = Optional.ofNullable(findWeek);
+        }
+
+        List<Team> teamList = week.get().getTeamList();
 
         List<TeamDto.WeekTeamDto> weekTeamDtoList = new ArrayList<>();
         for (Team team : teamList) {
@@ -88,8 +96,8 @@ public class TeamService {
             TeamDto.WeekTeamDto weekTeamDto = TeamDto.WeekTeamDto.builder()
                     .teamId(team.getTeamId())
                     .teamName(team.getTeamName())
-                    .weekId(week.getWeekId())
-                    .weekName(week.getWeekName())
+                    .weekId(week.get().getWeekId())
+                    .weekName(week.get().getWeekName())
                     .memberList(responseDtoList)
                     .build();
             weekTeamDtoList.add(weekTeamDto);
