@@ -67,6 +67,13 @@ public class TeamService {
 
     //해당 주차의 모든 팀을 조회
     public List<TeamDto.WeekTeamDto> getTeamList(Long weekId) {
+
+        //해당 주차의 디폴트 팀
+        if (weekId == null) {
+            Optional<Week> week = weekRepository.findByDisplay(true);
+            weekId = week.get().getWeekId();
+        }
+
         //해당 주차의 모든 팀을 조회
         Week week = weekRepository.findById(weekId).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
