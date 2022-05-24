@@ -62,4 +62,8 @@ public class User extends Timestamped {
     public void addMember(Member member) {
         this.memberList.add(member);
     }
+
+    public void addTags(Tag tag) {
+        this.tagList.add(tag);
+    }
 }

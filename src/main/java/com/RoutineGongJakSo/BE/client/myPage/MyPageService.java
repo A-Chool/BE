@@ -23,7 +23,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.LIAR_USER_IMAGE;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -123,17 +123,32 @@ public class MyPageService {
             tagRepository.deleteAll(tagList);
             if (myPageDto.getUserTag().contains(",")){
                 String[] arrTag = myPageDto.getUserTag().split(",");
+                if (arrTag.length > 2){
+                    throw new CustomException(TO_MUCH_TAG);
+                }
                 for (String t : arrTag){
+                    if (t.length() > 6){
+                        throw new CustomException(TO_MUCH_LENGTH);
+                    }
                     Tag saveTag = new Tag(t.trim(), user);
                     tagRepository.save(saveTag);
+                    user.addTags(saveTag);
                 }
             } else {
+                if (myPageDto.getUserTag().length() > 6){
+                    throw new CustomException(TO_MUCH_LENGTH);
+                }
                 Tag saveTag = new Tag(myPageDto.getUserTag(), user);
                 tagRepository.save(saveTag);
+                user.addTags(saveTag);
             }
         } else {
+            if (myPageDto.getUserTag().length() > 6){
+                throw new CustomException(TO_MUCH_LENGTH);
+            }
             Tag saveTag = new Tag(myPageDto.getUserTag(), user);
             tagRepository.save(saveTag);
+            user.addTags(saveTag);
         }
 
         user.setUserName(myPageDto.getUserName());
