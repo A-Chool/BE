@@ -9,7 +9,6 @@ import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
-import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,31 +105,23 @@ public class MemberService {
 
     //해당 주차에 멤버아이디가 없는 유저 리스트
     public List<MemberDto.GetNoMember> getNoMember(Long weekId) {
+        log.info("getNoMember weekId : {}", weekId);
 
-        Week targetWeek = weekRepository.findById(weekId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
-        );
+        // 쿼리 최적화 0524 HB
+        List<User> allUserList = userRepository.findAll();
+        List<Team> teamList = teamRepository.findByWeekId(weekId);
 
-        List<Team> teamList = targetWeek.getTeamList();
+        for (Team team : teamList) {
+            for (Member _member : team.getMemberList()) {
+                allUserList.remove(_member.getUser());
+            }
+        }
+        //return 값 가공하기
 
-        //모든 유저를 찾기
-        List<User> noMemberList = userRepository.findAll();
         //값을 return 할 CheckInListDto 만들기
         List<MemberDto.GetNoMember> noMembers = new ArrayList<>();
 
-        for (Team team : teamList) {
-            List<Member> memberList = team.getMemberList();
-            for (Member find : memberList) {
-                User getUser = userRepository.findById(find.getUser().getUserId()).orElseThrow(
-                        () -> new UserException(UserExceptionType.NOT_FOUND_MEMBER)
-                );
-                //제거 대상 제거
-                noMemberList.remove(getUser);
-            }
-        }
-
-        //return 값 가공하기
-        for (User user : noMemberList) {
+        for (User user : allUserList) {
             MemberDto.GetNoMember response = MemberDto.GetNoMember.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
@@ -138,8 +129,6 @@ public class MemberService {
 
             noMembers.add(response);
         }
-
-        log.info("해당 주차에 멤버 아이디가 없는 유저 리스트 {}", noMembers);
 
         return noMembers;
     }
