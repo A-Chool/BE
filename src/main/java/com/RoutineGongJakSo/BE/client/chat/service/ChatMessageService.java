@@ -54,7 +54,7 @@ public class ChatMessageService {
         message.setCreatedAt(date);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatRoomRepository.enterChatRoom(message.getRoomId());
-//            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
         } else {
             chatMessageRepository.save(message);
         }
