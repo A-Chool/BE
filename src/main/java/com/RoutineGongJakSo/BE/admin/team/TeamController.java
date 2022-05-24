@@ -30,8 +30,6 @@ public class TeamController {
             @PathVariable Long weekId) {
 
         log.info("POST /admin/admin/teams/" + weekId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -40,12 +38,10 @@ public class TeamController {
     }
 
     //해당 주차의 모든 팀을 조회
-    @GetMapping("/{weekId}")
-    public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
+    @GetMapping
+    public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(required = false) Long weekId) {
 
         log.info("GET /admin/admin/teams/" + weekId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -56,8 +52,6 @@ public class TeamController {
     public String deleteTeam(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long teamId) {
 
         log.info("DELETE /admin/admin/teams/" + teamId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
