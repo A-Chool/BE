@@ -38,7 +38,7 @@ public class TeamController {
     }
 
     //해당 주차의 모든 팀을 조회
-    @GetMapping("/teams")
+    @GetMapping
     public List<TeamDto.WeekTeamDto> getTeamList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(required = false) Long weekId) {
 
         log.info("GET /admin/admin/teams/" + weekId);
