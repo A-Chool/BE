@@ -15,6 +15,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.sse.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class CheckInService {
     private final TeamRepository teamRepository;
     private final WeekRepository weekRepository;
     private final Validator validator;
+    private final NotificationService notificationService;
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 
@@ -54,6 +56,10 @@ public class CheckInService {
     public String checkIn(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        //SSE event publish
+//        log.info("checkIn username : {}", user.getUserName());
+//        notificationService.signup(user);
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
