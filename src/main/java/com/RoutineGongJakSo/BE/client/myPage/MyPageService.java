@@ -136,12 +136,6 @@ public class MyPageService {
             tagRepository.save(saveTag);
         }
 
-
-
-
-
-
-
         user.setUserName(myPageDto.getUserName());
         user.setUserGitHub(myPageDto.getUserGitHub());
         user.setFindKakaoId(myPageDto.getFindKakaoId());
