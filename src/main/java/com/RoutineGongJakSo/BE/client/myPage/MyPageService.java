@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.myPage;
 
+import com.RoutineGongJakSo.BE.client.tag.Tag;
+import com.RoutineGongJakSo.BE.client.tag.TagRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
@@ -18,14 +20,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.LIAR_USER_IMAGE;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyPageService {
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
     private final S3Validator s3Validator;
     private final Validator validator;
     private AmazonS3 s3Client;
@@ -112,8 +117,32 @@ public class MyPageService {
     public MyPageDto.ResponseDto updateUserInfo(UserDetailsImpl userDetails, MyPageDto.PutRequestDto myPageDto) {
         User user = validator.userInfo(userDetails);
 
+        List<Tag> tagList = tagRepository.findByUser(userDetails.getUser());
+
+        if (myPageDto.getUserTag() != null){
+            tagRepository.deleteAll(tagList);
+            if (myPageDto.getUserTag().contains(",")){
+                String[] arrTag = myPageDto.getUserTag().split(",");
+                for (String t : arrTag){
+                    Tag saveTag = new Tag(t.trim(), user);
+                    tagRepository.save(saveTag);
+                }
+            } else {
+                Tag saveTag = new Tag(myPageDto.getUserTag(), user);
+                tagRepository.save(saveTag);
+            }
+        } else {
+            Tag saveTag = new Tag(myPageDto.getUserTag(), user);
+            tagRepository.save(saveTag);
+        }
+
+
+
+
+
+
+
         user.setUserName(myPageDto.getUserName());
-        user.setUserTag(myPageDto.getUserTag());
         user.setUserGitHub(myPageDto.getUserGitHub());
         user.setFindKakaoId(myPageDto.getFindKakaoId());
         user.setPhoneNumber(myPageDto.getPhoneNumber());
@@ -135,6 +164,13 @@ public class MyPageService {
             userImage = "https://i.esdrop.com/d/f/zoDvw3Gypq/575gyh5UjD.png";
         }
 
+        List<Tag> tags = tagRepository.findByUser(userDetails.getUser());
+        List<String> findTags = new ArrayList<>();
+
+        for (Tag tag : tags) {
+            findTags.add(tag.getTag());
+        }
+
         MyPageDto.ResponseDto responseDto = MyPageDto.ResponseDto.builder()
                 .userId(user.getUserId())
                 .kakaoId(user.getKakaoId())
@@ -143,7 +179,7 @@ public class MyPageService {
                 .userImage(userImage)
                 .userPhoneNumber(user.getPhoneNumber())
                 .username(user.getUserName())
-                .userTag(user.getUserTag())
+                .userTag(findTags)
                 .userGitHub(user.getUserGitHub())
                 .build();
 
