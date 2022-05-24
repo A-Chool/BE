@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.user;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
+import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.util.Timestamped;
 import lombok.*;
 
@@ -41,9 +42,6 @@ public class User extends Timestamped {
     private String naverId;
 
     @Column
-    private String userTag;
-
-    @Column
     private String userGitHub;
 
     @Column
@@ -58,7 +56,14 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Member> memberList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Tag> tagList;
+
     public void addMember(Member member) {
         this.memberList.add(member);
+    }
+
+    public void addTags(Tag tag) {
+        this.tagList.add(tag);
     }
 }

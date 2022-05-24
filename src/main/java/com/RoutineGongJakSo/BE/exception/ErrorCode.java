@@ -24,6 +24,8 @@ public enum ErrorCode {
     BAD_TOKEN(HttpStatus.BAD_REQUEST, "400_52", "유효하지 않은 토큰입니다."),
     TRY_START(HttpStatus.BAD_REQUEST, "400_53", "Start 를 먼저 눌러주세요."),
     NO_WEEK_MEMBER(HttpStatus.BAD_REQUEST, "400_54", "이 팀의 멤버가 아닙니다."),
+    TO_MUCH_TAG(HttpStatus.BAD_REQUEST, "400_55", "한 명의 유저는 2개 이하의 태그만 가질 수 있습니다."),
+    TO_MUCH_LENGTH(HttpStatus.BAD_REQUEST, "400_56", "태그는 6자 이하여야 합니다."),
 
     // 404 Not Found
     NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_0", "유저 아이디가 존재하지 않습니다."),

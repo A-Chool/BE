@@ -6,6 +6,7 @@ import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
+import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
@@ -83,13 +84,20 @@ public class TeamService {
         List<Team> teamList = week.get().getTeamList();
 
         List<TeamDto.WeekTeamDto> weekTeamDtoList = new ArrayList<>();
+
+
+
         for (Team team : teamList) {
             List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
 
             for (Member member : team.getMemberList()) { //ToDo getMemberList에 어떤 값이 들어있는지 확인은 어디서 할 수 있을까요?
+                List<String> tagList = new ArrayList<>();
+                for (Tag t : member.getUser().getTagList()){
+                    tagList.add(t.getTag());
+                }
                 MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
                 responseDto.setMemberId(member.getMemberId());
-                responseDto.setUser(new UserDto(member.getUser()));
+                responseDto.setUser(new UserDto(member.getUser(), tagList));
                 responseDtoList.add(responseDto);
             }
 
