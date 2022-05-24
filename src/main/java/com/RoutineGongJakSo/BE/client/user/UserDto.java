@@ -12,6 +12,8 @@ public class UserDto {
     private String phoneNumber;
     private String createdAt;
     private Long kakaoId;
+    private String userGitHub;
+    private String userTag;
 
     public UserDto(User user) {
         this.userId = user.getUserId();
@@ -20,5 +22,7 @@ public class UserDto {
         this.phoneNumber = user.getPhoneNumber();
         this.createdAt = user.getCreatedAt();
         this.kakaoId = user.getKakaoId();
+        this.userTag = user.getUserTag();
+        this.userGitHub = user.getUserGitHub();
     }
 }
