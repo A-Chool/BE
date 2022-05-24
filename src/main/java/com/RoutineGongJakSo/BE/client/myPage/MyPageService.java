@@ -119,36 +119,21 @@ public class MyPageService {
 
         List<Tag> tagList = tagRepository.findByUser(userDetails.getUser());
 
-        if (myPageDto.getUserTag() != null){
-            tagRepository.deleteAll(tagList);
-            if (myPageDto.getUserTag().contains(",")){
-                String[] arrTag = myPageDto.getUserTag().split(",");
-                if (arrTag.length > 2){
-                    throw new CustomException(TO_MUCH_TAG);
-                }
-                for (String t : arrTag){
-                    if (t.length() > 6){
-                        throw new CustomException(TO_MUCH_LENGTH);
-                    }
-                    Tag saveTag = new Tag(t.trim(), user);
-                    tagRepository.save(saveTag);
-                    user.addTags(saveTag);
-                }
-            } else {
-                if (myPageDto.getUserTag().length() > 6){
-                    throw new CustomException(TO_MUCH_LENGTH);
-                }
-                Tag saveTag = new Tag(myPageDto.getUserTag(), user);
-                tagRepository.save(saveTag);
-                user.addTags(saveTag);
-            }
-        } else {
-            if (myPageDto.getUserTag().length() > 6){
+        if(tagList != null) {
+            tagRepository.deleteAll();
+        }
+
+        if (myPageDto.getUserTag().size() > 2){
+            throw new CustomException(TO_MUCH_TAG);
+        }
+        for (String t : myPageDto.getUserTag()){
+            if (t.length() > 6){
                 throw new CustomException(TO_MUCH_LENGTH);
             }
-            Tag saveTag = new Tag(myPageDto.getUserTag(), user);
-            tagRepository.save(saveTag);
+
+            Tag saveTag = new Tag(t, user);
             user.addTags(saveTag);
+            tagRepository.save(saveTag);
         }
 
         user.setUserName(myPageDto.getUserName());

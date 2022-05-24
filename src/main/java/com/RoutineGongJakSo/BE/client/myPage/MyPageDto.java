@@ -10,7 +10,7 @@ public class MyPageDto {
     @Getter
     public static class PutRequestDto{
         private String userName;
-        private String userTag;
+        private List<String> userTag;
         private String userGitHub;
         private String findKakaoId;
         private String phoneNumber;
