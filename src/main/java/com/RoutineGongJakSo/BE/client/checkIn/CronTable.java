@@ -1,13 +1,13 @@
 package com.RoutineGongJakSo.BE.client.checkIn;
 
-import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
-import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
+import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
+import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -24,7 +24,8 @@ public class CronTable {
     private final AnalysisRepository analysisRepository;
     private final CheckInValidator checkInValidator;
 
-    @Scheduled(cron = "0 00 5 * * *") // 매일 오전 5시에 실행
+//    @Scheduled(cron = "0 00 5 * * *") // 매일 오전 5시에 실행
+    @PostConstruct
     @Transactional
     public void reset() throws ParseException {
 
@@ -40,8 +41,10 @@ public class CronTable {
 
         for (CheckIn check : checkInList){
             if (check.getCheckOut() == null){
-                check.setCheckOut("21:00:00");
-
+                String[] reSetCheck = check.getCheckIn().split(":");
+                int setH = Integer.parseInt(reSetCheck[0]) + 1;
+                String reSetCheckOut = setH + ":" + reSetCheck[1] + ":" + reSetCheck[2];
+                check.setCheckOut(reSetCheckOut);
                 checkInRepository.save(check);
 
                 Optional<Analysis> analysis = analysisRepository.findByUserAndDate(check.getUser(), check.getDate());
@@ -49,7 +52,7 @@ public class CronTable {
                 if (!analysis.isPresent()){
                     //체크아웃 기록이 아예 없어서 analysis 테이블이 null이라면,
                     Analysis setAnalysis = Analysis.builder()
-                            .daySum("12:00:00")
+                            .daySum("01:00:00")
                             .date(setToday)
                             .user(check.getUser())
                             .build();
@@ -57,7 +60,10 @@ public class CronTable {
                     check.setAnalysis(setAnalysis);
                     checkInRepository.save(check);
                 }else { //이미 체크아웃 한 기록이 있지만, 마지막 체크인 후 체크아웃을 하지 않은 경우 시간 초기화용
-                    analysis.get().setDaySum("12:00:00");
+                    String[] setTime = analysis.get().getDaySum().split(":");
+                    int reH = Integer.parseInt(setTime[0]) + 1;
+                    String setDaySum =  reH + ":" + setTime[1] + ":" + setTime[2];
+                    analysis.get().setDaySum(setDaySum);
                     analysisRepository.save(analysis.get());
                 }
             }
