@@ -4,6 +4,7 @@ import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
+import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
@@ -76,10 +77,15 @@ public class MemberService {
 
         List<Member> memberList = targetTeam.getMemberList();
         List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
+
         for (Member _member : memberList) {
+            List<String> tagList = new ArrayList<>();
+            for (Tag t : _member.getUser().getTagList()){
+                tagList.add(t.getTag());
+            }
             MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
             responseDto.setMemberId(_member.getMemberId());
-            responseDto.setUser(new UserDto(_member.getUser()));
+            responseDto.setUser(new UserDto(_member.getUser(), tagList));
             responseDtoList.add(responseDto);
         }
 
