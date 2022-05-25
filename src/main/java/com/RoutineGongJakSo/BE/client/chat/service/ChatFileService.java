@@ -80,7 +80,7 @@ public class ChatFileService {
 
         validator.loginCheck(userDetails);
 
-        if(prevId == 0L){
+        if(prevId != null && prevId == 0L ){
             throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         }
         try {
