@@ -39,10 +39,16 @@ public class CronTable {
         List<CheckIn> checkInList = checkInRepository.findByDate(setToday); //전 일에 해당하는 모든 리스트
 
         for (CheckIn check : checkInList){
+            String[] lastCheck = check.getCheckIn().split(":");
+            int lastTime = Integer.parseInt(lastCheck[0]);
+
+            if (lastTime >= 4){
+                checkInRepository.delete(check);
+            }
+
             if (check.getCheckOut() == null){
-                String[] reSetCheck = check.getCheckIn().split(":");
-                int setH = Integer.parseInt(reSetCheck[0]) + 1;
-                String reSetCheckOut = setH + ":" + reSetCheck[1] + ":" + reSetCheck[2];
+                int setH = Integer.parseInt(lastCheck[0]) + 1;
+                String reSetCheckOut = setH + ":" + lastCheck[1] + ":" + lastCheck[2];
                 check.setCheckOut(reSetCheckOut);
                 checkInRepository.save(check);
 
@@ -66,6 +72,7 @@ public class CronTable {
                     analysisRepository.save(analysis.get());
                 }
             }
+            checkInRepository.deleteAll(checkInList);
         }
 
     }
