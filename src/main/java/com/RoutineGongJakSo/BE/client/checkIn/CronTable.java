@@ -5,9 +5,9 @@ import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -24,8 +24,7 @@ public class CronTable {
     private final AnalysisRepository analysisRepository;
     private final CheckInValidator checkInValidator;
 
-//    @Scheduled(cron = "0 00 5 * * *") // 매일 오전 5시에 실행
-    @PostConstruct
+    @Scheduled(cron = "0 00 5 * * *") // 매일 오전 5시에 실행
     @Transactional
     public void reset() throws ParseException {
 
