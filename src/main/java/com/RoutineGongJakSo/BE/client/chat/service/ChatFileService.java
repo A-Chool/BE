@@ -7,6 +7,8 @@ import com.RoutineGongJakSo.BE.client.chat.repo.ChatFileRepository;
 import com.RoutineGongJakSo.BE.client.myPage.S3Validator;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
+import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,7 @@ import java.util.List;
 public class ChatFileService {
     private final ChatFileRepository chatFileRepository;
     private final S3Validator s3Validator;
-
+    private final Validator validator;
     // 파일에 내용 저장하기
     // fileName = roomId
     public String[] fileWriter(List<ChatMessage> chatMessageList, String roomId) throws Exception {
@@ -71,11 +73,14 @@ public class ChatFileService {
     }
 
     // 파일 -> List<ChatMessage> 로 읽어오기
-    public EnterRoomDto getMessageFromFile(String roomId, Long prevId) {
+    public EnterRoomDto getMessageFromFile(UserDetailsImpl userDetails, String roomId, Long prevId) {
         log.info("getMessageFromFile");
         log.info("roomId : {}", roomId);
         log.info("prevId : {}", prevId);
-        if(prevId == 0L){
+
+        validator.loginCheck(userDetails);
+
+        if(prevId != null && prevId == 0L ){
             throw new CustomException(ErrorCode.NOT_EXIST_CHAT_FILE);
         }
         try {

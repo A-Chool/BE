@@ -6,10 +6,12 @@ import com.RoutineGongJakSo.BE.client.chat.dto.EnterRoomDto;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatMessage;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatFileService;
 import com.RoutineGongJakSo.BE.client.chat.service.ChatMessageService;
+import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,8 +46,11 @@ public class ChatController {
 
     @GetMapping("/chat/message/file/{roomId}")
     @ResponseBody
-    public EnterRoomDto getMessageFromFile(@PathVariable String roomId, @RequestParam(required = false) Long prevId){
+    public EnterRoomDto getMessageFromFile(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable String roomId,
+            @RequestParam(required = false) Long prevId){
         log.info("요청 메서드 [GET] /chat/message/file/{roomId}");
-        return chatFileService.getMessageFromFile(roomId, prevId);
+        return chatFileService.getMessageFromFile(userDetails, roomId, prevId);
     }
 }
