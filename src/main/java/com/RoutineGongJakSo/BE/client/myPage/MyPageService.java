@@ -128,9 +128,9 @@ public class MyPageService {
 //        }
 
         for (String t : myPageDto.getUserTag()){
-            if (t.length() > 6){
-                throw new CustomException(TO_MUCH_LENGTH);
-            }
+//            if (t.length() > 6){
+//                throw new CustomException(TO_MUCH_LENGTH);
+//            }
 
             Tag saveTag = new Tag(t, user);
             user.addTags(saveTag);
