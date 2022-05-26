@@ -120,7 +120,7 @@ public class MyPageService {
         List<Tag> tagList = tagRepository.findByUser(userDetails.getUser());
 
         if(tagList != null) {
-            tagRepository.deleteAll();
+            tagRepository.deleteAll(tagList);
         }
 
 //        if (myPageDto.getUserTag().size() > 2){
@@ -128,9 +128,9 @@ public class MyPageService {
 //        }
 
         for (String t : myPageDto.getUserTag()){
-            if (t.length() > 6){
-                throw new CustomException(TO_MUCH_LENGTH);
-            }
+//            if (t.length() > 6){
+//                throw new CustomException(TO_MUCH_LENGTH);
+//            }
 
             Tag saveTag = new Tag(t, user);
             user.addTags(saveTag);
