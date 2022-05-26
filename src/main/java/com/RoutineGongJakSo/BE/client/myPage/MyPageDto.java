@@ -13,7 +13,7 @@ public class MyPageDto {
     @Getter
     public static class PutRequestDto{
         @NotBlank(message = "이름은 필수 입력 값입니다.")
-        @Pattern(regexp = "^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{2,7}$", message = "이름은 한글, 영문, 숫자만 가능하며 2-8자리 가능합니다.")
+        @Pattern(regexp = "^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{2,7}$", message = "이름은 한글, 영문, 숫자만 가능하며 2-7자리 가능합니다.")
         private String userName;
 
         private List<String> userTag;
