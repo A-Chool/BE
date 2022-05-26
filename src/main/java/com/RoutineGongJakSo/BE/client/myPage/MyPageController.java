@@ -4,6 +4,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,7 @@ public class MyPageController {
 
     @PutMapping("/mypage")
     public MyPageDto.ResponseDto updateUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @RequestBody MyPageDto.PutRequestDto myPageDto) {
+                                                @Validated @RequestBody MyPageDto.PutRequestDto myPageDto) {
         log.info("요청 메서드 [PUT] /api/user/mypage");
         return myPageService.updateUserInfo(userDetails, myPageDto);
     }
