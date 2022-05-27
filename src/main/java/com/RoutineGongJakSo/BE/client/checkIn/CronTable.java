@@ -72,7 +72,6 @@ public class CronTable {
                     analysisRepository.save(analysis.get());
                 }
             }
-            checkInRepository.deleteAll(checkInList);
         }
 
     }

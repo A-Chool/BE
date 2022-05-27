@@ -27,7 +27,7 @@ public class Analysis {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "analysis")
+    @OneToMany(mappedBy = "analysis", cascade = CascadeType.ALL)
     private List<CheckIn> checkIns;
 
 }
