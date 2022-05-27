@@ -20,5 +20,4 @@ public class AnalysisDto {
         private String day;
         private String value;
     }
-
 }

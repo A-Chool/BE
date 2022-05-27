@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -30,5 +31,11 @@ public class AnalysisController {
     public List<AnalysisDto.GandiResponseDto> getGandi(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("요청 메소드 [GET] /api/user/analysis");
         return analysisService.getGandi(userDetails);
+    }
+
+    @GetMapping("/line")
+    public Map<String, Object> getLineAnalysis(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
+        log.info("요청 메소드 [GET] /api/user/analysis/line");
+        return analysisService.getLineAnalysis(userDetails);
     }
 }
