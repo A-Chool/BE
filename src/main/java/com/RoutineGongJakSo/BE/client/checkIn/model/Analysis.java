@@ -28,5 +28,5 @@ public class Analysis {
     private User user;
 
     @OneToMany(mappedBy = "analysis", cascade = CascadeType.ALL)
-    List<CheckIn> checkIns;
+    private List<CheckIn> checkIns;
 }
