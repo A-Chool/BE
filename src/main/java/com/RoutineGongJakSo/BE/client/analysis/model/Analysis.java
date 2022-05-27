@@ -1,5 +1,6 @@
-package com.RoutineGongJakSo.BE.client.checkIn.model;
+package com.RoutineGongJakSo.BE.client.analysis.model;
 
+import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.*;
 
