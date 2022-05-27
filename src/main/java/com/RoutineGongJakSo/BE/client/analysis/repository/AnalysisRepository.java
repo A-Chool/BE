@@ -1,6 +1,6 @@
-package com.RoutineGongJakSo.BE.client.checkIn.repository;
+package com.RoutineGongJakSo.BE.client.analysis.repository;
 
-import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

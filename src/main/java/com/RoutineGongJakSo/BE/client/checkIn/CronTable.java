@@ -1,8 +1,8 @@
 package com.RoutineGongJakSo.BE.client.checkIn;
 
-import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
-import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
+import com.RoutineGongJakSo.BE.client.analysis.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -72,7 +72,6 @@ public class CronTable {
                     analysisRepository.save(analysis.get());
                 }
             }
-            checkInRepository.deleteAll(checkInList);
         }
 
     }

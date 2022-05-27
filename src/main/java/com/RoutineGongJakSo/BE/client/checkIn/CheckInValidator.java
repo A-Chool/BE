@@ -1,6 +1,6 @@
 package com.RoutineGongJakSo.BE.client.checkIn;
 
-import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

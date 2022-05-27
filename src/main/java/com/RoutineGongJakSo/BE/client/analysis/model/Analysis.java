@@ -1,5 +1,6 @@
-package com.RoutineGongJakSo.BE.client.checkIn.model;
+package com.RoutineGongJakSo.BE.client.analysis.model;
 
+import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.*;
 
@@ -28,5 +29,5 @@ public class Analysis {
     private User user;
 
     @OneToMany(mappedBy = "analysis", cascade = CascadeType.ALL)
-    List<CheckIn> checkIns;
+    private List<CheckIn> checkIns;
 }
