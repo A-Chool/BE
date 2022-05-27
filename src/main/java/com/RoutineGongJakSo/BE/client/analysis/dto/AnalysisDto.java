@@ -11,7 +11,14 @@ public class AnalysisDto {
        private Long startDate;
        private String totalTime;
        private String todayTime;
-        private String todayCheckIn;
+       private String todayCheckIn;
+    }
+
+    @Getter
+    @Builder
+    public static class GandiResponseDto {
+        private String day;
+        private String value;
     }
 
 }

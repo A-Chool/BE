@@ -13,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class AnalysisService {
     private final AnalysisRepository analysisRepository;
     private final CheckInRepository checkInRepository;
     private final CheckInValidator checkInValidator;
+
+    //상단 통계
+    @Transactional
     public AnalysisDto.TopResponseDto topAnalysis(UserDetailsImpl userDetails) throws ParseException {
         User user = validator.userInfo(userDetails);
 
@@ -80,7 +85,29 @@ public class AnalysisService {
                 .todayTime(daySum)
                 .todayCheckIn(todayCheckIn)
                 .build();
+
         log.info("상단 통계 {}", responseDto);
         return responseDto;
+    }
+
+    // 잔디용 통계
+    @Transactional
+    public List<AnalysisDto.GandiResponseDto> getGandi(UserDetailsImpl userDetails) {
+        User user = validator.userInfo(userDetails);
+        List<Analysis> userAllAnalysis = analysisRepository.findByUser(user);
+        List<AnalysisDto.GandiResponseDto> gandi = new ArrayList<>();
+
+        for (Analysis find : userAllAnalysis) {
+            String[] arrA = find.getDaySum().split(":");
+            String value = arrA[0];
+
+            AnalysisDto.GandiResponseDto response = AnalysisDto.GandiResponseDto.builder()
+                    .day(find.getDate())
+                    .value(value)
+                    .build();
+            gandi.add(response);
+        }
+        log.info("잔디 통계 {}", gandi);
+        return gandi;
     }
 }

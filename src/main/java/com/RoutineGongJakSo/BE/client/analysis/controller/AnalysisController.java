@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,5 +24,11 @@ public class AnalysisController {
     public AnalysisDto.TopResponseDto topAnalysis(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
         log.info("요청 메소드 [GET] /api/user/analysis/top");
         return analysisService.topAnalysis(userDetails);
+    }
+
+    @GetMapping
+    public List<AnalysisDto.GandiResponseDto> getGandi(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("요청 메소드 [GET] /api/user/analysis");
+        return analysisService.getGandi(userDetails);
     }
 }
