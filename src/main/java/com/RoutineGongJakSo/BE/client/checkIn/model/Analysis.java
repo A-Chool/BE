@@ -29,5 +29,4 @@ public class Analysis {
 
     @OneToMany(mappedBy = "analysis", cascade = CascadeType.ALL)
     private List<CheckIn> checkIns;
-
 }
