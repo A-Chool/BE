@@ -4,6 +4,7 @@ import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
 import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
+import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -105,7 +108,13 @@ public class AdminService {
         //로그인 여부 확인, 접근권한 확인
         User user = validator.adminCheck(userDetails);
 
-        user.setUserLevel(update.getUserLevel());
+        User getUser = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(NOT_FOUND_USER_ID)
+        );
+
+        getUser.setUserLevel(update.getUserLevel());
+
+        userRepository.save(getUser);
 
         log.info("권한 변경 유저 {}", user);
 
