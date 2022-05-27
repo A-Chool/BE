@@ -53,10 +53,10 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CheckIn> checkIn;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Member> memberList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tag> tagList;
 
     public void addMember(Member member) {
