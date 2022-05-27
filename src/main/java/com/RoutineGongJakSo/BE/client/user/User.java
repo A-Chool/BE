@@ -1,6 +1,7 @@
 package com.RoutineGongJakSo.BE.client.user;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
+import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.util.Timestamped;
@@ -53,11 +54,14 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CheckIn> checkIn;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Member> memberList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tag> tagList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Analysis> analysisList;
 
     public void addMember(Member member) {
         this.memberList.add(member);

@@ -120,7 +120,7 @@ public class MyPageService {
         List<Tag> tagList = tagRepository.findByUser(userDetails.getUser());
 
         if(tagList != null) {
-            tagRepository.deleteAll();
+            tagRepository.deleteAll(tagList);
         }
 
 //        if (myPageDto.getUserTag().size() > 2){
