@@ -22,7 +22,7 @@ public class CheckIn {
 
     @ManyToOne
     @JoinColumn(name = "ANALYSIS_ID")
-    Analysis analysis;
+    private Analysis analysis;
 
     @Column
     private String date;
