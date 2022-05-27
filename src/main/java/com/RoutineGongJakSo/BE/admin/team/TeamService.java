@@ -38,7 +38,7 @@ public class TeamService {
         Week week = weekFound.get();
 
         String teamName = teamDto.getTeamName();
-        Optional<Team> teamFound = teamRepository.findByTeamName(teamName);
+        Optional<Team> teamFound = teamRepository.findByTeamNameAndWeek(teamName, week);
         checkTeamDuple(teamFound);
 
         String groundRule = "";
