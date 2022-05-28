@@ -2,7 +2,6 @@ package com.RoutineGongJakSo.BE.client.analysis.controller;
 
 import com.RoutineGongJakSo.BE.client.analysis.dto.AnalysisDto;
 import com.RoutineGongJakSo.BE.client.analysis.service.AnalysisService;
-import com.RoutineGongJakSo.BE.client.analysis.service.CronRank;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AnalysisController {
     private final AnalysisService analysisService;
-    private final CronRank cronRank;
 
     @GetMapping("/top")
     public AnalysisDto.TopResponseDto topAnalysis(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
@@ -42,18 +40,8 @@ public class AnalysisController {
     }
 
     @GetMapping("/rank")
-    public void getRank(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Object getRank(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("요청 메소드 [GET] /api/user/analysis/rank");
-        analysisService.getRank();
-    }
-
-    @GetMapping("/update")
-    public void updateRank(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        cronRank.updateRank();
-    }
-
-    @GetMapping("/reset")
-    public void resetRank(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        cronRank.resetRank();
+        return analysisService.getRank(userDetails);
     }
 }
