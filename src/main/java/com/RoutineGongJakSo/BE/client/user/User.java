@@ -1,7 +1,7 @@
 package com.RoutineGongJakSo.BE.client.user;
 
 import com.RoutineGongJakSo.BE.admin.member.Member;
-import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.util.Timestamped;
