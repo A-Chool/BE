@@ -10,6 +10,8 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +30,7 @@ public class AnalysisService {
     private final Validator validator;
     private final AnalysisRepository analysisRepository;
     private final CheckInRepository checkInRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     //상단 통계
     @Transactional
@@ -62,7 +65,7 @@ public class AnalysisService {
 
         Analysis todayAnalysis = new Analysis();
         for (Analysis find : userAllAnalysis) {
-            if (find.getDate().equals(setToday)){
+            if (find.getDate().equals(setToday)) {
                 todayAnalysis = find;
             }
         }
@@ -76,7 +79,7 @@ public class AnalysisService {
 
         String todayCheckIn = "00:00:00";
 
-        if (firstCheckIn.size() >= 1){
+        if (firstCheckIn.size() >= 1) {
             todayCheckIn = firstCheckIn.get(0).getCheckIn();
         }
 
@@ -133,10 +136,12 @@ public class AnalysisService {
         List<String> getUsersAvg = new ArrayList<>(); //전체 평균 일 공부시간
 
         //본인 일별 공부시간
-        for (int i = 1; i <= lastDay; i++){
+        for (int i = 1; i <= lastDay; i++) {
             String getDay = String.valueOf(i);
+
             String day ="";
             String getString = getDay + ":" + "0";
+          
             for (Analysis find : targetUser) {
                 String[] getDate = find.getDate().split("-");
 
@@ -155,21 +160,21 @@ public class AnalysisService {
             String getDay = String.valueOf(i);
             int totalMM = 0;
             int cnt = 0;
-            for (Analysis t : allUserAnalysis){
+            for (Analysis t : allUserAnalysis) {
                 String[] targetDate = t.getDate().split("-");
-                if (getDay.equals(targetDate[2])){
+                if (getDay.equals(targetDate[2])) {
                     String[] arr = t.getDaySum().split(":");
 
                     int allHH = Integer.parseInt(arr[0]);
                     int allMM = allHH * 60;
                     int alltotal = allMM + Integer.parseInt(arr[1]); //분으로 환산
                     totalMM += alltotal;
-                    cnt+=1;
+                    cnt += 1;
                 }
             }
             int totalHH = totalMM / 60;
             int avg = 0;
-            if (cnt != 0){
+            if (cnt != 0) {
                 avg = totalHH / cnt;
             }
 
@@ -182,5 +187,15 @@ public class AnalysisService {
 
         log.info("꺽은선 통계 {}", response);
         return response;
+    }
+
+    public Object getRank(UserDetailsImpl userDetails) {
+        log.info("getRank redis에서 rank 불러오기");
+        validator.userInfo(userDetails);
+        String key = "rank";
+        ZSetOperations<String, Object> ZSetOperation = redisTemplate.opsForZSet();
+        Set<ZSetOperations.TypedTuple<Object>> redisSet = ZSetOperation.reverseRangeWithScores(key, 0, -1);
+
+        return redisSet;
     }
 }
