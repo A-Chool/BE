@@ -18,6 +18,6 @@ public class AnalysisDto {
     @Builder
     public static class GandiResponseDto {
         private String day;
-        private String value;
+        private int value;
     }
 }
