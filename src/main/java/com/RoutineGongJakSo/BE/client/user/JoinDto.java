@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.user;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@Builder
 public class JoinDto {
 
 
