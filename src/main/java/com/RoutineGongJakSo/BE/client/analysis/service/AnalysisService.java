@@ -104,7 +104,7 @@ public class AnalysisService {
 
             AnalysisDto.GandiResponseDto response = AnalysisDto.GandiResponseDto.builder()
                     .day(find.getDate())
-                    .value(value)
+                    .value(Integer.parseInt(value))
                     .build();
             gandi.add(response);
         }
