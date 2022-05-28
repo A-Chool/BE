@@ -138,17 +138,20 @@ public class AnalysisService {
         //본인 일별 공부시간
         for (int i = 1; i <= lastDay; i++) {
             String getDay = String.valueOf(i);
-            String day = "";
+
+            String day ="";
+            String getString = getDay + ":" + "0";
+          
             for (Analysis find : targetUser) {
                 String[] getDate = find.getDate().split("-");
+
                 if (getDay.equals(getDate[2])) {
                     String[] getDaySum = find.getDaySum().split(":");
-                    day = getDay + ":" + Integer.parseInt(getDaySum[0]);
-                } else {
-                    day = getDay + ":" + "0";
+                    Long getNum = Long.valueOf(getDaySum[0]);
+                    getString = getDay + ":" + String.valueOf(getNum);
                 }
             }
-            getMyTotal.add(day);
+            getMyTotal.add(getString);
         }
 
         //전체 평균 일 공부시간
