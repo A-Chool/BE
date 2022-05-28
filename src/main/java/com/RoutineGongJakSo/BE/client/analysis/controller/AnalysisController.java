@@ -38,4 +38,10 @@ public class AnalysisController {
         log.info("요청 메소드 [GET] /api/user/analysis/line");
         return analysisService.getLineAnalysis(userDetails);
     }
+
+    @GetMapping("/rank")
+    public Object getRank(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("요청 메소드 [GET] /api/user/analysis/rank");
+        return analysisService.getRank(userDetails);
+    }
 }
