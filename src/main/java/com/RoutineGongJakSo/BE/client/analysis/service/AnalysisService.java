@@ -3,7 +3,6 @@ package com.RoutineGongJakSo.BE.client.analysis.service;
 import com.RoutineGongJakSo.BE.client.analysis.dto.AnalysisDto;
 import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.analysis.repository.AnalysisRepository;
-import com.RoutineGongJakSo.BE.client.checkIn.CheckInValidator;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
@@ -20,6 +19,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static com.RoutineGongJakSo.BE.util.CalendarUtil.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,6 @@ public class AnalysisService {
     private final Validator validator;
     private final AnalysisRepository analysisRepository;
     private final CheckInRepository checkInRepository;
-    private final CheckInValidator checkInValidator;
 
     //상단 통계
     @Transactional
@@ -37,11 +37,11 @@ public class AnalysisService {
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
         System.out.println(date);
 
-        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
-        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+        Calendar setDay = todayCalender(date); //오늘 기준 캘린더
+        setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         if (today.compareTo(setDay) < 0) {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
@@ -54,7 +54,7 @@ public class AnalysisService {
 
         Long days = ChronoUnit.DAYS.between(startDate, standardDate); //공부 시작 일수
 
-        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+        String setToday = DateFormat(today); //Date -> String 변환
 
         List<Analysis> userAllAnalysis = analysisRepository.findByUser(user);
         String daySum = "0";
@@ -69,7 +69,7 @@ public class AnalysisService {
 
         if (userAllAnalysis.size() >= 1) {
             daySum = todayAnalysis.getDaySum();
-            totalTime = checkInValidator.totalTime(userAllAnalysis);
+            totalTime = totalTime(userAllAnalysis);
         }
 
         List<CheckIn> firstCheckIn = checkInRepository.findByUserAndDate(user, setToday);
@@ -104,7 +104,7 @@ public class AnalysisService {
 
             AnalysisDto.GandiResponseDto response = AnalysisDto.GandiResponseDto.builder()
                     .day(find.getDate())
-                    .value(value)
+                    .value(Integer.parseInt(value))
                     .build();
             gandi.add(response);
         }
@@ -119,8 +119,8 @@ public class AnalysisService {
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         int lastDay = today.getActualMaximum(Calendar.DAY_OF_MONTH); //달의 마지막 날
 
