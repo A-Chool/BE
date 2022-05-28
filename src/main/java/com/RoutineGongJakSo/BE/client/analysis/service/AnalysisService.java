@@ -11,6 +11,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +29,7 @@ public class AnalysisService {
     private final AnalysisRepository analysisRepository;
     private final CheckInRepository checkInRepository;
     private final CheckInValidator checkInValidator;
+    private final RedisTemplate<String, String> redisTemplate;
 
     //상단 통계
     @Transactional
@@ -186,5 +188,9 @@ public class AnalysisService {
         response.put("myTotal", getMyTotal);
 
         return response;
+    }
+
+    public void getRank() {
+        
     }
 }
