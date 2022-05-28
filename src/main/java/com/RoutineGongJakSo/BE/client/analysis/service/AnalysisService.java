@@ -73,10 +73,11 @@ public class AnalysisService {
         }
 
         List<CheckIn> firstCheckIn = checkInRepository.findByUserAndDate(user, setToday);
-        String todayCheckIn = firstCheckIn.get(0).getCheckIn();
 
-        if (firstCheckIn.size() < 1){
-            todayCheckIn = "00:00:00";
+        String todayCheckIn = "00:00:00";
+
+        if (firstCheckIn.size() >= 1){
+            todayCheckIn = firstCheckIn.get(0).getCheckIn();
         }
 
         AnalysisDto.TopResponseDto responseDto = AnalysisDto.TopResponseDto.builder()
@@ -124,14 +125,7 @@ public class AnalysisService {
         int lastDay = today.getActualMaximum(Calendar.DAY_OF_MONTH); //달의 마지막 날
 
         List<Analysis> allUserAnalysis = analysisRepository.findAll();
-
-        List<Analysis> targetUser = new ArrayList<>();
-
-        for (Analysis t : allUserAnalysis) {
-            if (t.getUser() == user){
-                targetUser.add(t);
-            }
-        }
+        List<Analysis> targetUser = analysisRepository.findByAnalysisWithUser(user); // N+1 문제 해결용
 
         Map<String, Object> response = new HashMap<>();
 
@@ -185,6 +179,7 @@ public class AnalysisService {
         response.put("usersAvg", getUsersAvg);
         response.put("myTotal", getMyTotal);
 
+        log.info("꺽은선 통계 {}", response);
         return response;
     }
 }

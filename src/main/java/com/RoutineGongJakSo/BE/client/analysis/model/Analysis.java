@@ -24,7 +24,7 @@ public class Analysis {
     @Column //날짜
     private String date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
