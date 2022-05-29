@@ -35,7 +35,7 @@ public class CronRank {
         String key = "rank";
         ZSetOperations<String, Object> ZSetOperation = redisTemplate.opsForZSet();
 
-        String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
+        String date = (LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1)).toString(); // 현재 서울 날짜 에서 하루 빼야함
         Calendar today = todayCalender(date); //현재 시간 기준 날짜
         String dateFormat = DateFormat(today);
 
