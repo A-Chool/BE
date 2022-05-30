@@ -3,10 +3,12 @@ package com.RoutineGongJakSo.BE.security.jwt;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenUtils {
 
@@ -29,10 +31,12 @@ public class JwtTokenUtils {
                     // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
+            log.info("일반유저 로그인 try 토큰 {}", token);
         } catch (Exception e) {
+            log.info("일반유저 로그인 catch 토큰 {}", token);
             System.out.println(e.getMessage());
         }
-
+        log.info("일반유저 로그인 마지막 return 토큰 {}", token);
         return token;
     }
 
@@ -54,9 +58,12 @@ public class JwtTokenUtils {
                     // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + adminTokenTime))
                     .sign(generateAlgorithm());
+            log.info("유틸 어드민 토큰 try {} 부분", token);
         } catch (Exception e) {
+            log.info("유틸 어드민 토큰 catch 부분 {}", e.getMessage());
             System.out.println(e.getMessage());
         }
+        log.info("어드민 트라이 캐치 빠져나오고, 맨 마지막 return {}", token);
         return token;
     }
 
@@ -69,9 +76,12 @@ public class JwtTokenUtils {
                     .withIssuer("Mr.A-Chool")
                     .withClaim(CLAIM_EXPIRED_DATE, new Date((System.currentTimeMillis() + refreshToken)))
                     .sign(generateAlgorithm());
+            log.info("유틸 리프레쉬 토큰 try {} 부분", token);
         } catch (Exception e) {
+            log.info("유틸 어드민 토큰 catch {} 부분", token);
             System.out.println(e.getMessage());
         }
+        log.info("리프레쉬 트라이 캐치 빠져나오고, 맨 마지막 return {}", token);
         return token;
     }
 
@@ -86,9 +96,12 @@ public class JwtTokenUtils {
                     // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
+            log.info("유틸 jwt 재발행 try {} 부분", token);
         } catch (Exception e) {
+            log.info("유틸 jwt 재발행 catch {} 부분", token);
             System.out.println(e.getMessage());
         }
+        log.info("jwt 재발행 트라이 캐치 빠져나오고, 맨 마지막 return {}", token);
         return token;
     }
 }
