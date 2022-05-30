@@ -80,10 +80,10 @@ public class JwtDecoder {
                     .build();
 
             jwt = verifier.verify(token);
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        } catch (CustomException e) {
+//            log.error(e.getMessage());
+            return Optional.ofNullable(jwt);
         }
-
         return Optional.ofNullable(jwt);
     }
 }
