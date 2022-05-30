@@ -72,7 +72,7 @@ public class JwtDecoder {
 
     public Optional<DecodedJWT> isValidToken(String token) {
         DecodedJWT jwt = null;
-
+        log.info("token : {}", token);
         try {
             Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
             JWTVerifier verifier = JWT
