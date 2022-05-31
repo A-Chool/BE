@@ -6,16 +6,19 @@ import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
+@Component
 public class SlackAlert {
 
     @Value("${logging.slack.webhook-uri}")
-    private static String slackUrl;
+    private String slackUrl;
 
-    public static void joinAlert(User user) {
+    public void joinAlert(User user) {
         log.info("joinAlert");
+        log.info("slackUrl : {}", slackUrl);
         HttpHeaders headers = new HttpHeaders();
 
         headers.add("Content-type", "application/json; charset=utf-8");
