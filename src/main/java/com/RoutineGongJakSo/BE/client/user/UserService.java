@@ -1,7 +1,5 @@
 package com.RoutineGongJakSo.BE.client.user;
 
-import com.RoutineGongJakSo.BE.exception.CustomException;
-import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.NOT_FOUND_USER_ID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -80,25 +74,5 @@ public class UserService {
         HttpStatus httpStatus = responseEntity.getStatusCode();
         int status = httpStatus.value();
         String response = responseEntity.getBody();
-    }
-
-    @Transactional
-    public Map<String, String> bodyToken(BodyTokenDto bodyTokenDto) {
-        User user = userRepository.findByUserEmail(bodyTokenDto.getEmail()).orElseThrow(
-                () -> new CustomException(NOT_FOUND_USER_ID)
-        );
-
-        if (!passwordEncoder.matches(bodyTokenDto.getPassword(), user.getUserPw())) {
-            throw new CustomException(NOT_FOUND_USER_ID);
-        }
-
-        Map<String, String> result = new HashMap<>();
-
-        result.put("Authorization", JwtTokenUtils.generateAdminJwtToken(user.getUserName(), user.getUserEmail(), user.getUserLevel()));
-        result.put("RefreshToken", JwtTokenUtils.generateRefreshToken());
-
-        log.info("바디토큰{}", result);
-
-        return result;
     }
 }
