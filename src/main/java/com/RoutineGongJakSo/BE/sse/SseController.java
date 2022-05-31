@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SseController {
     private static final Map<String, SseEmitter> CLIENTS = new ConcurrentHashMap<>();
 
-    @GetMapping("/api/subscribe/{id}")
+    @GetMapping(value = "/api/subscribe/{id}" , produces = "text/event-stream")
     public SseEmitter subscribe(@PathVariable String id) {
         SseEmitter emitter = new SseEmitter();
         CLIENTS.put(id, emitter);
