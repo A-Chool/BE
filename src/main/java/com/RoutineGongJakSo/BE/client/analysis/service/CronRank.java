@@ -47,10 +47,34 @@ public class CronRank {
         }
     }
 
+    public void updateRankForce() throws ParseException {
+        log.info("updateRankForce");
+
+        String key = "rank";
+        ZSetOperations<String, Object> ZSetOperation = redisTemplate.opsForZSet();
+
+        String date = (LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1)).toString(); // 현재 서울 날짜 에서 하루 빼야함
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        String dateFormat = DateFormat(today);
+
+        log.info("날짜 : {}", dateFormat);
+        List<Analysis> todayAnalysisList = analysisRepository.findAllByDate(dateFormat);
+
+        for (Analysis _analysis : todayAnalysisList) {
+            ZSetOperation.incrementScore(key, new RankRedisDto(_analysis), toTime(_analysis.getDaySum()));
+        }
+    }
+
     @Scheduled(cron = "0 00 5 * * MON") // 매주 월요일 오전 5시에 실행
     @Transactional
     public void resetRank() {
         log.info("resetRank");
+        String key = "rank";
+        redisTemplate.delete(key);
+    }
+
+    public void resetRankForce() {
+        log.info("resetRankForce");
         String key = "rank";
         redisTemplate.delete(key);
     }
