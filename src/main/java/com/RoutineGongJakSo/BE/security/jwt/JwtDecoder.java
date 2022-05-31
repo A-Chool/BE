@@ -72,7 +72,7 @@ public class JwtDecoder {
 
     public Optional<DecodedJWT> isValidToken(String token) {
         DecodedJWT jwt = null;
-
+        log.info("token : {}", token);
         try {
             Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
             JWTVerifier verifier = JWT
@@ -80,10 +80,13 @@ public class JwtDecoder {
                     .build();
 
             jwt = verifier.verify(token);
-        } catch (Exception e) {
-            log.error(e.getMessage());
+            log.info("try jwt 부분 {}", jwt);
+        } catch (CustomException e) {
+//            log.error(e.getMessage());
+            log.info("catch jwt 부분 {}", jwt);
+            return Optional.ofNullable(jwt);
         }
-
+        log.info("맨 마지막 return jwt 부분 {}", jwt);
         return Optional.ofNullable(jwt);
     }
 }

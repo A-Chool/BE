@@ -67,7 +67,7 @@ public class MyPageService {
 
         if (user.getUserImageUrl() != null) {
             String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
-            boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
+            boolean isExitstObject = s3Client.doesObjectExist(bucket, "userProfile/" + deleteUrl);
             String imageUrl = "";
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
@@ -99,7 +99,7 @@ public class MyPageService {
         User user = validator.userInfo(userDetails);
         if (user.getUserImageUrl() != null) {
             String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
-            boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
+            boolean isExitstObject = s3Client.doesObjectExist(bucket, "userProfile/" + deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
                 user.setUserImageUrl(null);
