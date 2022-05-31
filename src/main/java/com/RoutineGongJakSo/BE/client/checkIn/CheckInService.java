@@ -15,7 +15,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
-import com.RoutineGongJakSo.BE.sse.NotificationService;
+import com.RoutineGongJakSo.BE.sse.SseController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.NO_WEEK;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.TRY_START;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +46,7 @@ public class CheckInService {
     private final TeamRepository teamRepository;
     private final WeekRepository weekRepository;
     private final Validator validator;
-    private final NotificationService notificationService;
-
+    private final SseController sseController;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 
     //ToDo : 현재시간 이상하게 나오니까, checkInValidator.sumDateTime() 사용해서 초기화하기
@@ -104,7 +104,7 @@ public class CheckInService {
         checkInRepository.save(checkIn);
 
         log.info("체크인 {}", response);
-
+        sseController.publishCheckIn(checkIn);
         return response;
     }
 
@@ -260,7 +260,7 @@ public class CheckInService {
         analysisRepository.save(analysis);
 
         log.info("체크아웃 {}", getCheckIn(userDetails));
-
+        sseController.publishCheckOut(userDetails.getUser());
         return getCheckIn(userDetails);
     }
 
@@ -285,7 +285,7 @@ public class CheckInService {
 
         // display 한 주차 찾기
         Week week = weekRepository.findByDisplay(true).orElseThrow(
-                ()-> new CustomException(NO_WEEK)
+                () -> new CustomException(NO_WEEK)
         );
         List<Team> teamList = teamRepository.findByWeek(week);
 
