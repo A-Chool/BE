@@ -126,6 +126,10 @@ public class AnalysisService {
         todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         int lastDay = today.getActualMaximum(Calendar.DAY_OF_MONTH); //달의 마지막 날
+        int getM =today.DATE +1;
+
+//        String getM = String.valueOf(today.DATE);
+        log.info("==============현재 월=========={}", today.DATE);
 
         List<Analysis> allUserAnalysis = analysisRepository.findAll();
         List<Analysis> targetUser = analysisRepository.findByAnalysisWithUser(user); // N+1 문제 해결용
@@ -137,7 +141,7 @@ public class AnalysisService {
 
         //본인 일별 공부시간
         for (int i = 1; i <= lastDay; i++) {
-            String getDay = String.valueOf(i);
+            int getDay = i;
 
             String day ="";
             String getString = getDay + ":" + "0";
@@ -145,7 +149,8 @@ public class AnalysisService {
             for (Analysis find : targetUser) {
                 String[] getDate = find.getDate().split("-");
 
-                if (getDay.equals(getDate[2])) {
+                if (getDay == Integer.valueOf(getDate[2]) && getM == Integer.valueOf(getDate[1])) {
+                    log.info("====확인{}=======", getDate[1]);
                     String[] getDaySum = find.getDaySum().split(":");
                     Long getNum = Long.valueOf(getDaySum[0]);
                     getString = getDay + ":" + String.valueOf(getNum);
@@ -157,12 +162,12 @@ public class AnalysisService {
         //전체 평균 일 공부시간
         for (int i = 1; i <= lastDay; i++) {
             String dayAvg = "";
-            String getDay = String.valueOf(i);
+            int getDay = i;
             int totalMM = 0;
             int cnt = 0;
             for (Analysis t : allUserAnalysis) {
                 String[] targetDate = t.getDate().split("-");
-                if (getDay.equals(targetDate[2])) {
+                if (getDay == Integer.valueOf(targetDate[2])) {
                     String[] arr = t.getDaySum().split(":");
 
                     int allHH = Integer.parseInt(arr[0]);
@@ -178,7 +183,7 @@ public class AnalysisService {
                 avg = totalHH / cnt;
             }
 
-            dayAvg = getDay + ":" + String.valueOf(avg);
+            dayAvg = String.valueOf(getDay) + ":" + String.valueOf(avg);
             getUsersAvg.add(dayAvg);
         }
 
