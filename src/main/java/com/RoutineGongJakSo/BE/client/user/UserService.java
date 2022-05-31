@@ -5,13 +5,8 @@ import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.RoutineGongJakSo.BE.util.SlackAlert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -22,6 +17,7 @@ import java.util.Optional;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final SlackAlert slackAlert;
 
 
     @Transactional
@@ -51,7 +47,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        SlackAlert.joinAlert(user);
+        slackAlert.joinAlert(user);
         return new ErrorResult(true, "회원가입 완료!");
     }
 
