@@ -79,7 +79,7 @@ public class NaverService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", naverClientId);
         body.add("client_secret", naverSecret);
-        body.add("redirect_uri", "https://www.a-chool.com/api/user/naver/callback");
+        body.add("redirect_uri", "https://www.a-chool.com/api/user/kakao/callback");
         body.add("code", code);
         body.add("state", state);
 
