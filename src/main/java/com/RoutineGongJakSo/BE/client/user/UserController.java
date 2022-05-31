@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -27,5 +28,11 @@ public class UserController {
         }
 
         return userService.join(joinDto);
+    }
+
+    @PostMapping("/api/user/bodyToken")
+    public Map<String, String> bodyToken(@RequestBody BodyTokenDto bodyTokenDto) {
+        log.info("요청 메서드 [POST] /api/user/bodyToken");
+        return userService.bodyToken(bodyTokenDto);
     }
 }
