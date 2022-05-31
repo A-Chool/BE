@@ -7,6 +7,7 @@ import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.client.social.Dto.NaverUserInfoDto;
+import com.RoutineGongJakSo.BE.util.SlackAlert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,7 +100,8 @@ public class NaverService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        log.info("인가코드로 액세스 토큰 요청 {}", jsonNode.get("access_token").asText());
+//        log.info("제이슨 노드 코드{}", jsonNode);
+//        log.info("인가코드로 액세스 토큰 요청 {}", jsonNode.get("access_token").asText());
         return jsonNode.get("access_token").asText();
     }
 
@@ -164,6 +166,9 @@ public class NaverService {
             log.info("네이버 아이디로 회원가입 {}", naverUser);
 
             repository.save(naverUser);
+
+            SlackAlert.joinAlert(naverUser);
+
             return naverUser;
 
         }

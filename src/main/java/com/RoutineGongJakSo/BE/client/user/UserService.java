@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.user;
 
 import com.RoutineGongJakSo.BE.security.validator.ErrorResult;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.util.SlackAlert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -22,8 +23,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    @Value("${logging.slack.webhook-uri}")
-    private String slackUrl;
 
     @Transactional
     public ErrorResult join(JoinDto joinDto) {
@@ -52,27 +51,8 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        joinAlert(user);
+        SlackAlert.joinAlert(user);
         return new ErrorResult(true, "회원가입 완료!");
     }
 
-    public void joinAlert(User user) {
-        log.info("joinAlert");
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.add("Content-type", "application/json; charset=utf-8");
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("text", user.getUserName() + " 신규회원 가입 " + new DateTime());
-        String body = jsonObject.toString();
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(slackUrl, HttpMethod.POST, requestEntity, String.class);
-
-        HttpStatus httpStatus = responseEntity.getStatusCode();
-        int status = httpStatus.value();
-        String response = responseEntity.getBody();
-    }
 }
