@@ -22,8 +22,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    //@Value("${logging.slack.webhook-uri}")
-    private String slackUrl = "https://hooks.slack.com/services/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";
+    @Value("${logging.slack.webhook-uri}")
+    private String slackUrl;
 
     @Transactional
     public ErrorResult join(JoinDto joinDto) {
@@ -59,10 +59,11 @@ public class UserService {
     public void joinAlert(User user) {
         log.info("joinAlert");
         HttpHeaders headers = new HttpHeaders();
+
         headers.add("Content-type", "application/json; charset=utf-8");
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("text", user.getUserName()+ " 신규회원 가입 " + new DateTime());
+        jsonObject.put("text", user.getUserName() + " 신규회원 가입 " + new DateTime());
         String body = jsonObject.toString();
 
         HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
