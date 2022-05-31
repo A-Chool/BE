@@ -45,7 +45,8 @@
 </details>
 
 ## 🍀 Service Architecture
-![Frame 2095](https://user-images.githubusercontent.com/98807506/170970566-960020d1-967e-440a-bd86-7f6305154d0f.png)
+![서비스 아키텍처 (1)](https://user-images.githubusercontent.com/98807506/171093946-18023bcc-3f86-4621-84e5-75cb94320b2a.png)
+
 
 ## 🐳 ERD
 <img width="1670" alt="스크린샷 2022-05-30 오후 6 53 35" src="https://user-images.githubusercontent.com/98807506/170968919-1de6cfec-af0e-4c40-923c-e15ebaf43f1e.png">
