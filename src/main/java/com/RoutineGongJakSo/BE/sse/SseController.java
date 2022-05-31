@@ -57,7 +57,7 @@ public class SseController {
 
         CLIENTS.forEach((id, emitter) -> {
             try {
-                emitter.send(new SseDto.CheckOutResponse(user), MediaType.APPLICATION_JSON);
+                emitter.send(new SseDto.CheckInResponse(user), MediaType.APPLICATION_JSON);
             } catch (Exception e) {
                 deadIds.add(id);
                 log.warn("disconnected id : {}", id);
