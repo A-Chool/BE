@@ -32,10 +32,10 @@ public class Team {
     @JoinColumn(name = "WEEK_ID")
     private Week week;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String groundRule;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String workSpace;
 
     @Column(nullable = false)
