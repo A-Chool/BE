@@ -28,24 +28,14 @@ public class SseDto {
             this.online = true;
             this.lateCheck = lateCheck;
         }
-    }
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class CheckOutResponse {
-        private Long userId;
-        private String userEmail;
-        private String userName;
-        private String phoneNumber;
-        private boolean online;
 
-        public CheckOutResponse(User user) {
+        public CheckInResponse(User user) {
             this.userId = user.getUserId();
             this.userEmail = user.getUserEmail();
             this.userName = user.getUserName();
             this.phoneNumber = user.getPhoneNumber();
             this.online = false;
+            this.lateCheck = false;
         }
     }
 }
