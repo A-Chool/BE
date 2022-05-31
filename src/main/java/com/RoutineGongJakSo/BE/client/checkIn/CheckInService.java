@@ -97,7 +97,10 @@ public class CheckInService {
         checkInRepository.save(checkIn);
 
         log.info("체크인 {}", response);
-        sseController.publishCheckIn(checkIn);
+
+
+
+        sseController.publishCheckIn(checkIn, lateCheck(checkInList));
         return response;
     }
 
@@ -238,7 +241,7 @@ public class CheckInService {
             findAnalysis.get().setDaySum(daySum); // 총 공부 시간
 
             log.info("체크아웃 {}", getCheckIn(userDetails));
-
+            sseController.publishCheckOut(userDetails.getUser());
             return getCheckIn(userDetails);
         }
 
@@ -252,7 +255,6 @@ public class CheckInService {
         lastCheckIn.setAnalysis(analysis);
         analysisRepository.save(analysis);
 
-        log.info("체크아웃 {}", getCheckIn(userDetails));
         sseController.publishCheckOut(userDetails.getUser());
         return getCheckIn(userDetails);
     }
