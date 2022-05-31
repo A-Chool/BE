@@ -42,7 +42,6 @@ public class KakaoService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final SlackAlert slackAlert;
 
     public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가코드" 로 "액세스 토큰" 요청
@@ -157,7 +156,7 @@ public class KakaoService {
             repository.save(kakaoUser);
             log.info("카카오 아이디로 회원가입 {}", kakaoUser);
 
-            slackAlert.joinAlert(kakaoUser);
+            SlackAlert.joinAlert(kakaoUser);
 
             return kakaoUser;
         }
