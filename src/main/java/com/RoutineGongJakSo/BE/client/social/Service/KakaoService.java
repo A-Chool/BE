@@ -7,6 +7,7 @@ import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
+import com.RoutineGongJakSo.BE.util.SlackAlert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -154,6 +155,9 @@ public class KakaoService {
 
             repository.save(kakaoUser);
             log.info("카카오 아이디로 회원가입 {}", kakaoUser);
+
+            SlackAlert.joinAlert(kakaoUser);
+
             return kakaoUser;
         }
         log.info("카카오 아이디가 있는 경우 {}", findKakao);

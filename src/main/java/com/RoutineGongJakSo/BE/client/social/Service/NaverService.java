@@ -7,6 +7,7 @@ import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.client.social.Dto.NaverUserInfoDto;
+import com.RoutineGongJakSo.BE.util.SlackAlert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -165,6 +166,9 @@ public class NaverService {
             log.info("네이버 아이디로 회원가입 {}", naverUser);
 
             repository.save(naverUser);
+
+            SlackAlert.joinAlert(naverUser);
+
             return naverUser;
 
         }
