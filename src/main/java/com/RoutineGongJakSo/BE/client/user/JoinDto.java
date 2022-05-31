@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.user;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@Builder
 public class JoinDto {
 
 
@@ -16,8 +18,8 @@ public class JoinDto {
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;
 
-    @NotBlank(message = "닉네임는 필수 입력 값입니다.")
-    @Pattern(regexp = "^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,8}$", message = "닉네임은 한글, 영문, 숫자만 가능하며 1-8자리 가능합니다.")
+    @NotBlank(message = "이름은 필수 입력 값입니다.")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,7}$", message = "이름은 한글, 영문, 숫자만 가능하며 2-7자리 가능합니다.")
     private String userName;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
@@ -29,6 +31,6 @@ public class JoinDto {
     private String userPwCheck;
 
     @NotBlank(message = "핸드폰 번호는 필수 입력 값입니다.")
-    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "올바른 형식의 전화번호가 아닙니다.")
+    @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$", message = "올바른 형식의 전화번호가 아닙니다.")
     private String phoneNumber;
 }

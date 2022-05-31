@@ -24,8 +24,6 @@ public class WeekController {
     public ResponseEntity<Object> getAllWeek(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         log.info("GET /admin/admin/week");
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -39,8 +37,6 @@ public class WeekController {
     public ResponseEntity<Object> createWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody WeekDto.RequestDto weekName) {
 
         log.info("POST /admin/admin/week");
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -55,8 +51,6 @@ public class WeekController {
     public ResponseEntity<Object> deleteWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
 
         log.info("Delete /admin/admin/week " + weekId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -71,8 +65,6 @@ public class WeekController {
     public ResponseEntity<Object> displayWeek(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId) {
 
         log.info("POST /admin/admin/week/" + weekId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);
@@ -87,8 +79,6 @@ public class WeekController {
     public ResponseEntity<Object> changeWeekName(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long weekId, @RequestBody WeekDto.RequestDto weekName) {
 
         log.info("PUT /admin/admin/week/" + weekId);
-        //로그인 여부 확인
-        validator.loginCheck(userDetails);
 
         //접근권한 확인
         validator.adminCheck(userDetails);

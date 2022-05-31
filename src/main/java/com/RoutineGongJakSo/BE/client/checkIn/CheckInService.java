@@ -5,9 +5,9 @@ import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
 import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
-import com.RoutineGongJakSo.BE.client.checkIn.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
+import com.RoutineGongJakSo.BE.client.analysis.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
-import com.RoutineGongJakSo.BE.client.checkIn.repository.AnalysisRepository;
 import com.RoutineGongJakSo.BE.client.checkIn.repository.CheckInRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.exception.CustomException;
@@ -22,18 +22,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.NO_WEEK;
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.TRY_START;
+import static com.RoutineGongJakSo.BE.util.CalendarUtil.*;
+import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
+import static com.RoutineGongJakSo.BE.util.Formatter.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +39,10 @@ public class CheckInService {
 
     private final CheckInRepository checkInRepository;
     private final AnalysisRepository analysisRepository;
-    private final CheckInValidator checkInValidator;
     private final TeamRepository teamRepository;
     private final WeekRepository weekRepository;
     private final Validator validator;
     private final SseController sseController;
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-
-    //ToDo : 현재시간 이상하게 나오니까, checkInValidator.sumDateTime() 사용해서 초기화하기
 
     //[POST]체크인
     @Transactional
@@ -63,11 +56,11 @@ public class CheckInService {
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
-        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+        Calendar setDay = todayCalender(date); //오늘 기준 캘린더
+        setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         //compareTo() > 0 : 인자보다 미래
         //compareTo() < 0 : 인자보다 과거
@@ -76,7 +69,7 @@ public class CheckInService {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
         }
 
-        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+        String setToday = DateFormat(today); //Date -> String 변환
 
         //체크인 테이블에서 해당 유저 + 오늘 날짜의 해당하는 친구들을 리스트에 담음
         List<CheckIn> checkInList = checkInRepository.findByUserAndDate(user, setToday);
@@ -95,7 +88,7 @@ public class CheckInService {
             response = analysis.get().getDaySum();
         }
 
-        String nowTime = checkInValidator.nowTime(); //현재 서울 시간
+        String nowTime = nowTime(); //현재 서울 시간
         CheckIn checkIn = CheckIn.builder()
                 .user(user)
                 .date(setToday)
@@ -115,17 +108,17 @@ public class CheckInService {
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
-        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+        Calendar setDay = todayCalender(date); //오늘 기준 캘린더
+        setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         if (today.compareTo(setDay) < 0) {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
         }
 
-        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+        String setToday = DateFormat(today); //Date -> String 변환
 
         Optional<Analysis> analysis = analysisRepository.findByUserAndDate(user, setToday);
 
@@ -137,7 +130,7 @@ public class CheckInService {
 
             List<Analysis> allUserList = analysisRepository.findByUser(user);
 
-            String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
+            String total = totalTime(allUserList); //총 누적 공부시간
 
             CheckInListDto.CheckInDto checkInDto = CheckInListDto.CheckInDto.builder()
                     .daySumTime("00:00:00")
@@ -167,11 +160,11 @@ public class CheckInService {
         today.add(Calendar.MINUTE, -mm);
         today.add(Calendar.SECOND, -ss);
 
-        String daySum = checkInValidator.analysisCheck(analysis, today); //누적 시간 계산
+        String daySum = analysisCheck(analysis, today); //누적 시간 계산
 
         List<Analysis> allUserList = analysisRepository.findByUser(user);
 
-        String total = checkInValidator.totalTime(allUserList); //총 누적 공부시간
+        String total = totalTime(allUserList); //총 누적 공부시간
 
         for (CheckIn check : findCheckIn) {
             CheckInListDto.TodayLogDto todayLogDto = CheckInListDto.TodayLogDto.builder()
@@ -214,11 +207,11 @@ public class CheckInService {
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
-        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+        Calendar setDay = todayCalender(date); //오늘 기준 캘린더
+        setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
@@ -226,7 +219,7 @@ public class CheckInService {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
         }
 
-        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+        String setToday = DateFormat(today); //Date -> String 변환
 
         List<CheckIn> findCheckIns = checkInRepository.findByUserAndDate(user, setToday);
         CheckIn lastCheckIn = findCheckIns.get(findCheckIns.size() - 1); //마지막번째 기록을 get
@@ -271,17 +264,17 @@ public class CheckInService {
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
-        Calendar setDay = checkInValidator.todayCalender(date); //오늘 기준 캘린더
-        checkInValidator.setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
+        Calendar setDay = todayCalender(date); //오늘 기준 캘린더
+        setCalendarTime(setDay); // yyyy-MM-dd 05:00:00(당일 오전 5시) 캘린더에 적용
 
-        Calendar today = checkInValidator.todayCalender(date); //현재 시간 기준 날짜
-        checkInValidator.todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
+        Calendar today = todayCalender(date); //현재 시간 기준 날짜
+        todayCalendarTime(today); // String yyyy-MM-dd HH:mm:ss 현재시간
 
         if (today.compareTo(setDay) < 0) {
             today.add(Calendar.DATE, -1); //오전 5시보다 과거라면, 현재 날짜에서 -1
         }
 
-        String setToday = checkInValidator.DateFormat(today); //Date -> String 변환
+        String setToday = DateFormat(today); //Date -> String 변환
 
         // display 한 주차 찾기
         Week week = weekRepository.findByDisplay(true).orElseThrow(
@@ -298,8 +291,8 @@ public class CheckInService {
             for (Member member : team.getMemberList()) {
                 List<CheckIn> findCheckIns = checkInRepository.findByUserAndDate(member.getUser(), setToday);
 
-                boolean online = checkInValidator.onlineCheck(findCheckIns); //온라인 여부
-                boolean lateCheck = checkInValidator.lateCheck(findCheckIns); //지각 여부
+                boolean online = onlineCheck(findCheckIns); //온라인 여부
+                boolean lateCheck = lateCheck(findCheckIns); //지각 여부
 
                 CheckInListDto.UserDto userDto = CheckInListDto.UserDto.builder()
                         .memberId(member.getMemberId())
@@ -324,5 +317,62 @@ public class CheckInService {
         }
         log.info("해당 주차 모든 유저의 기록 {}", teamListDtos);
         return teamListDtos;
+    }
+
+    //String 현재시간
+    private String nowTime() {
+        ZonedDateTime nowSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        return nowSeoul.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    private boolean onlineCheck(List<CheckIn> findCheckIns) {
+        if (findCheckIns.size() == 0 || findCheckIns.get(findCheckIns.size() - 1).getCheckOut() != null) {
+            return false;
+        }
+        return true;
+    }
+
+    //지각 여부 확인
+    private boolean lateCheck(List<CheckIn> findCheckIns) {
+        int HH = 0; // 첫번째 체크인 시간
+
+        if (findCheckIns.size() != 0) {
+            String timeCheck = findCheckIns.get(0).getCheckIn();
+            String[] arrayTime = timeCheck.split(":");
+            HH = Integer.parseInt(arrayTime[0]);
+            if (HH < 5) { //다음 날로 넘아간 새벽시간에 체크인 했을 때, 지각 처리를 하기 위한 조건
+                HH += 24;
+            }
+        }
+        if (findCheckIns.size() == 0 || HH >= 9) {
+            return true;
+        }
+        return false;
+    }
+
+    // 사용자가 1회 이상 체크인 체크아웃 완성된 행이 있을 경우 시간 계산
+    private String analysisCheck(Optional<Analysis> analysis, Calendar today) throws ParseException {
+        if (analysis.isPresent()) {
+            String daySum = calenderFormatter.format(today.getTime());
+            analysis.get().getDaySum();
+            Calendar analysisDay = todayCalender(analysis.get().getDate()); //analysis 기준 calendar 만들기
+            String setTime = analysis.get().getDate() + " " + analysis.get().getDaySum();
+            Date setFromatter = formatter.parse(setTime);
+            analysisDay.setTime(setFromatter); // analysisa 의 daySum 기준시간으로 셋팅
+
+            String[] reTimeStamp = daySum.split(":");
+
+            int reHH = Integer.parseInt(reTimeStamp[0]); //시
+            int remm = Integer.parseInt(reTimeStamp[1]); //분
+            int ress = Integer.parseInt(reTimeStamp[2]); //초
+
+            analysisDay.add(Calendar.HOUR, reHH);
+            analysisDay.add(Calendar.MINUTE, remm);
+            analysisDay.add(Calendar.SECOND, ress);
+
+            daySum = calenderFormatter.format(analysisDay.getTime());
+            return daySum;
+        }
+        return calenderFormatter.format(today.getTime());
     }
 }

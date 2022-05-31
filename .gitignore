@@ -41,3 +41,4 @@ application.yml
 static/
 S3Application.yml
 Dockerfile
+build/

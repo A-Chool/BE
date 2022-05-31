@@ -5,8 +5,8 @@ import com.RoutineGongJakSo.BE.admin.member.MemberDto;
 import com.RoutineGongJakSo.BE.admin.member.MemberRepository;
 import com.RoutineGongJakSo.BE.admin.team.Team;
 import com.RoutineGongJakSo.BE.admin.team.TeamRepository;
-import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
+import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.client.teamBoard.dto.GroundRuleDto;
 import com.RoutineGongJakSo.BE.client.teamBoard.dto.TeamBoardDto;
 import com.RoutineGongJakSo.BE.client.teamBoard.dto.TeamDto;
@@ -17,7 +17,6 @@ import com.RoutineGongJakSo.BE.client.toDo.ToDoValidator;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.exception.CustomException;
-import com.RoutineGongJakSo.BE.exception.ErrorCode;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import lombok.RequiredArgsConstructor;
@@ -165,10 +164,15 @@ public class TeamBoardService {
         // memberList dtoList로 변환
         List<Member> memberList = targetTeam.getMemberList();
         List<MemberDto.ResponseDto> memberResponseDtoList = new ArrayList<>();
+
         for(Member _member : memberList){
+            List<String> tagList = new ArrayList<>();
+            for (Tag t : _member.getUser().getTagList()){
+                tagList.add(t.getTag());
+            }
             MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
             responseDto.setMemberId(_member.getMemberId());
-            responseDto.setUser(new UserDto(_member.getUser()));
+            responseDto.setUser(new UserDto(_member.getUser(), tagList));
             memberResponseDtoList.add(responseDto);
         }
 

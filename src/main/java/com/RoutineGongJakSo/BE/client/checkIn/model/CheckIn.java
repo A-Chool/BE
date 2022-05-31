@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.client.checkIn.model;
 
+import com.RoutineGongJakSo.BE.client.analysis.model.Analysis;
 import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class CheckIn {
 
     @ManyToOne
     @JoinColumn(name = "ANALYSIS_ID")
-    Analysis analysis;
+    private Analysis analysis;
 
     @Column
     private String date;

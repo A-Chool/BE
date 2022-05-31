@@ -6,6 +6,7 @@ import com.RoutineGongJakSo.BE.admin.week.Week;
 import com.RoutineGongJakSo.BE.admin.week.WeekRepository;
 import com.RoutineGongJakSo.BE.client.chat.model.ChatRoom;
 import com.RoutineGongJakSo.BE.client.chat.repo.ChatRoomRepository;
+import com.RoutineGongJakSo.BE.client.tag.Tag;
 import com.RoutineGongJakSo.BE.client.user.UserDto;
 import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.exception.ErrorCode;
@@ -37,7 +38,7 @@ public class TeamService {
         Week week = weekFound.get();
 
         String teamName = teamDto.getTeamName();
-        Optional<Team> teamFound = teamRepository.findByTeamName(teamName);
+        Optional<Team> teamFound = teamRepository.findByTeamNameAndWeek(teamName, week);
         checkTeamDuple(teamFound);
 
         String groundRule = "";
@@ -67,29 +68,44 @@ public class TeamService {
 
     //해당 주차의 모든 팀을 조회
     public List<TeamDto.WeekTeamDto> getTeamList(Long weekId) {
-        //해당 주차의 모든 팀을 조회
-        Week week = weekRepository.findById(weekId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
-        );
 
-        List<Team> teamList = week.getTeamList();
+        Optional<Week> week;
+        //해당 주차의 디폴트 팀
+        if (weekId == null) {
+            week = weekRepository.findByDisplay(true);
+        } else {
+            //해당 주차의 모든 팀을 조회
+        Week findWeek = weekRepository.findById(weekId).orElseThrow(
+                    () -> new CustomException(ErrorCode.NOT_FOUND_WEEK_ID)
+            );
+            week = Optional.ofNullable(findWeek);
+        }
+
+        List<Team> teamList = week.get().getTeamList();
 
         List<TeamDto.WeekTeamDto> weekTeamDtoList = new ArrayList<>();
+
+
+
         for (Team team : teamList) {
             List<MemberDto.ResponseDto> responseDtoList = new ArrayList<>();
 
             for (Member member : team.getMemberList()) { //ToDo getMemberList에 어떤 값이 들어있는지 확인은 어디서 할 수 있을까요?
+                List<String> tagList = new ArrayList<>();
+                for (Tag t : member.getUser().getTagList()){
+                    tagList.add(t.getTag());
+                }
                 MemberDto.ResponseDto responseDto = new MemberDto.ResponseDto();
                 responseDto.setMemberId(member.getMemberId());
-                responseDto.setUser(new UserDto(member.getUser()));
+                responseDto.setUser(new UserDto(member.getUser(), tagList));
                 responseDtoList.add(responseDto);
             }
 
             TeamDto.WeekTeamDto weekTeamDto = TeamDto.WeekTeamDto.builder()
                     .teamId(team.getTeamId())
                     .teamName(team.getTeamName())
-                    .weekId(week.getWeekId())
-                    .weekName(week.getWeekName())
+                    .weekId(week.get().getWeekId())
+                    .weekName(week.get().getWeekName())
                     .memberList(responseDtoList)
                     .build();
             weekTeamDtoList.add(weekTeamDto);

@@ -1,5 +1,7 @@
 package com.RoutineGongJakSo.BE.client.myPage;
 
+import com.RoutineGongJakSo.BE.client.tag.Tag;
+import com.RoutineGongJakSo.BE.client.tag.TagRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.exception.CustomException;
@@ -18,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
@@ -26,6 +30,7 @@ import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class MyPageService {
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
     private final S3Validator s3Validator;
     private final Validator validator;
     private AmazonS3 s3Client;
@@ -62,7 +67,7 @@ public class MyPageService {
 
         if (user.getUserImageUrl() != null) {
             String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
-            boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
+            boolean isExitstObject = s3Client.doesObjectExist(bucket, "userProfile/" + deleteUrl);
             String imageUrl = "";
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
@@ -94,7 +99,7 @@ public class MyPageService {
         User user = validator.userInfo(userDetails);
         if (user.getUserImageUrl() != null) {
             String deleteUrl = user.getUserImageUrl().replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/userProfile/", "");
-            boolean isExitstObject = s3Client.doesObjectExist(bucket, deleteUrl);
+            boolean isExitstObject = s3Client.doesObjectExist(bucket, "userProfile/" + deleteUrl);
             if (isExitstObject) {
                 s3Client.deleteObject(bucket, deleteUrl);
                 user.setUserImageUrl(null);
@@ -112,10 +117,30 @@ public class MyPageService {
     public MyPageDto.ResponseDto updateUserInfo(UserDetailsImpl userDetails, MyPageDto.PutRequestDto myPageDto) {
         User user = validator.userInfo(userDetails);
 
-        user.setUserName(myPageDto.getUserNickName());
-        user.setUserTag(myPageDto.getUserTag());
+        List<Tag> tagList = tagRepository.findByUser(userDetails.getUser());
+
+        if(tagList != null) {
+            tagRepository.deleteAll(tagList);
+        }
+
+//        if (myPageDto.getUserTag().size() > 2){
+//            throw new CustomException(TO_MUCH_TAG);
+//        }
+
+        for (String t : myPageDto.getUserTag()){
+//            if (t.length() > 6){
+//                throw new CustomException(TO_MUCH_LENGTH);
+//            }
+
+            Tag saveTag = new Tag(t, user);
+            user.addTags(saveTag);
+            tagRepository.save(saveTag);
+        }
+
+        user.setUserName(myPageDto.getUserName());
         user.setUserGitHub(myPageDto.getUserGitHub());
-        user.setKakaoNickName(myPageDto.getUserKakao());
+        user.setFindKakaoId(myPageDto.getFindKakaoId());
+        user.setPhoneNumber(myPageDto.getPhoneNumber());
 
         userRepository.save(user);
 
@@ -131,18 +156,26 @@ public class MyPageService {
         String userImage = user.getUserImageUrl();
 
         if (user.getUserImageUrl() == null){
-            userImage = "https://i.esdrop.com/d/f/zoDvw3Gypq/LDMVjgddH1.png";
+            userImage = "https://i.esdrop.com/d/f/zoDvw3Gypq/575gyh5UjD.png";
+        }
+
+        List<Tag> tags = tagRepository.findByUser(userDetails.getUser());
+        List<String> findTags = new ArrayList<>();
+
+        for (Tag tag : tags) {
+            findTags.add(tag.getTag());
         }
 
         MyPageDto.ResponseDto responseDto = MyPageDto.ResponseDto.builder()
                 .userId(user.getUserId())
+                .kakaoId(user.getKakaoId())
+                .findKakaoId(user.getFindKakaoId())
                 .userEmail(user.getUserEmail())
                 .userImage(userImage)
                 .userPhoneNumber(user.getPhoneNumber())
-                .kakaoNickName(user.getKakaoNickName())
-                .userTag(user.getUserTag())
+                .username(user.getUserName())
+                .userTag(findTags)
                 .userGitHub(user.getUserGitHub())
-                .userKakao(user.getKakaoNickName())
                 .build();
 
         log.info("마이페이지 조회 {}", responseDto);
