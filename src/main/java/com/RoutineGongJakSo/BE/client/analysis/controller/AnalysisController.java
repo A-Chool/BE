@@ -48,8 +48,15 @@ public class AnalysisController {
     }
 
     @GetMapping("/update")
-    public void updateRand() throws ParseException {
+    public void updateRank(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
         log.info("요청 메소드 [GET] /api/user/analysis/update");
-        cronRank.updateRank();
+        cronRank.updateRankForce();
+    }
+
+
+    @GetMapping("/reset")
+    public void resetRank(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        log.info("요청 메소드 [GET] /api/user/analysis/reset");
+        cronRank.resetRankForce();
     }
 }

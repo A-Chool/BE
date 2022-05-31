@@ -15,6 +15,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.sse.SseController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,17 @@ public class CheckInService {
     private final TeamRepository teamRepository;
     private final WeekRepository weekRepository;
     private final Validator validator;
+    private final SseController sseController;
 
     //[POST]체크인
     @Transactional
     public String checkIn(UserDetailsImpl userDetails) throws ParseException {
 
         User user = validator.userInfo(userDetails);// 유저 정보를 찾음(로그인 하지 않았다면 에러 뜰 것)
+
+        //SSE event publish
+//        log.info("checkIn username : {}", user.getUserName());
+//        notificationService.signup(user);
 
         String date = LocalDate.now(ZoneId.of("Asia/Seoul")).toString(); // 현재 서울 날짜
 
@@ -91,7 +97,7 @@ public class CheckInService {
         checkInRepository.save(checkIn);
 
         log.info("체크인 {}", response);
-
+        sseController.publishCheckIn(checkIn);
         return response;
     }
 
@@ -247,7 +253,7 @@ public class CheckInService {
         analysisRepository.save(analysis);
 
         log.info("체크아웃 {}", getCheckIn(userDetails));
-
+        sseController.publishCheckOut(userDetails.getUser());
         return getCheckIn(userDetails);
     }
 
@@ -272,7 +278,7 @@ public class CheckInService {
 
         // display 한 주차 찾기
         Week week = weekRepository.findByDisplay(true).orElseThrow(
-                ()-> new CustomException(NO_WEEK)
+                () -> new CustomException(NO_WEEK)
         );
         List<Team> teamList = teamRepository.findByWeek(week);
 
