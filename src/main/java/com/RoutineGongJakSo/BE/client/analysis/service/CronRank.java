@@ -27,7 +27,7 @@ public class CronRank {
     private final AnalysisRepository analysisRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @Scheduled(cron = "0 00 5 * * *") // 매일 오전 5시에 실행
+    @Scheduled(cron = "0 15 5 * * *") // 매일 오전 5시에 실행
     @Transactional
     public void updateRank() throws ParseException {
         log.info("updateRank");
@@ -47,7 +47,7 @@ public class CronRank {
         }
     }
 
-    @Scheduled(cron = "0 30 5 * * MON") // 매주 월요일 오전 5시에 실행
+    @Scheduled(cron = "0 00 5 * * MON") // 매주 월요일 오전 5시에 실행
     @Transactional
     public void resetRank() {
         log.info("resetRank");
