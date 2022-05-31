@@ -22,8 +22,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    @Value("${logging.slack.webhook-uri}")
-    private String slackUrl;
+    //@Value("${logging.slack.webhook-uri}")
+    private String slackUrl = "https://hooks.slack.com/services/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";
 
     @Transactional
     public ErrorResult join(JoinDto joinDto) {
