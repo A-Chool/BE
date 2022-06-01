@@ -296,11 +296,18 @@ public class CheckInService {
                 boolean online = onlineCheck(findCheckIns); //온라인 여부
                 boolean lateCheck = lateCheck(findCheckIns); //지각 여부
 
+                String imageUrl = member.getUser().getUserImageUrl();
+
+                if (imageUrl == null){
+                    imageUrl = "https://i.esdrop.com/d/f/zoDvw3Gypq/575gyh5UjD.png";
+                }
+
                 CheckInListDto.UserDto userDto = CheckInListDto.UserDto.builder()
                         .memberId(member.getMemberId())
                         .userName(member.getUser().getUserName())
                         .userEmail(member.getUser().getUserEmail())
                         .phoneNumber(member.getUser().getPhoneNumber())
+                        .imageUrl(imageUrl)
                         .online(online)
                         .lateCheck(lateCheck)
                         .build();

@@ -25,6 +25,7 @@ public class CheckInListDto {
         private String userEmail;
         private String userName;
         private String phoneNumber;
+        private String imageUrl;
         private boolean online; //로그인 여부
         private boolean lateCheck; //지각 여부
     }
