@@ -2,6 +2,7 @@ package com.RoutineGongJakSo.BE.client.analysis.model;
 
 import com.RoutineGongJakSo.BE.client.checkIn.model.CheckIn;
 import com.RoutineGongJakSo.BE.client.user.User;
+import com.RoutineGongJakSo.BE.util.Timestamped;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Analysis {
+public class Analysis extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long analysisId;
