@@ -7,6 +7,7 @@ import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
+import com.RoutineGongJakSo.BE.util.SlackAlert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,7 @@ public class KakaoService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository repository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final SlackAlert slackAlert;
 
     public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가코드" 로 "액세스 토큰" 요청
@@ -154,6 +156,9 @@ public class KakaoService {
 
             repository.save(kakaoUser);
             log.info("카카오 아이디로 회원가입 {}", kakaoUser);
+
+            slackAlert.joinAlert(kakaoUser);
+
             return kakaoUser;
         }
         log.info("카카오 아이디가 있는 경우 {}", findKakao);
@@ -184,7 +189,7 @@ public class KakaoService {
 
         RefreshToken findToken = refreshTokenRepository.findByUserEmail(userDetailsImpl.getUserEmail());
 
-        if (findToken != null){
+        if (findToken != null) {
             findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
             log.info("리프레쉬 토큰 저장 {}", findToken);
             return;
