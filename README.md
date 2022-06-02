@@ -148,10 +148,8 @@
 <summary>API 명세서</summary>
 <div markdown="1">
 
-![auth](https://user-images.githubusercontent.com/87928719/151182062-10082d50-771c-4835-992a-be3f1c5d034e.PNG)
-![users](https://user-images.githubusercontent.com/87928719/151182046-13c8f50a-da55-4e85-b68f-e0ee2ed242d6.png)
-![studyRoom](https://user-images.githubusercontent.com/87928719/151182076-8896433d-2e7e-45e1-9c45-24e4ca46761d.png)
-![post](https://user-images.githubusercontent.com/87928719/151182093-e3c120e9-cc38-4eb6-a706-4068b04534fb.png)
+![Admin](https://user-images.githubusercontent.com/98807506/171592425-072c43c7-d621-4d63-84ce-d01be14db1ed.png)
+![User](https://user-images.githubusercontent.com/98807506/171592532-61eec599-1501-4fe2-adc2-243da9aacb21.png)
 
 </div>
 </details>
