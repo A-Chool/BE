@@ -6,7 +6,7 @@
 <br>
 
 <center>
-<img width="300" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565120-50a28594-4326-41ac-ab1e-4f099d9cfc16.png" align="left" a href="https://www.a-chool.com/">
+<a href="https://www.a-chool.com/"><img width="200" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565120-50a28594-4326-41ac-ab1e-4f099d9cfc16.png" align="left"></a>
 </center>
 
 <br>
