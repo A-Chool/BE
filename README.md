@@ -9,11 +9,14 @@
   
 </center>
 
+<br>
+<br>
+<br>
+<br>
 
-<br>
-<br>
-<br>
-<br>
+
+## 🍀 Service Architecture
+![서비스 아키텍쳐](https://user-images.githubusercontent.com/98807506/171581919-4f903fe2-92e1-48ac-a31b-7e900ce4b1fe.png)
 
 
 
@@ -127,20 +130,41 @@
 <br>
 
   
-  
-## ✍️ Wireframe
-<details>
-<summary>Wireframe</summary>
-<div markdown="1">       
+# Links
 
-<img width="804" alt="스크린샷 2022-05-02 오전 2 16 55" src="https://user-images.githubusercontent.com/98807506/166156916-484f604e-6a8c-411f-b657-6b1a5ee8b43e.png">
-<img width="812" alt="스크린샷 2022-05-02 오전 2 21 36" src="https://user-images.githubusercontent.com/98807506/166157015-6cefbe94-3da0-49c0-9297-f92697a835e6.png">
+- Project homepage: https://www.a-chool.com/
+- Repository: https://github.com/A-Chool
+
+- 프론트엔드 깃허브 주소 : https://github.com/A-Chool/FE
+- 백엔드 깃허브 주소 : https://github.com/A-Chool/BE
+
+<br> 
+  
+  
+
+# more info
+  
+  <details>
+<summary>API 명세서</summary>
+<div markdown="1">
+
+![auth](https://user-images.githubusercontent.com/87928719/151182062-10082d50-771c-4835-992a-be3f1c5d034e.PNG)
+![users](https://user-images.githubusercontent.com/87928719/151182046-13c8f50a-da55-4e85-b68f-e0ee2ed242d6.png)
+![studyRoom](https://user-images.githubusercontent.com/87928719/151182076-8896433d-2e7e-45e1-9c45-24e4ca46761d.png)
+![post](https://user-images.githubusercontent.com/87928719/151182093-e3c120e9-cc38-4eb6-a706-4068b04534fb.png)
 
 </div>
 </details>
 
-## 🍀 Service Architecture
-![서비스 아키텍처 (1)](https://user-images.githubusercontent.com/98807506/171093946-18023bcc-3f86-4621-84e5-75cb94320b2a.png)
+<details>
+<summary>ERD</summary>
+<div markdown="1">
+![스크린샷 2022-06-02 오후 4 50 22](https://user-images.githubusercontent.com/98807506/171581214-5687b031-695d-436c-80bc-441c911f48f3.png)
+</div>
+</details>
+  
+
+
 
 
 ## 🐳 ERD
