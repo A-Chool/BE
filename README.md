@@ -3,13 +3,19 @@
 <h1 align="left"> 성공적인 팀플을 위한 체크인/팀관리 서비스<br/>아무튼 출석!</h1>
 
 
-<br>
 
 <center>
-<a href="https://www.a-chool.com/"><img width="200" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565120-50a28594-4326-41ac-ab1e-4f099d9cfc16.png" align="left"></a>
+<a href="https://www.a-chool.com/"><img width="200" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565120-50a28594-4326-41ac-ab1e-4f099d9cfc16.png" align="left"></a>      
+  
 </center>
 
+
 <br>
+<br>
+<br>
+<br>
+
+
 
 ## 🗓 프로젝트 기간
 - 2022년 4월 22일 ~ 2022년 6월 3일
