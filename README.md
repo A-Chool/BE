@@ -1,5 +1,5 @@
 <!-- 서비스 간략설명  -->
-<img width="80" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171563302-54b2b491-e071-435a-a071-aee7eb60fb32.png" align="left">
+<img width="100" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565945-5a4e4ec0-fa18-43e7-a5fa-1e0e981e47d7.png" align="left">
 <h1 align="left"> 성공적인 팀플을 위한 체크인/팀관리 서비스<br/>아무튼 출석!</h1>
 
 
@@ -11,31 +11,26 @@
 
 <br>
 
-![스크린샷 2022-05-29 20 33 1](https://user-images.githubusercontent.com/98807506/170971643-4aa29124-8c0f-4b1b-b7f3-e1f8863f861b.png)
-
-
-## 🤖 항해99 실전 프로젝트 A-Chool
-- 학원과 학생들을 위한 체크인 및 팀관리 서비스
-
-
 ## 🗓 프로젝트 기간
 - 2022년 4월 22일 ~ 2022년 6월 3일
 - 1차 배포 : 2022년 5월 25일
 - 최종 배포 : 2022년 6월 1일
 - 유튜브 링크 : 
 
-## 👥 팀 소개
-#### `Backend`
-<a href="https://github.com/hobit22" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=김호빈 &color=08CE5D&style=for-the-badge&>"/></a>
-<a href="https://github.com/hyun-woong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=심현웅 &color=08CE5D&style=for-the-badge&>"/></a>
-<a href="https://github.com/jjems" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=김일권 &color=08CE5D&style=for-the-badge&>"/></a>
+<br>
 
-#### `Frontend`
- <a href="https://github.com/kyeongbong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=이경태 &color=61dafb&style=for-the-badge&>"/></a>
-  <a href="https://github.com/kyeongbong" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=최경민 &color=61dafb&style=for-the-badge&>"/></a>
+# 팀 구성
+| 이름     | 깃허브 주소                                                | 포지션     |
+|:--------:|:----------------------------------------------------------:|:-----------:|
+| 이경태🔰 | [https://github.com/kyeongbong](https://github.com/kyeongbong)                     | Frontend     |
+| 최경민   | [https://github.com/kyngmn](https://github.com/kyngmn)                     | Frontend     |
+| 김호빈   | [https://github.com/hobit22](https://github.com/hobit22) | Backend     |
+| 심현웅   | [https://github.com/hyun-woong](https://github.com/hyun-woong)                     | Backend |
+| 김일권   | [https://github.com/jjems](https://github.com/jjems)                     | Backend |
+| 장유진   | [https://github.com/A-Chool](https://github.com/A-Chool)                     | Designer |
+| 전하경   | [https://github.com/A-Chool](https://github.com/A-Chool)                     | Designer |
 
-
-**[(Front-end github)](https://github.com/Routine-GongJakSo/FE)**
+<br>
 
 ## 📜 기술스택
 |분류|기술|
