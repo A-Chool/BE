@@ -1,3 +1,16 @@
+<!-- 서비스 간략설명  -->
+<img width="80" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171563302-54b2b491-e071-435a-a071-aee7eb60fb32.png" align="left">
+<h1 align="left"> 성공적인 팀플을 위한 체크인/팀관리 서비스<br/>아무튼 출석!</h1>
+
+
+<br>
+
+<center>
+<img width="300" alt="modal1" src="https://user-images.githubusercontent.com/98807506/171565120-50a28594-4326-41ac-ab1e-4f099d9cfc16.png" align="left" a href="https://www.a-chool.com/">
+</center>
+
+<br>
+
 ![스크린샷 2022-05-29 20 33 1](https://user-images.githubusercontent.com/98807506/170971643-4aa29124-8c0f-4b1b-b7f3-e1f8863f861b.png)
 
 
