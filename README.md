@@ -108,13 +108,13 @@
 <img src="https://img.shields.io/badge/Notion-181818?style=for-the-badge&logo=Notion&logoColor=white">
 <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/Slack-FF253F?style=for-the-badge&logo=Slack&logoColor=white">
+<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
 <br>
-<img src="https://img.shields.io/badge/Jenkins-FF253F?style=for-the-badge&logo=Jenkins&logoColor=white">
- <img src="https://img.shields.io/badge/jwt-FB015B?style=for-the-badge&logo=jwt&logoColor=white">
-<img src="https://img.shields.io/badge/Docker-FF253F?style=for-the-badge&logo=Docker&logoColor=white">
+<img src="https://img.shields.io/badge/Jenkins-D73634?style=for-the-badge&logo=Jenkins&logoColor=white">
+ <img src="https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jwt&logoColor=white">
+<img src="https://img.shields.io/badge/Docker-4DCBFE?style=for-the-badge&logo=Docker&logoColor=white">
 
-<img src="https://img.shields.io/badge/AWS SDK-E68B49?style=for-the-badge&logo=AWS&logoColor=white">
+<img src="https://img.shields.io/badge/AWS EC2 SDK-F58536?style=for-the-badge&logo=AWS&logoColor=white">
 
 <br>
 
