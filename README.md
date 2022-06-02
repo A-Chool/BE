@@ -71,6 +71,51 @@
 <br>
 
 ## 📜 기술스택
+
+> ## Frontend
+
+<p align="center">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/WebRTC-333333?style=for-the-badge&logo=WebRTC&logoColor=white">
+<img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white">
+<img src="https://img.shields.io/badge/CloudFront-D05C4B?style=for-the-badge&logo=CloudFront&logoColor=white">
+<img src="https://img.shields.io/badge/Route53-E68B49?style=for-the-badge&logo=Route53s&logoColor=white">
+<img src="https://img.shields.io/badge/S3-569A31?style=for-the-badge&logo=S3&logoColor=white">
+<br>
+<br>
+<br>
+
+> ## Backend
+
+<p align="center">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/sequelize-52B0E7?style=for-the-badge&logo=sequelize&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Spring&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Elasticache&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Redis&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Gradle&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Notion&logoColor=white">
+<img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Slack&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Jenkins&logoColor=white">
+ <img src="https://img.shields.io/badge/jwt-FB015B?style=for-the-badge&logo=jwt&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Docker&logoColor=white">
+<img src="https://img.shields.io/badge/cors-FF253F?style=for-the-badge&logo=Amazon S3&logoColor=white">
+<img src="https://img.shields.io/badge/AWS SDK-E68B49?style=for-the-badge&logo=AWS&logoColor=white">
+
+<br>
+
 |분류|기술|
 | :-: |:- |
 |Language|<img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">|
