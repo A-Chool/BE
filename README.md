@@ -28,7 +28,7 @@
 
 <br>
 
-# 팀 구성
+# ⭐️ 팀 구성
 | 이름     | 깃허브 주소                                                | 포지션     |
 |:--------:|:----------------------------------------------------------:|:-----------:|
 | 이경태🔰 | [https://github.com/kyeongbong](https://github.com/kyeongbong)                     | Frontend     |
@@ -42,7 +42,7 @@
 <br>
 
 
-# 핵심 기능 Key Feature
+# 🎯 핵심 기능 Key Feature
 
 <details>
 <summary>📚 그룹 채팅</summary>
@@ -130,7 +130,7 @@
 <br>
 
   
-# Links
+# ⚓️ Links
 
 - Project homepage: https://www.a-chool.com/
 - Repository: https://github.com/A-Chool
@@ -142,7 +142,7 @@
   
   
 
-# more info
+# 🖥 more info
   
   <details>
 <summary>API 명세서</summary>
