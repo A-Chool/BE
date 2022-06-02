@@ -96,14 +96,16 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
-<img src="https://img.shields.io/badge/sequelize-52B0E7?style=for-the-badge&logo=sequelize&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon S3-E15343?style=for-the-badge&logo=S3&logoColor=white">
+<img src="https://img.shields.io/badge/Elasticache-5294CF?style=for-the-badge&logo=Elasticache&logoColor=white">
+<img src="https://img.shields.io/badge/Redis-D82A20?style=for-the-badge&logo=Redis&logoColor=white">
+  
 <br>
-<img src="https://img.shields.io/badge/Spring-FF253F?style=for-the-badge&logo=Spring&logoColor=white">
-<img src="https://img.shields.io/badge/Elasticache-FF253F?style=for-the-badge&logo=Elasticache&logoColor=white">
-<img src="https://img.shields.io/badge/Redis-FF253F?style=for-the-badge&logo=Redis&logoColor=white">
-<img src="https://img.shields.io/badge/Gradle-FF253F?style=for-the-badge&logo=Gradle&logoColor=39D52D">
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
+
+<img src="https://img.shields.io/badge/Gradle-39D52D?style=for-the-badge&logo=Gradle&logoColor=white">
 <br>
-<img src="https://img.shields.io/badge/Notion-FF253F?style=for-the-badge&logo=Notion&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-181818?style=for-the-badge&logo=Notion&logoColor=white">
 <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/Slack-FF253F?style=for-the-badge&logo=Slack&logoColor=white">
@@ -111,7 +113,7 @@
 <img src="https://img.shields.io/badge/Jenkins-FF253F?style=for-the-badge&logo=Jenkins&logoColor=white">
  <img src="https://img.shields.io/badge/jwt-FB015B?style=for-the-badge&logo=jwt&logoColor=white">
 <img src="https://img.shields.io/badge/Docker-FF253F?style=for-the-badge&logo=Docker&logoColor=white">
-<img src="https://img.shields.io/badge/Amazon S3-FF253F?style=for-the-badge&logo=S3&logoColor=white">
+
 <img src="https://img.shields.io/badge/AWS SDK-E68B49?style=for-the-badge&logo=AWS&logoColor=white">
 
 <br>
