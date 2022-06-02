@@ -167,3 +167,4 @@
 ## 📌 Personal Trouble Shooting
 <a href="https://github.com/A-Chool/BE/wiki/%5BHobinKim%5DTrouble-Shooting" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=김호빈 &color=08CE5D&style=for-the-badge&>"/></a>
 <a href="https://github.com/A-Chool/BE/wiki/%5BHyunWoong%5DTrouble-Shooting" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=심현웅 &color=08CE5D&style=for-the-badge&>"/></a>
+<a href="https://github.com/A-Chool/FE/wiki" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=이경태 &color=95D0F6&style=for-the-badge&>"/></a>
