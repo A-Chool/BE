@@ -38,6 +38,38 @@
 
 <br>
 
+
+# 핵심 기능 Key Feature
+
+<details>
+<summary>📚 그룹 채팅</summary>
+<div markdown="1">
+ <br>
+  → 팀별 그룹 채팅 서비스를 지원
+  <br> → 대화 내용은 저장되어, 페이지를 벗어났다 다시 돌아와도 유지
+</div>
+</details>
+
+<details>
+<summary>⏰ 공부 타이머</summary>
+<div markdown="1">
+<br>
+  → 유저별 공부 시간을 기록할 수 있는 타이머 제공
+  <br> → 타이머는 매일 오전 5시에 초기화 됨
+  <br> → checkOut을 누르지 않은 유저의 경우 마지막 checkIn 시간에서 한 시간이 추가된 상태로 저장
+</div>
+</details>
+<details>
+<summary>🏆 랭킹 및 당근밭 콘텐츠</summary>
+<div markdown="1">
+ <br>
+   → 유저의 일별 누적 공부시간을 기준으로 랭킹이 집계되며, 일별 공부시간에 비례해 당근 밭에 당근이 심어짐
+</div>
+
+</details>
+
+<br>
+
 ## 📜 기술스택
 |분류|기술|
 | :-: |:- |
