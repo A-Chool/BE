@@ -41,6 +41,16 @@
 
 <br>
 
+# 📎 구현기능
+
+
+| 이름     | 구현기능                                                | 포지션     |
+|:--------:|:----------------------------------------------------------|:-----------:|
+| 이경태🔰 | Admin page : <p>유저관리, 팀관리</p> Client page : <p>체크인 / 체크아웃, 팀 대시보드, 학습통계 / 랭킹 </p>                  | Frontend     |
+| 최경민   | Client page : <p>채팅,프로필 수정</p>       | Frontend     |
+| 김호빈   | Admin page : <p>주차/멤버/팀 조회, 추가, 삭제, 수정</p> Client page : <p>팀 대시보드, Redis 를 이용한 채팅, 랭킹</p> Common : <p>Jmeter Test</p>| Backend     |
+| 심현웅   | Admin page : <p>전체 유저 조회, 삭제, 권한 변경</p> Client page : <p>체크인 시스템, 학습통계, 소셜로그인(kakao, naver),</p><p>마이페이지 이미지 업로드, 수정, 태그</p>Common : <p>CI/CD, RefreshToken, Security, SSL</p>                     | Backend |
+| 김일권   | Common : <p>Jmeter Test</p>| Backend     |
 
 # 🎯 핵심 기능 Key Feature
 
@@ -127,8 +137,8 @@
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
   
-<br>
 
+<br>
   
 # ⚓️ Links
 
