@@ -18,6 +18,9 @@
 ## 🍀 Service Architecture
 ![서비스 아키텍쳐](https://user-images.githubusercontent.com/98807506/171581919-4f903fe2-92e1-48ac-a31b-7e900ce4b1fe.png)
 
+## 📊 프로젝트 소개
+![readme](https://user-images.githubusercontent.com/98807506/172156370-af120070-164f-4fbb-a364-51a25a876730.png)
+
 ## 🗓 프로젝트 기간
 - 2022년 4월 22일 ~ 2022년 6월 3일
 - 1차 배포 : 2022년 5월 25일
