@@ -171,6 +171,14 @@
 </div>
 </details>
   
+  <details>
+<summary>📄 서비스 기획 배경</summary>
+<div markdown="1">
+  
+![01](https://user-images.githubusercontent.com/98807506/172096592-b263fc8c-c69b-4cd9-ac49-57dbb3505180.png)
+
+</div>
+</details>
   
 <details>
 <summary>🪄 서비스 기술 도입 배경</summary>
