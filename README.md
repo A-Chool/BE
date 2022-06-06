@@ -18,8 +18,6 @@
 ## 🍀 Service Architecture
 ![서비스 아키텍쳐](https://user-images.githubusercontent.com/98807506/171581919-4f903fe2-92e1-48ac-a31b-7e900ce4b1fe.png)
 
-
-
 ## 🗓 프로젝트 기간
 - 2022년 4월 22일 ~ 2022년 6월 3일
 - 1차 배포 : 2022년 5월 25일
@@ -170,6 +168,18 @@
   
 ![erd](https://user-images.githubusercontent.com/98807506/171581214-5687b031-695d-436c-80bc-441c911f48f3.png)
   
+</div>
+</details>
+  
+  
+<details>
+<summary>🪄 서비스 기술 도입 배경</summary>
+<div markdown="1">
+  
+![1](https://user-images.githubusercontent.com/98807506/172096141-ca84af64-180a-424f-b7e8-599af40fdd09.png)
+![2](https://user-images.githubusercontent.com/98807506/172096137-a9417ce7-234c-40d4-bce7-323582bad679.png)
+![3](https://user-images.githubusercontent.com/98807506/172096129-da4ff841-aa03-497d-a2e6-c6cb395349c1.png)
+
 </div>
 </details>
   
