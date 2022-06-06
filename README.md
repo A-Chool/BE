@@ -155,7 +155,7 @@
 # 🖥 more info
   
   <details>
-<summary>API 명세서</summary>
+<summary>🖨 API 명세서</summary>
 <div markdown="1">
 
 ![Admin](https://user-images.githubusercontent.com/98807506/171592425-072c43c7-d621-4d63-84ce-d01be14db1ed.png)
@@ -174,7 +174,7 @@
 </details>
   
 <details>
-<summary>고객 반응 및 개선사항</summary>
+<summary>📬 고객 반응 및 개선사항</summary>
 <div markdown="1">
   
 ![User](https://user-images.githubusercontent.com/98807506/172095737-f139564e-c11c-4387-8496-ed957d3807ff.png)
