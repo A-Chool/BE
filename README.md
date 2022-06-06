@@ -18,8 +18,6 @@
 ## 🍀 Service Architecture
 ![서비스 아키텍쳐](https://user-images.githubusercontent.com/98807506/171581919-4f903fe2-92e1-48ac-a31b-7e900ce4b1fe.png)
 
-
-
 ## 🗓 프로젝트 기간
 - 2022년 4월 22일 ~ 2022년 6월 3일
 - 1차 배포 : 2022년 5월 25일
@@ -48,7 +46,7 @@
 |:--------:|:----------------------------------------------------------|:-----------:|
 | 이경태🔰 | Admin page : <p>유저관리, 팀관리</p> Client page : <p>체크인 / 체크아웃, 팀 대시보드, 학습통계 / 랭킹 </p>                  | Frontend     |
 | 최경민   | Client page : <p>채팅,프로필 수정</p>       | Frontend     |
-| 김호빈   | Admin page : <p>주차/멤버/팀 조회, 추가, 삭제, 수정</p> Client page : <p>팀 대시보드, Redis 를 이용한 채팅, 랭킹</p> Common : <p>Jmeter Test</p>| Backend     |
+| 김호빈   | Admin page : <p>주차/멤버/팀 조회, 추가, 삭제, 수정</p> Client page : <p>팀 대시보드, WebSocket과 Redis 를 이용한 채팅, 랭킹</p> Common : <p>Jmeter Test, 슬랙 알림</p>| Backend     |
 | 심현웅   | Admin page : <p>전체 유저 조회, 삭제, 권한 변경</p> Client page : <p>체크인 시스템, 학습통계, 소셜로그인(kakao, naver),</p><p>마이페이지 이미지 업로드, 수정, 태그</p>Common : <p>CI/CD, RefreshToken, Security, SSL</p>                     | Backend |
 | 김일권   | Common : <p>Jmeter Test</p>| Backend     |
 
@@ -155,7 +153,7 @@
 # 🖥 more info
   
   <details>
-<summary>API 명세서</summary>
+<summary>🖨 API 명세서</summary>
 <div markdown="1">
 
 ![Admin](https://user-images.githubusercontent.com/98807506/171592425-072c43c7-d621-4d63-84ce-d01be14db1ed.png)
@@ -170,6 +168,38 @@
   
 ![erd](https://user-images.githubusercontent.com/98807506/171581214-5687b031-695d-436c-80bc-441c911f48f3.png)
   
+</div>
+</details>
+  
+  <details>
+<summary>📄 서비스 기획 배경</summary>
+<div markdown="1">
+  
+![01](https://user-images.githubusercontent.com/98807506/172096592-b263fc8c-c69b-4cd9-ac49-57dbb3505180.png)
+
+</div>
+</details>
+  
+<details>
+<summary>🪄 서비스 기술 도입 배경</summary>
+<div markdown="1">
+  
+![1](https://user-images.githubusercontent.com/98807506/172096141-ca84af64-180a-424f-b7e8-599af40fdd09.png)
+![2](https://user-images.githubusercontent.com/98807506/172096137-a9417ce7-234c-40d4-bce7-323582bad679.png)
+![3](https://user-images.githubusercontent.com/98807506/172096129-da4ff841-aa03-497d-a2e6-c6cb395349c1.png)
+
+</div>
+</details>
+  
+<details>
+<summary>📬 고객 반응 및 개선사항</summary>
+<div markdown="1">
+  
+![User](https://user-images.githubusercontent.com/98807506/172095737-f139564e-c11c-4387-8496-ed957d3807ff.png)
+![User](https://user-images.githubusercontent.com/98807506/172095735-300f5f2c-50d9-4d5c-8859-f2c2a4f46a4d.png)
+![User](https://user-images.githubusercontent.com/98807506/172095734-7298e431-d365-422e-80d8-f24233187093.png)
+![User](https://user-images.githubusercontent.com/98807506/172095724-8017d72e-f21e-4191-9455-1e9f41c4b147.png)
+
 </div>
 </details>
   
