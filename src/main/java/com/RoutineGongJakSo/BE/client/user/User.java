@@ -70,4 +70,8 @@ public class User extends Timestamped {
     public void addTags(Tag tag) {
         this.tagList.add(tag);
     }
+
+    public User(int userLevel) {
+        this.userLevel = userLevel;
+    }
 }
