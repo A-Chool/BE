@@ -115,5 +115,6 @@ public class AdminService {
         log.info("확인 삭제된 유저 {}", user);
 
         return "해당 유저 정보가 삭제되었습니다.";
+
     }
 }
