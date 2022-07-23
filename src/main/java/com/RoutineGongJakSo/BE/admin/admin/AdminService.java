@@ -4,10 +4,7 @@ import com.RoutineGongJakSo.BE.client.refreshToken.RefreshToken;
 import com.RoutineGongJakSo.BE.client.refreshToken.RefreshTokenRepository;
 import com.RoutineGongJakSo.BE.client.user.User;
 import com.RoutineGongJakSo.BE.client.user.UserRepository;
-import com.RoutineGongJakSo.BE.exception.CustomException;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
-import com.RoutineGongJakSo.BE.security.exception.UserException;
-import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
 import com.RoutineGongJakSo.BE.validator.AdminCheckValidator;
@@ -15,14 +12,13 @@ import com.RoutineGongJakSo.BE.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.RoutineGongJakSo.BE.exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -87,7 +83,7 @@ public class AdminService {
 
     //권한 변경
     @Transactional
-    public String updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
+    public ResponseEntity<String> updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
 
         AdminCheckValidator.adminAuthorization(userDetails.getUserLevel());
 
@@ -99,12 +95,14 @@ public class AdminService {
 
         log.info("권한 변경 유저 {}", getUser);
 
-        return "권한이 수정 되었습니다.";
+        return ResponseEntity
+                .status(200)
+                .body("권한이 수정되었습니다.");
     }
 
     //유저 삭제
     @Transactional
-    public String deleteUser(Long userId, UserDetailsImpl userDetails) {
+    public ResponseEntity<String> deleteUser(Long userId, UserDetailsImpl userDetails) {
 
         AdminCheckValidator.adminAuthorization(userDetails.getUserLevel());
 
@@ -114,7 +112,9 @@ public class AdminService {
 
         log.info("확인 삭제된 유저 {}", user);
 
-        return "해당 유저 정보가 삭제되었습니다.";
+        return ResponseEntity
+                .status(200)
+                .body("유저 정보가 삭제 되었습니다.");
 
     }
 }

@@ -5,7 +5,6 @@ import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
-import com.RoutineGongJakSo.BE.validator.AdminCheckValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

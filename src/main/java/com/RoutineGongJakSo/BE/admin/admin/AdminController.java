@@ -4,6 +4,7 @@ import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,6 @@ public class AdminController {
     private final AdminService adminService;
 
     //관리자 로그인
-
     @PostMapping("/login")
     public HttpHeaders login(@RequestBody AdminDto.RequestDto adminDto) {
         log.info("요청 메소드 [POST] /api/admin/login");
@@ -33,14 +33,19 @@ public class AdminController {
 
     //권한 변경
     @PutMapping("/{userId}")
-    public String updateLevel(@PathVariable Long userId, @RequestBody AdminDto.UpdateDto update, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> updateLevel(
+            @PathVariable Long userId,
+            @RequestBody AdminDto.UpdateDto update,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("요청 메소드 [PUT] /api/admin/{userId}");
         return adminService.updateLevel(userId, update, userDetails);
     }
 
     //유저 삭제
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> deleteUser(
+            @PathVariable Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         log.info("요청 메소드 [DELETE] /api/admin/{userId}");
         return adminService.deleteUser(userId, userDetails);
     }
