@@ -10,6 +10,8 @@ import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
 import com.RoutineGongJakSo.BE.security.jwt.JwtTokenUtils;
 import com.RoutineGongJakSo.BE.security.validator.Validator;
+import com.RoutineGongJakSo.BE.validator.AdminCheckValidator;
+import com.RoutineGongJakSo.BE.validator.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -29,21 +31,17 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
+    private final AdminCheckValidator adminCheckValidator;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenValidator tokenValidator;
 
     //관리자 로그인
     @Transactional
     public HttpHeaders login(AdminDto.RequestDto adminDto) {
-        User user = userRepository.findByUserEmail(adminDto.getEmail())
-                .orElseThrow(() -> new UserException(UserExceptionType.NOT_FOUND_MEMBER));
+        User user = adminCheckValidator.userAuthentication(adminDto.getEmail());
 
-        if (!passwordEncoder.matches(adminDto.getPassword(), user.getUserPw())) {
-            throw new UserException(UserExceptionType.WRONG_PASSWORD);
-        }
-
-        if (user.getUserLevel() < 5) {
-            throw new UserException(UserExceptionType.LOW_LEVER);
-        }
+        adminCheckValidator.passwordMatches(adminDto.getPassword(), user.getUserPw());
+        AdminCheckValidator.adminAuthorization(user.getUserLevel());
 
         //Token -> Headers로 보내기
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +49,7 @@ public class AdminService {
         headers.add("RefreshAuthorization", "BEARER " + JwtTokenUtils.generateRefreshToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        RefreshToken findToken = refreshTokenRepository.findByUserEmail(user.getUserEmail());
+        RefreshToken findToken = tokenValidator.findRefreshToken(user.getUserEmail());
 
         if (findToken != null){
             findToken.setRefreshToken(JwtTokenUtils.generateRefreshToken());
@@ -61,10 +59,7 @@ public class AdminService {
 
         //리프레쉬 토큰을 저장
         //PK = userEmail
-        RefreshToken refresh = RefreshToken.builder()
-                .refreshToken(JwtTokenUtils.generateRefreshToken())
-                .userEmail(user.getUserEmail())
-                .build();
+        RefreshToken refresh = new RefreshToken(user);
 
         refreshTokenRepository.save(refresh);
 
@@ -74,26 +69,15 @@ public class AdminService {
 
     //전체 유저 조회
     public List<AdminDto.ResponseDto> getAllUser(UserDetailsImpl userDetails) {
-
-        //로그인 여부 확인, 접근권한 확인
-        validator.adminCheck(userDetails);
+        validator.loginCheck(userDetails);
+        AdminCheckValidator.adminAuthorization(userDetails.getUserLevel());
 
         List<User> users = userRepository.findAll();
 
         List<AdminDto.ResponseDto> responseDtos = new ArrayList<>();
 
         for (User user : users) {
-            AdminDto.ResponseDto findDto = AdminDto.ResponseDto.builder()
-                    .userId(user.getUserId())
-                    .userEmail(user.getUserEmail())
-                    .userName(user.getUserName())
-                    .phoneNumber(user.getPhoneNumber())
-                    .userLevel(user.getUserLevel())
-                    .kakaoId(user.getKakaoId())
-                    .naverId(user.getNaverId())
-                    .createdAt(user.getCreatedAt())
-                    .build();
-            responseDtos.add(findDto);
+            AdminDto.ResponseDto findDto = new AdminDto.ResponseDto(user);
         }
 
         log.info("전체 유저 조회 {}", responseDtos);
@@ -105,18 +89,15 @@ public class AdminService {
     @Transactional
     public String updateLevel(Long userId, AdminDto.UpdateDto update, UserDetailsImpl userDetails) {
 
-        //로그인 여부 확인, 접근권한 확인
-        User user = validator.adminCheck(userDetails);
+        AdminCheckValidator.adminAuthorization(userDetails.getUserLevel());
 
-        User getUser = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(NOT_FOUND_USER_ID)
-        );
+        User getUser = validator.findUserIdInfo(userId);
 
-        getUser.setUserLevel(update.getUserLevel());
+        getUser = new User(update.getUserLevel());
 
         userRepository.save(getUser);
 
-        log.info("권한 변경 유저 {}", user);
+        log.info("권한 변경 유저 {}", getUser);
 
         return "권한이 수정 되었습니다.";
     }
@@ -125,9 +106,8 @@ public class AdminService {
     @Transactional
     public String deleteUser(Long userId, UserDetailsImpl userDetails) {
 
-        //로그인 여부 확인, 접근권한 확인
-        validator.adminCheck(userDetails);
-        //유저아이디로 유저정보 찾기
+        AdminCheckValidator.adminAuthorization(userDetails.getUserLevel());
+
         User user = validator.findUserIdInfo(userId);
 
         userRepository.delete(user);
