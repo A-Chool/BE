@@ -1,5 +1,6 @@
 package com.RoutineGongJakSo.BE.admin.admin;
 
+import com.RoutineGongJakSo.BE.client.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,17 @@ public class AdminDto {
         private Long kakaoId;
         private String naverId;
         private String createdAt;
+
+        public ResponseDto(User user) {
+            this.userId = user.getUserId();
+            this.userEmail = user.getUserEmail();
+            this.userName = user.getUserName();
+            this.phoneNumber = user.getPhoneNumber();
+            this.userLevel = user.getUserLevel();
+            this.kakaoId = user.getKakaoId();
+            this.naverId = user.getNaverId();
+            this.createdAt = user.getCreatedAt();
+        }
     }
 
     @Getter

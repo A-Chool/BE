@@ -5,6 +5,7 @@ import com.RoutineGongJakSo.BE.client.user.UserRepository;
 import com.RoutineGongJakSo.BE.security.UserDetailsImpl;
 import com.RoutineGongJakSo.BE.security.exception.UserException;
 import com.RoutineGongJakSo.BE.security.exception.UserExceptionType;
+import com.RoutineGongJakSo.BE.validator.AdminCheckValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -54,9 +55,8 @@ public class Validator {
 
     //유저아이디로 유저정보 찾기
     public User findUserIdInfo(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
+        return userRepository.findById(userId).orElseThrow(
                 () -> new UserException(UserExceptionType.NOT_FOUND_MEMBER)
         );
-        return user;
     }
 }
